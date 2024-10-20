@@ -14,12 +14,14 @@ export function ExternalLink({ href, ...rest }: LinkPropsWithStringHref) {
       {...rest}
       href={href}
       onPress={async event => {
-        if (Platform.OS !== "web") {
+        if (Platform.OS === "web") {
+          return;
+        }
+
           // Prevent the default behavior of linking to the default browser on native.
           event.preventDefault();
           // Open the link in an in-app browser.
           await openBrowserAsync(href);
-        }
       }}
     />
   );
