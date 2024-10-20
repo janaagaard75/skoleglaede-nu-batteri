@@ -10,7 +10,11 @@ interface Props {
 
 export const Battery = (props: Props) => {
   return (
-    <View>
+    <View
+      style={{
+        alignItems: "center",
+      }}
+    >
       <BatteryIcon />
       <ThemedText>{props.level} %</ThemedText>
     </View>
