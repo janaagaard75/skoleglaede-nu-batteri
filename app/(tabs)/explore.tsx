@@ -4,6 +4,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
 import { Image, Platform, StyleSheet } from "react-native";
 
 export default function TabTwoScreen() {
@@ -58,9 +59,9 @@ export default function TabTwoScreen() {
           source={require("@/assets/images/react-logo.png")}
           style={{ alignSelf: "center" }}
         />
-        <ExternalLink href="https://reactnative.dev/docs/images">
+        <Link href="https://reactnative.dev/docs/images">
           <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
+        </Link>
       </Collapsible>
       <Collapsible title="Custom fonts">
         <ThemedText>
