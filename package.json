@@ -5,6 +5,7 @@
   "scripts": {
     "android": "expo start --android",
     "check-lint": "expo lint",
+    "check-types": "tsc",
     "ios": "expo start --ios",
     "reset-project": "node ./scripts/reset-project.js",
     "start": "expo start",
