@@ -1,0 +1,10 @@
+{
+  "cSpell.language": "en,da",
+  "cSpell.words": ["skoleglaede"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
