@@ -1,5 +1,5 @@
 import { Collapsible } from "@/components/Collapsible";
-import { InAppBrowserLink } from "@/components/ExternalLink";
+import { InAppBrowserLink } from "@/components/InAppBrowserLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
