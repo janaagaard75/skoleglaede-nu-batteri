@@ -1,8 +1,12 @@
 import { View } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
 
+interface Props {
+  color: string;
+}
+
 /** Ionicons v5 battery. https://react-icons.github.io/react-icons/icons/io5/ */
-export const BatteryIcon = () => (
+export const BatteryIcon = (props: Props) => (
   <View
     style={{
       marginBottom: -40,
@@ -10,8 +14,8 @@ export const BatteryIcon = () => (
     }}
   >
     <Svg
-      stroke="currentColor"
-      fill="currentColor"
+      stroke={props.color}
+      fill={props.color}
       strokeWidth="0"
       viewBox="0 0 512 512"
       height="200px"
