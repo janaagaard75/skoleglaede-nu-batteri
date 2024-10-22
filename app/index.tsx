@@ -14,6 +14,8 @@ export default function HomeScreen() {
           }}
         >
           <BatteryAndPercentage level={0} />
+          <BatteryAndPercentage level={1} />
+          <BatteryAndPercentage level={5} />
           <BatteryAndPercentage level={10} />
           <BatteryAndPercentage level={20} />
           <BatteryAndPercentage level={50} />
