@@ -8,7 +8,7 @@ interface Props {
   level: number;
 }
 
-export const Battery = (props: Props) => {
+export const BatteryAndPercentage = (props: Props) => {
   const roundedLevel = Math.round(props.level);
 
   const batteryColor = (() => {

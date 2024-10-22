@@ -1,4 +1,4 @@
-import { Battery } from "@/components/Battery";
+import { BatteryAndPercentage } from "@/components/BatteryAndPercentage";
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,11 +13,11 @@ export default function HomeScreen() {
             gap: 30,
           }}
         >
-          <Battery level={0} />
-          <Battery level={10} />
-          <Battery level={20} />
-          <Battery level={50} />
-          <Battery level={100} />
+          <BatteryAndPercentage level={0} />
+          <BatteryAndPercentage level={10} />
+          <BatteryAndPercentage level={20} />
+          <BatteryAndPercentage level={50} />
+          <BatteryAndPercentage level={100} />
         </ThemedView>
       </ScrollView>
     </SafeAreaView>
