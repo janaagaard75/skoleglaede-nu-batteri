@@ -2,7 +2,7 @@ import { View } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
 
 interface Props {
-  color: string;
+  color: "green" | "orange" | "red";
   /** A number between 0 and 100. */
   level: number;
 }
@@ -11,6 +11,17 @@ interface Props {
 export const BatteryIcon = (props: Props) => {
   const roundedWidth =
     Math.round(((100 * props.level) / 100) * (292.63 + 32)) / 100;
+
+  const hexColor = (() => {
+    switch (props.color) {
+      case "green":
+        return "#16a34a"; // green-600
+      case "orange":
+        return "#f59e0b"; // amber-500
+      case "red":
+        return "#dc2626"; // red-600
+    }
+  })();
 
   return (
     <View
@@ -21,8 +32,8 @@ export const BatteryIcon = (props: Props) => {
       }}
     >
       <Svg
-        stroke={props.color}
-        fill={props.color}
+        stroke={hexColor}
+        fill={hexColor}
         strokeWidth="0"
         viewBox="0 0 512 512"
         height="200px"
@@ -47,7 +58,7 @@ export const BatteryIcon = (props: Props) => {
           y={198.93 - 16}
           strokeLinecap="square"
           strokeMiterlimit="10"
-                    rx={15}
+          rx={15}
           ry={15}
         />
         <Path
