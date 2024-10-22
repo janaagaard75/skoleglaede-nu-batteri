@@ -27,7 +27,24 @@ export const Battery = (props: Props) => {
         alignItems: "center",
       }}
     >
-      <BatteryIcon color={batteryColor} />
+      <View
+        style={{
+          position: "relative",
+        }}
+      >
+        <BatteryIcon color={batteryColor} />
+        <View
+          style={{
+            position: "absolute",
+            backgroundColor: batteryColor,
+            borderRadius: 5,
+            top: 30,
+            left: 25,
+            width: Math.floor(1.3 * props.level),
+            height: 60,
+          }}
+        ></View>
+      </View>
       <ThemedText>{props.level} %</ThemedText>
     </View>
   );
