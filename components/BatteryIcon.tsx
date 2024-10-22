@@ -10,6 +10,7 @@ export const BatteryIcon = (props: Props) => (
   <View
     style={{
       marginBottom: -40,
+      marginRight: -10, // Center the battery visually.
       marginTop: -40,
     }}
   >
