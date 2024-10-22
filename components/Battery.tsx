@@ -9,12 +9,14 @@ interface Props {
 }
 
 export const Battery = (props: Props) => {
+  const roundedLevel = Math.round(props.level);
+
   const batteryColor = (() => {
-    if (props.level <= 10) {
+    if (roundedLevel <= 10) {
       return "red";
     }
 
-    if (props.level <= 20) {
+    if (roundedLevel <= 20) {
       return "orange";
     }
 
@@ -27,24 +29,10 @@ export const Battery = (props: Props) => {
         alignItems: "center",
       }}
     >
-      <View
-        style={{
-          position: "relative",
-        }}
-      >
-        <BatteryIcon color={batteryColor} />
-        <View
-          style={{
-            position: "absolute",
-            backgroundColor: batteryColor,
-            borderRadius: 5,
-            top: 30,
-            left: 25,
-            width: Math.floor(1.3 * props.level),
-            height: 60,
-          }}
-        ></View>
-      </View>
+      <BatteryIcon
+        color={batteryColor}
+        level={roundedLevel}
+      />
       <ThemedText>{props.level} %</ThemedText>
     </View>
   );
