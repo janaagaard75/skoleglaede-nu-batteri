@@ -4,10 +4,11 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef, useState } from "react";
-import { Button, Dimensions, View } from "react-native";
+import { Button, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { ScannerDialog } from "./ScannerDialog";
+import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [level, setLevel] = useState(50);
@@ -45,7 +46,7 @@ export const MainPage = () => {
       }}
     >
       <BottomSheetModalProvider>
-        <View
+        <ThemedView
           style={{
             gap: 20,
             height: "100%",
@@ -53,7 +54,7 @@ export const MainPage = () => {
           }}
         >
           <BatteryAndPercentage level={level} />
-          <View
+          <ThemedView
             style={{
               display: "flex",
               flexDirection: "row",
@@ -69,7 +70,7 @@ export const MainPage = () => {
               title="+5"
               onPress={increaseLevel}
             />
-          </View>
+          </ThemedView>
           <Button
             onPress={handlePresentModalPress}
             title="Present Modal"
@@ -86,7 +87,7 @@ export const MainPage = () => {
               <ScannerDialog />
             </BottomSheetView>
           </BottomSheetModal>
-        </View>
+        </ThemedView>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

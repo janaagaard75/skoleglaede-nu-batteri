@@ -1,21 +1,28 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
+import {
+  BarcodeScanningResult,
+  CameraView,
+  useCameraPermissions,
+} from "expo-camera";
+import { useState } from "react";
 import { Button, View } from "react-native";
 import { ThemedText } from "./themed/ThemedText";
+import { ThemedView } from "./themed/ThemedView";
 
 export const ScannerDialog = () => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
+  const [scannedBarcode, setScannedBarcode] = useState<string>("");
+
+  const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
+    setScannedBarcode(scanningResult.data);
+  };
 
   if (cameraPermissions === null) {
-    return (
-      <View>
-        <ThemedText>Venter på tilladelse til kameraet&hellip;</ThemedText>
-      </View>
-    );
+    return <ThemedText>Venter på tilladelse til kameraet&hellip;</ThemedText>;
   }
 
   if (!cameraPermissions.granted) {
     return (
-      <View>
+      <ThemedView>
         <ThemedText
           style={{
             marginTop: 20,
@@ -28,13 +35,19 @@ export const ScannerDialog = () => {
           onPress={requestCameraPermissions}
           title="Giv adgang til kameraet"
         />
-      </View>
+      </ThemedView>
     );
   }
 
   return (
-    <View>
-      <CameraView facing="back">
+    <ThemedView>
+      <CameraView
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr"],
+        }}
+        facing="back"
+        onBarcodeScanned={barcodeScanned}
+      >
         <View
           style={{
             backgroundColor: "transparent",
@@ -42,6 +55,9 @@ export const ScannerDialog = () => {
           }}
         ></View>
       </CameraView>
-    </View>
+      <ThemedText>
+        {scannedBarcode === "" ? "Ingenting" : scannedBarcode}
+      </ThemedText>
+    </ThemedView>
   );
 };
