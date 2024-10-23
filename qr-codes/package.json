@@ -1,0 +1,17 @@
+{
+  "name": "qr-koder",
+  "version": "0.0.0",
+  "author": "Jan Aagaard <jan@aagaard.net>",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "tsx generate.ts"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "tsx": "^4.19.1"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5"
+  }
+}
