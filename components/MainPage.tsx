@@ -76,6 +76,7 @@ export const MainPage = () => {
             color="gray"
           />
           <BottomSheetModal
+            enableDismissOnClose={true}
             enableDynamicSizing={false}
             enablePanDownToClose={true}
             ref={bottomSheetModalRef}
