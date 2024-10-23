@@ -1,5 +1,5 @@
-import * as QRCode from "qrcode";
 import * as fs from "fs";
+import * as QRCode from "qrcode";
 
 const qrCodes = [
   "+005pp",
@@ -14,6 +14,10 @@ const qrCodes = [
   "-030pp",
   "-040pp",
   "-050pp",
+  "+heart",
+  "-heart",
+  "+flame",
+  "-flame",
 ];
 
 fs.mkdirSync("out", { recursive: true });
