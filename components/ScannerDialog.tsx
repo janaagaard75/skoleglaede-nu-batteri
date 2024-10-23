@@ -10,15 +10,30 @@ import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
 export const ScannerDialog = () => {
-  const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
+
+  const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
   const [scannedBarcode, setScannedBarcode] = useState<string | undefined>(
     undefined
   );
+  const [resetTimeoutId, setResetTimeoutId] = useState<
+    NodeJS.Timeout | undefined
+  >(undefined);
+
+  const resetScannedBarcode = () => {
+    setScannedBarcode(undefined);
+    setBounds(undefined);
+  };
 
   const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
+    if (resetTimeoutId !== undefined) {
+      clearTimeout(resetTimeoutId);
+    }
+
     setScannedBarcode(scanningResult.data);
     setBounds(scanningResult.bounds);
+
+    setResetTimeoutId(setTimeout(resetScannedBarcode, 3_000));
   };
 
   if (cameraPermissions === null) {
@@ -54,11 +69,11 @@ export const ScannerDialog = () => {
         onBarcodeScanned={barcodeScanned}
         style={{
           height: 20 * 16,
-          width: 20 * 10,
           marginLeft: "auto",
           marginRight: "auto",
+          width: 20 * 10,
         }}
-        zoom={0.003}
+        zoom={0.004}
       >
         {bounds !== undefined && (
           <View
