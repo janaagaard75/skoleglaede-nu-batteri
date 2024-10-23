@@ -21,7 +21,17 @@
         "backgroundColor": "#ffffff"
       }
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Tillad at $(PRODUCT_NAME) får adgang til kameraet",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true
     }
