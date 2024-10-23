@@ -20,10 +20,6 @@ export const MainPage = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
-
   const decreaseLevel = () => {
     const newLevel = level - 5;
     if (newLevel >= 0) {
@@ -82,7 +78,6 @@ export const MainPage = () => {
           <BottomSheetModal
             enableDynamicSizing={false}
             enablePanDownToClose={true}
-            onChange={handleSheetChanges}
             ref={bottomSheetModalRef}
             snapPoints={[bottomSheetHeight]}
           >
