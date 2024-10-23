@@ -73,7 +73,7 @@ export const MainPage = () => {
           <Button
             onPress={handlePresentModalPress}
             title="Present Modal"
-            color="black"
+            color="gray"
           />
           <BottomSheetModal
             enableDynamicSizing={false}
