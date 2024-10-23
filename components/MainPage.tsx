@@ -1,9 +1,28 @@
-import { useState } from "react";
-import { Button, View } from "react-native";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import React, { useCallback, useRef, useState } from "react";
+import { Button, Dimensions, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
+import { ThemedText } from "./themed/ThemedText";
 
 export const MainPage = () => {
   const [level, setLevel] = useState(50);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const screenHeight = Dimensions.get("window").height;
+  const bottomSheetHeight = screenHeight - 100;
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
   const decreaseLevel = () => {
     const newLevel = level - 5;
@@ -24,31 +43,55 @@ export const MainPage = () => {
   };
 
   return (
-    <View
+    <GestureHandlerRootView
       style={{
-        gap: 20,
         height: "100%",
-        justifyContent: "center",
       }}
     >
-      <BatteryAndPercentage level={level} />
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: 40,
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          title="-5"
-          onPress={decreaseLevel}
-        />
-        <Button
-          title="+5"
-          onPress={increaseLevel}
-        />
-      </View>
-    </View>
+      <BottomSheetModalProvider>
+        <View
+          style={{
+            gap: 20,
+            height: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <BatteryAndPercentage level={level} />
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 40,
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              title="-5"
+              onPress={decreaseLevel}
+            />
+            <Button
+              title="+5"
+              onPress={increaseLevel}
+            />
+          </View>
+          <Button
+            onPress={handlePresentModalPress}
+            title="Present Modal"
+            color="black"
+          />
+          <BottomSheetModal
+            enableDynamicSizing={false}
+            enablePanDownToClose={true}
+            onChange={handleSheetChanges}
+            ref={bottomSheetModalRef}
+            snapPoints={[bottomSheetHeight]}
+          >
+            <BottomSheetView>
+              <ThemedText>Awesome 🎉</ThemedText>
+            </BottomSheetView>
+          </BottomSheetModal>
+        </View>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
