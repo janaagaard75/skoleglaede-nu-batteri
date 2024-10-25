@@ -70,8 +70,7 @@ export const ScannerPage = () => {
     <ThemedView
       style={{
         height: "100%",
-        marginLeft: 20,
-        marginRight: 20,
+        marginHorizontal: 20,
       }}
     >
       <CameraView
