@@ -19,6 +19,9 @@ export const ScannerPage = () => {
   const [resetScannedBarcodeTimeoutId, setResetScannedBarcodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
+  const viewfinderHeight = 20 * 16;
+  const viewfinderWidth = 20 * 10;
+
   const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
     if (resetScannedBarcodeTimeoutId !== undefined) {
       clearTimeout(resetScannedBarcodeTimeoutId);
@@ -67,10 +70,10 @@ export const ScannerPage = () => {
         facing="back"
         onBarcodeScanned={barcodeScanned}
         style={{
-          height: 20 * 16,
+          height: viewfinderHeight,
           marginLeft: "auto",
           marginRight: "auto",
-          width: 20 * 10,
+          width: viewfinderWidth,
         }}
         zoom={0.004}
       >
