@@ -16,9 +16,8 @@ export const ScannerPage = () => {
   const [scannedBarcode, setScannedBarcode] = useState<string | undefined>(
     undefined
   );
-  const [resetTimeoutId, setResetTimeoutId] = useState<
-    NodeJS.Timeout | undefined
-  >(undefined);
+  const [resetScannedBarcodeTimeoutId, setResetScannedBarcodeTimeoutId] =
+    useState<NodeJS.Timeout | undefined>(undefined);
 
   const resetScannedBarcode = () => {
     setScannedBarcode(undefined);
@@ -26,14 +25,14 @@ export const ScannerPage = () => {
   };
 
   const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
-    if (resetTimeoutId !== undefined) {
-      clearTimeout(resetTimeoutId);
+    if (resetScannedBarcodeTimeoutId !== undefined) {
+      clearTimeout(resetScannedBarcodeTimeoutId);
     }
 
     setScannedBarcode(scanningResult.data);
     setBounds(scanningResult.bounds);
 
-    setResetTimeoutId(setTimeout(resetScannedBarcode, 3_000));
+    setResetScannedBarcodeTimeoutId(setTimeout(resetScannedBarcode, 3_000));
   };
 
   if (cameraPermissions === null) {
