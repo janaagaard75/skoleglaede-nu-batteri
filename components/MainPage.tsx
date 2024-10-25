@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { ScannerPage } from "./ScannerPage";
 import { ThemedView } from "./themed/ThemedView";
+import { useThemeColor } from "./themed/useThemeColor";
 
 export const MainPage = () => {
   const [level, setLevel] = useState(50);
@@ -16,6 +17,7 @@ export const MainPage = () => {
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 100;
+  const backgroundColor = useThemeColor({}, "background");
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -83,7 +85,11 @@ export const MainPage = () => {
             ref={bottomSheetModalRef}
             snapPoints={[bottomSheetHeight]}
           >
-            <BottomSheetView>
+            <BottomSheetView
+              style={{
+                backgroundColor: backgroundColor,
+              }}
+            >
               <ScannerPage />
             </BottomSheetView>
           </BottomSheetModal>
