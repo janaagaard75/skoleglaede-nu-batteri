@@ -17,6 +17,7 @@ export const MainPage = () => {
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 100;
+  const textColor = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "background");
 
   const handlePresentModalPress = useCallback(() => {
@@ -82,6 +83,12 @@ export const MainPage = () => {
             enableDismissOnClose={true}
             enableDynamicSizing={false}
             enablePanDownToClose={true}
+            handleIndicatorStyle={{
+              backgroundColor: textColor,
+            }}
+            handleStyle={{
+              backgroundColor: backgroundColor,
+            }}
             ref={bottomSheetModalRef}
             snapPoints={[bottomSheetHeight]}
           >
