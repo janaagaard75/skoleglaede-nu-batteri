@@ -15,7 +15,7 @@ type SliderState =
   | "idle";
 
 interface Props {
-  disabled?: boolean;
+  disabled: boolean;
   onSlide: () => void;
   title: string;
 }
@@ -83,8 +83,7 @@ export const SlideButton = (props: Props) => {
         setSliderState("dropWillCancel");
       },
 
-      onStartShouldSetPanResponder: (_evt, _gestureState) =>
-        !(props.disabled !== true),
+      onStartShouldSetPanResponder: (_evt, _gestureState) => props.disabled,
 
       onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
       onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
@@ -125,9 +124,9 @@ export const SlideButton = (props: Props) => {
               setButtonSize(layoutEvent.nativeEvent.layout);
             }}
             style={{
-              borderColor: props.disabled === true ? "#999" : "#000",
+              borderColor: props.disabled ? "#999" : "#000",
               borderWidth: 2,
-              color: props.disabled === true ? "#999" : "#000",
+              color: props.disabled ? "#999" : "#000",
               fontSize: 16,
               paddingHorizontal: 8,
               paddingVertical: 6,
