@@ -96,6 +96,7 @@ export const SlideButton = (props: Props) => {
   return (
     <View
       style={{
+        borderRadius: 10,
         borderWidth: 2,
         padding: 3,
       }}
@@ -106,7 +107,6 @@ export const SlideButton = (props: Props) => {
         }}
         style={{
           alignItems: "flex-start",
-          borderColor: "#000",
         }}
       >
         <Animated.View
@@ -124,15 +124,16 @@ export const SlideButton = (props: Props) => {
               setButtonSize(layoutEvent.nativeEvent.layout);
             }}
             style={{
+              borderRadius: 6,
               borderColor: props.disabled ? "#999" : "#000",
               borderWidth: 2,
               color: props.disabled ? "#999" : "#000",
               fontSize: 16,
-              paddingHorizontal: 8,
+              paddingHorizontal: 10,
               paddingVertical: 6,
             }}
           >
-            {props.title} &#x21E8;
+            {props.title} &nbsp;&#x21E8;
           </Text>
         </Animated.View>
       </View>
