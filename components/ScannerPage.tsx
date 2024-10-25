@@ -6,6 +6,7 @@ import {
 import { BarCodeBounds } from "expo-camera/build/legacy/Camera.types";
 import { useState } from "react";
 import { Button, View } from "react-native";
+import { SlideButton } from "./SlideButton";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
@@ -31,6 +32,10 @@ export const ScannerPage = () => {
     setBounds(scanningResult.bounds);
 
     setResetScannedBarcodeTimeoutId(setTimeout(resetScannedBarcode, 3_000));
+  };
+
+  const confirmScannedBarcode = () => {
+    console.log("TODO");
   };
 
   const resetScannedBarcode = () => {
@@ -96,6 +101,11 @@ export const ScannerPage = () => {
         )}
       </CameraView>
       <ThemedText>{scannedBarcode ?? "Ingenting"}</ThemedText>
+      <SlideButton
+        disabled={scannedBarcode === undefined}
+        onSlide={confirmScannedBarcode}
+        title="Bekræft"
+      />
     </ThemedView>
   );
 };
