@@ -7,7 +7,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { Button, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
-import { ScannerDialog } from "./ScannerDialog";
+import { ScannerPage } from "./ScannerPage";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
@@ -84,7 +84,7 @@ export const MainPage = () => {
             snapPoints={[bottomSheetHeight]}
           >
             <BottomSheetView>
-              <ScannerDialog />
+              <ScannerPage />
             </BottomSheetView>
           </BottomSheetModal>
         </ThemedView>

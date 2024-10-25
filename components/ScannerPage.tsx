@@ -9,7 +9,7 @@ import { Button, View } from "react-native";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
-export const ScannerDialog = () => {
+export const ScannerPage = () => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
 
   const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
