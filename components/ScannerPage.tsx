@@ -67,7 +67,13 @@ export const ScannerPage = () => {
   }
 
   return (
-    <ThemedView style={{ height: "100%" }}>
+    <ThemedView
+      style={{
+        height: "100%",
+        marginLeft: 20,
+        marginRight: 20,
+      }}
+    >
       <CameraView
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
