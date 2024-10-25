@@ -8,12 +8,11 @@ import {
   View,
 } from "react-native";
 
-enum SliderState {
-  Animating,
-  DropWillCancel,
-  DropWillTriggerAction,
-  Idle,
-}
+type SliderState =
+  | "animating"
+  | "dropWillCancel"
+  | "dropWillTriggerAction"
+  | "idle";
 
 interface Props {
   disabled?: boolean;
@@ -22,7 +21,7 @@ interface Props {
 }
 
 export const SlideButton = (props: Props) => {
-  const [sliderState, setSliderState] = useState<SliderState>(SliderState.Idle);
+  const [sliderState, setSliderState] = useState<SliderState>("idle");
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
@@ -30,7 +29,7 @@ export const SlideButton = (props: Props) => {
     undefined
   );
 
-  const sliderStateRef = useRef<SliderState>(SliderState.Idle);
+  const sliderStateRef = useRef<SliderState>("idle");
   sliderStateRef.current = sliderState;
   const buttonSizeRef = useRef<LayoutRectangle | undefined>(undefined);
   buttonSizeRef.current = buttonSize;
@@ -42,11 +41,11 @@ export const SlideButton = (props: Props) => {
   const panResponder = useRef(
     PanResponder.create({
       onPanResponderEnd: (_evt, _gestureState) => {
-        if (sliderStateRef.current === SliderState.DropWillTriggerAction) {
+        if (sliderStateRef.current === "dropWillTriggerAction") {
           props.onSlide();
         }
 
-        setSliderState(SliderState.Animating);
+        setSliderState("animating");
 
         Animated.timing(animatedPosition, {
           duration: 100,
@@ -54,8 +53,8 @@ export const SlideButton = (props: Props) => {
           toValue: 0,
           useNativeDriver: true,
         }).start(() => {
-          if (sliderStateRef.current !== SliderState.DropWillCancel) {
-            setSliderState(SliderState.Idle);
+          if (sliderStateRef.current !== "dropWillCancel") {
+            setSliderState("idle");
           }
         });
       },
@@ -74,16 +73,14 @@ export const SlideButton = (props: Props) => {
         const dropZoneWidth = 20;
         const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
         setSliderState(
-          withinDropZone
-            ? SliderState.DropWillTriggerAction
-            : SliderState.DropWillCancel
+          withinDropZone ? "dropWillTriggerAction" : "dropWillCancel"
         );
 
         animatedPosition.setValue(restrictedDx);
       },
 
       onPanResponderStart: (_evt, _gestureState) => {
-        setSliderState(SliderState.DropWillCancel);
+        setSliderState("dropWillCancel");
       },
 
       onStartShouldSetPanResponder: (_evt, _gestureState) =>
