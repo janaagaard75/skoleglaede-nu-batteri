@@ -39,7 +39,6 @@ export const SlideButton = (props: Props) => {
 
   const animatedPosition = useRef(new Animated.Value(0)).current;
 
-  const backgroundColor = useThemeColor({}, "background");
   const disabledTextColor = useThemeColor({}, "disabledText");
   const textColor = useThemeColor({}, "text");
 
@@ -47,6 +46,7 @@ export const SlideButton = (props: Props) => {
     PanResponder.create({
       onPanResponderEnd: (_evt, _gestureState) => {
         if (sliderStateRef.current === "dropWillTriggerAction") {
+          console.log("Triggering onSlide");
           props.onSlide();
         }
 
@@ -88,7 +88,7 @@ export const SlideButton = (props: Props) => {
         setSliderState("dropWillCancel");
       },
 
-      onStartShouldSetPanResponder: (_evt, _gestureState) => props.disabled,
+      onStartShouldSetPanResponder: (_evt, _gestureState) => true,
 
       onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
       onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,

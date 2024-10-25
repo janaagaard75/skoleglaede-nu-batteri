@@ -10,37 +10,62 @@ import { SlideButton } from "./SlideButton";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
-export const ScannerPage = () => {
+interface Props {
+  onDecrease(percentagePoints: number): void;
+  onIncrease(percentagePoints: number): void;
+}
+
+export const ScannerPage = (props: Props) => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
 
   const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
-  const [scannedBarcode, setScannedBarcode] = useState<string | undefined>(
+  const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
     undefined
   );
-  const [resetScannedBarcodeTimeoutId, setResetScannedBarcodeTimeoutId] =
+  const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
   // This aspect ratio of 4:3 seems to be what the QR scanner uses.
   const viewfinderHeight = 80 * 4;
   const viewfinderWidth = 80 * 3;
 
-  const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
-    if (resetScannedBarcodeTimeoutId !== undefined) {
-      clearTimeout(resetScannedBarcodeTimeoutId);
+  const qrCodeScanned = (scanningResult: BarcodeScanningResult) => {
+    if (resetScannedQrCodeTimeoutId !== undefined) {
+      clearTimeout(resetScannedQrCodeTimeoutId);
     }
 
-    setScannedBarcode(scanningResult.data);
+    setScannedQrCode(scanningResult.data);
     setBounds(scanningResult.bounds);
 
-    setResetScannedBarcodeTimeoutId(setTimeout(resetScannedBarcode, 3_000));
+    setResetScannedQrCodeTimeoutId(setTimeout(resetScannedQrCode, 3_000));
   };
 
-  const confirmScannedBarcode = () => {
-    console.log("TODO");
+  const applyScannedQrCode = () => {
+    console.log("1", scannedQrCode);
+
+    if (scannedQrCode === undefined) {
+      return;
+    }
+
+    if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
+      console.log("match");
+
+      const operation = scannedQrCode[0];
+      const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+
+      switch (operation) {
+        case "-":
+          props.onDecrease(percentagePoints);
+          break;
+        case "+":
+          props.onIncrease(percentagePoints);
+          break;
+      }
+    }
   };
 
-  const resetScannedBarcode = () => {
-    setScannedBarcode(undefined);
+  const resetScannedQrCode = () => {
+    setScannedQrCode(undefined);
     setBounds(undefined);
   };
 
@@ -79,7 +104,7 @@ export const ScannerPage = () => {
           barcodeTypes: ["qr"],
         }}
         facing="back"
-        onBarcodeScanned={barcodeScanned}
+        onBarcodeScanned={qrCodeScanned}
         style={{
           height: viewfinderHeight,
           marginLeft: "auto",
@@ -106,10 +131,10 @@ export const ScannerPage = () => {
           />
         )}
       </CameraView>
-      <ThemedText>{scannedBarcode ?? "Ingenting"}</ThemedText>
+      <ThemedText>{scannedQrCode ?? "Ingenting"}</ThemedText>
       <SlideButton
-        disabled={scannedBarcode === undefined}
-        onSlide={confirmScannedBarcode}
+        disabled={scannedQrCode === undefined}
+        onSlide={applyScannedQrCode}
         title="Bekræft"
       />
     </ThemedView>

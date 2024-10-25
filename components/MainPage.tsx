@@ -12,7 +12,7 @@ import { ThemedView } from "./themed/ThemedView";
 import { useThemeColor } from "./themed/useThemeColor";
 
 export const MainPage = () => {
-  const [level, setLevel] = useState(50);
+  const [percentage, setPercentage] = useState(50);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
@@ -24,22 +24,26 @@ export const MainPage = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const decreaseLevel = () => {
-    const newLevel = level - 5;
-    if (newLevel >= 0) {
-      setLevel(newLevel);
+  const decreasePercentage = (percentagePoints: number) => {
+    const newPercentage = percentage - percentagePoints;
+    if (newPercentage >= 0) {
+      setPercentage(newPercentage);
     } else {
-      setLevel(0);
+      setPercentage(0);
     }
+
+    bottomSheetModalRef.current?.dismiss();
   };
 
-  const increaseLevel = () => {
-    const newLevel = level + 5;
-    if (newLevel <= 100) {
-      setLevel(newLevel);
+  const increasePercentage = (percentagePoints: number) => {
+    const newPercentage = percentage + percentagePoints;
+    if (newPercentage <= 100) {
+      setPercentage(newPercentage);
     } else {
-      setLevel(100);
+      setPercentage(100);
     }
+
+    bottomSheetModalRef.current?.dismiss();
   };
 
   return (
@@ -56,27 +60,10 @@ export const MainPage = () => {
             justifyContent: "center",
           }}
         >
-          <BatteryAndPercentage level={level} />
-          <ThemedView
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 40,
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              title="-5"
-              onPress={decreaseLevel}
-            />
-            <Button
-              title="+5"
-              onPress={increaseLevel}
-            />
-          </ThemedView>
+          <BatteryAndPercentage level={percentage} />
           <Button
             onPress={handlePresentModalPress}
-            title="Present Modal"
+            title="Scan QR-kode"
             color="gray"
           />
           <BottomSheetModal
@@ -100,7 +87,10 @@ export const MainPage = () => {
                 backgroundColor: backgroundColor,
               }}
             >
-              <ScannerPage />
+              <ScannerPage
+                onDecrease={increasePercentage}
+                onIncrease={decreasePercentage}
+              />
             </BottomSheetView>
           </BottomSheetModal>
         </ThemedView>
