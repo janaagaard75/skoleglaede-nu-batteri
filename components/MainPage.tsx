@@ -7,36 +7,43 @@ import React, { useCallback, useRef, useState } from "react";
 import { Button, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
-import { ScannerDialog } from "./ScannerDialog";
+import { ScannerPage } from "./ScannerPage";
 import { ThemedView } from "./themed/ThemedView";
+import { useThemeColor } from "./themed/useThemeColor";
 
 export const MainPage = () => {
-  const [level, setLevel] = useState(50);
+  const [percentage, setPercentage] = useState(50);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 100;
+  const textColor = useThemeColor({}, "text");
+  const backgroundColor = useThemeColor({}, "background");
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const decreaseLevel = () => {
-    const newLevel = level - 5;
-    if (newLevel >= 0) {
-      setLevel(newLevel);
+  const decreasePercentage = (percentagePoints: number) => {
+    const newPercentage = percentage - percentagePoints;
+    if (newPercentage >= 0) {
+      setPercentage(newPercentage);
     } else {
-      setLevel(0);
+      setPercentage(0);
     }
+
+    bottomSheetModalRef.current?.dismiss();
   };
 
-  const increaseLevel = () => {
-    const newLevel = level + 5;
-    if (newLevel <= 100) {
-      setLevel(newLevel);
+  const increasePercentage = (percentagePoints: number) => {
+    const newPercentage = percentage + percentagePoints;
+    if (newPercentage <= 100) {
+      setPercentage(newPercentage);
     } else {
-      setLevel(100);
+      setPercentage(100);
     }
+
+    bottomSheetModalRef.current?.dismiss();
   };
 
   return (
@@ -53,38 +60,37 @@ export const MainPage = () => {
             justifyContent: "center",
           }}
         >
-          <BatteryAndPercentage level={level} />
-          <ThemedView
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 40,
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              title="-5"
-              onPress={decreaseLevel}
-            />
-            <Button
-              title="+5"
-              onPress={increaseLevel}
-            />
-          </ThemedView>
+          <BatteryAndPercentage level={percentage} />
           <Button
             onPress={handlePresentModalPress}
-            title="Present Modal"
+            title="Scan QR-kode"
             color="gray"
           />
           <BottomSheetModal
+            backgroundStyle={{
+              backgroundColor: backgroundColor,
+            }}
             enableDismissOnClose={true}
             enableDynamicSizing={false}
             enablePanDownToClose={true}
+            handleIndicatorStyle={{
+              backgroundColor: textColor,
+            }}
+            handleStyle={{
+              backgroundColor: backgroundColor,
+            }}
             ref={bottomSheetModalRef}
             snapPoints={[bottomSheetHeight]}
           >
-            <BottomSheetView>
-              <ScannerDialog />
+            <BottomSheetView
+              style={{
+                backgroundColor: backgroundColor,
+              }}
+            >
+              <ScannerPage
+                onDecrease={increasePercentage}
+                onIncrease={decreasePercentage}
+              />
             </BottomSheetView>
           </BottomSheetModal>
         </ThemedView>
