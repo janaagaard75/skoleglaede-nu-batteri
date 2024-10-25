@@ -20,8 +20,9 @@ export const ScannerPage = () => {
   const [resetScannedBarcodeTimeoutId, setResetScannedBarcodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
-  const viewfinderHeight = 20 * 16;
-  const viewfinderWidth = 20 * 10;
+  // This aspect ratio of 4:3 seems to be what the QR scanner uses.
+  const viewfinderHeight = 80 * 4;
+  const viewfinderWidth = 80 * 3;
 
   const barcodeScanned = (scanningResult: BarcodeScanningResult) => {
     if (resetScannedBarcodeTimeoutId !== undefined) {
