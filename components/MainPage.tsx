@@ -80,6 +80,9 @@ export const MainPage = () => {
             color="gray"
           />
           <BottomSheetModal
+            backgroundStyle={{
+              backgroundColor: backgroundColor,
+            }}
             enableDismissOnClose={true}
             enableDynamicSizing={false}
             enablePanDownToClose={true}
