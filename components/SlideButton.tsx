@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useThemeColor } from "./themed/useThemeColor";
 
 type SliderState =
   | "animating"
@@ -37,6 +38,10 @@ export const SlideButton = (props: Props) => {
   sliderSizeRef.current = sliderSize;
 
   const animatedPosition = useRef(new Animated.Value(0)).current;
+
+  const backgroundColor = useThemeColor({}, "background");
+  const disabledTextColor = useThemeColor({}, "disabledText");
+  const textColor = useThemeColor({}, "text");
 
   const panResponder = useRef(
     PanResponder.create({
@@ -96,6 +101,7 @@ export const SlideButton = (props: Props) => {
   return (
     <View
       style={{
+        borderColor: props.disabled ? disabledTextColor : textColor,
         borderRadius: 10,
         borderWidth: 2,
         padding: 3,
@@ -125,9 +131,9 @@ export const SlideButton = (props: Props) => {
             }}
             style={{
               borderRadius: 6,
-              borderColor: props.disabled ? "#999" : "#000",
+              borderColor: props.disabled ? disabledTextColor : textColor,
               borderWidth: 2,
-              color: props.disabled ? "#999" : "#000",
+              color: props.disabled ? disabledTextColor : textColor,
               fontSize: 16,
               paddingHorizontal: 10,
               paddingVertical: 6,
