@@ -48,6 +48,10 @@ export const SlideButton = memo((props: Props) => {
     _evt: GestureResponderEvent,
     _gestureStat: PanResponderGestureState
   ) => {
+    if (props.disabled) {
+      return;
+    }
+
     if (sliderStateRef.current === "dropWillTriggerAction") {
       props.onSlide();
     }
@@ -70,6 +74,10 @@ export const SlideButton = memo((props: Props) => {
     _evt: GestureResponderEvent,
     gestureState: PanResponderGestureState
   ) => {
+    if (props.disabled) {
+      return;
+    }
+
     if (
       buttonSizeRef.current === undefined ||
       sliderSizeRef.current === undefined
@@ -81,6 +89,7 @@ export const SlideButton = memo((props: Props) => {
     const restrictedDx = restrict(gestureState.dx, 0, maximumDx);
     const dropZoneWidth = 20;
     const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
+    // TODO: This causes the slider to break. Figure out a solution where this state variable isn't needed. The solution could also be to create the PanResponder in a useEffect hook.
     setSliderState(withinDropZone ? "dropWillTriggerAction" : "dropWillCancel");
 
     animatedPosition.setValue(restrictedDx);
@@ -90,6 +99,10 @@ export const SlideButton = memo((props: Props) => {
     _evt: GestureResponderEvent,
     _gestureStat: PanResponderGestureState
   ) => {
+    if (props.disabled) {
+      return;
+    }
+
     setSliderState("dropWillCancel");
   };
 
