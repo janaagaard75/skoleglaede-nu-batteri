@@ -88,8 +88,8 @@ export const MainPage = () => {
               }}
             >
               <ScannerPage
-                onDecrease={increasePercentage}
-                onIncrease={decreasePercentage}
+                onDecrease={decreasePercentage}
+                onIncrease={increasePercentage}
               />
             </BottomSheetView>
           </BottomSheetModal>

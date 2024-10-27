@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -21,7 +21,7 @@ interface Props {
   title: string;
 }
 
-export const SlideButton = (props: Props) => {
+export const SlideButton = memo((props: Props) => {
   const [sliderState, setSliderState] = useState<SliderState>("idle");
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
@@ -46,7 +46,6 @@ export const SlideButton = (props: Props) => {
     PanResponder.create({
       onPanResponderEnd: (_evt, _gestureState) => {
         if (sliderStateRef.current === "dropWillTriggerAction") {
-          console.log("Triggering onSlide");
           props.onSlide();
         }
 
@@ -145,7 +144,7 @@ export const SlideButton = (props: Props) => {
       </View>
     </View>
   );
-};
+});
 
 const restrict = (input: number, minimum: number, maximum: number): number => {
   if (input < minimum) {
