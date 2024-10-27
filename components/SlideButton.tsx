@@ -2,8 +2,10 @@ import { memo, useRef, useState } from "react";
 import {
   Animated,
   Easing,
+  GestureResponderEvent,
   LayoutRectangle,
   PanResponder,
+  PanResponderGestureState,
   Text,
   View,
 } from "react-native";
@@ -42,60 +44,66 @@ export const SlideButton = memo((props: Props) => {
   const disabledTextColor = useThemeColor({}, "disabledText");
   const textColor = useThemeColor({}, "text");
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onPanResponderEnd: (_evt, _gestureState) => {
-        if (sliderStateRef.current === "dropWillTriggerAction") {
-          props.onSlide();
-        }
+  const end = (
+    _evt: GestureResponderEvent,
+    _gestureStat: PanResponderGestureState
+  ) => {
+    if (sliderStateRef.current === "dropWillTriggerAction") {
+      props.onSlide();
+    }
 
-        setSliderState("animating");
+    setSliderState("animating");
 
-        Animated.timing(animatedPosition, {
-          duration: 100,
-          easing: Easing.ease,
-          toValue: 0,
-          useNativeDriver: true,
-        }).start(() => {
-          if (sliderStateRef.current !== "dropWillCancel") {
-            setSliderState("idle");
-          }
-        });
-      },
+    Animated.timing(animatedPosition, {
+      duration: 100,
+      easing: Easing.ease,
+      toValue: 0,
+      useNativeDriver: true,
+    }).start(() => {
+      if (sliderStateRef.current !== "dropWillCancel") {
+        setSliderState("idle");
+      }
+    });
+  };
 
-      onPanResponderMove: (_evt, gestureState) => {
-        if (
-          buttonSizeRef.current === undefined ||
-          sliderSizeRef.current === undefined
-        ) {
-          throw new Error("Both buttonSize and sliderSize must be defined.");
-        }
+  const move = (
+    _evt: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
+    if (
+      buttonSizeRef.current === undefined ||
+      sliderSizeRef.current === undefined
+    ) {
+      throw new Error("Both buttonSize and sliderSize must be defined.");
+    }
 
-        const maximumDx =
-          sliderSizeRef.current.width - buttonSizeRef.current.width;
-        const restrictedDx = restrict(gestureState.dx, 0, maximumDx);
-        const dropZoneWidth = 20;
-        const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
-        setSliderState(
-          withinDropZone ? "dropWillTriggerAction" : "dropWillCancel"
-        );
+    const maximumDx = sliderSizeRef.current.width - buttonSizeRef.current.width;
+    const restrictedDx = restrict(gestureState.dx, 0, maximumDx);
+    const dropZoneWidth = 20;
+    const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
+    setSliderState(withinDropZone ? "dropWillTriggerAction" : "dropWillCancel");
 
-        animatedPosition.setValue(restrictedDx);
-      },
+    animatedPosition.setValue(restrictedDx);
+  };
 
-      onPanResponderStart: (_evt, _gestureState) => {
-        setSliderState("dropWillCancel");
-      },
+  const start = (
+    _evt: GestureResponderEvent,
+    _gestureStat: PanResponderGestureState
+  ) => {
+    setSliderState("dropWillCancel");
+  };
 
-      onStartShouldSetPanResponder: (_evt, _gestureState) => true,
-
-      onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
-      onPanResponderTerminationRequest: (_evt, _gestureState) => true,
-      onShouldBlockNativeResponder: (_evt, _gestureState) => true,
-      onStartShouldSetPanResponderCapture: (_evt, _gestureState) => true,
-    })
-  ).current;
+  const panResponder = PanResponder.create({
+    // onPanResponderTerminationRequest: (_evt, _gestureState) => true,
+    onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
+    onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+    onPanResponderEnd: end,
+    onPanResponderMove: move,
+    onPanResponderStart: start,
+    onShouldBlockNativeResponder: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponder: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+  });
 
   return (
     <View
