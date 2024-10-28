@@ -9,7 +9,7 @@ interface Props {
 
 /** Ionicons v5 battery. https://react-icons.github.io/react-icons/icons/io5/ */
 export const BatteryIcon = (props: Props) => {
-  const roundedWidth =
+  const percentageBarWidth =
     Math.round(((100 * props.level) / 100) * (292.63 + 32)) / 100;
 
   const hexColor = (() => {
@@ -52,7 +52,7 @@ export const BatteryIcon = (props: Props) => {
           ry="45.7"
         />
         <Rect
-          width={roundedWidth}
+          width={percentageBarWidth}
           height={114.13 + 32}
           x={85.69 - 16}
           y={198.93 - 16}
