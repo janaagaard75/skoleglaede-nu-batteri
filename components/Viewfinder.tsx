@@ -31,7 +31,6 @@ export const Viewfinder = (props: Props) => {
     }
 
     if (scanningResult.data !== props.scannedQrCode) {
-      console.log("Setting scanned QR code to", scanningResult.data);
       props.onScannedQrCodeChange(scanningResult.data);
     }
     setBounds(scanningResult.bounds);
@@ -40,7 +39,6 @@ export const Viewfinder = (props: Props) => {
   };
 
   const resetScannedQrCode = () => {
-    console.log("Setting scanned QR code to undefined");
     props.onScannedQrCodeChange(undefined);
     setBounds(undefined);
   };

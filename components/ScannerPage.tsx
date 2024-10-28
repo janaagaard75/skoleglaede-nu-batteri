@@ -22,15 +22,10 @@ export const ScannerPage = (props: Props) => {
     setLockScannedQrCode(false);
 
     if (scannedQrCode === undefined) {
-      console.log("No scanned QR code to apply.");
       return;
     }
 
-    console.log(`Applying scanned QR code '${scannedQrCode}'.`);
-
     if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
-      console.log("match");
-
       const operation = scannedQrCode[0];
       const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
 
