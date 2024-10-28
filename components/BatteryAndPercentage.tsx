@@ -29,10 +29,17 @@ export const BatteryAndPercentage = (props: Props) => {
         alignItems: "center",
       }}
     >
-      <BatteryIcon
-        color={batteryColor}
-        level={roundedLevel}
-      />
+      <View
+        style={{
+          aspectRatio: 1.5,
+          width: "60%",
+        }}
+      >
+        <BatteryIcon
+          color={batteryColor}
+          level={roundedLevel}
+        />
+      </View>
       <ThemedText>{props.level} %</ThemedText>
     </View>
   );
