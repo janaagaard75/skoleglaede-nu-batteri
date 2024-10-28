@@ -9,16 +9,15 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { ScannerPage } from "./ScannerPage";
 import { ThemedView } from "./themed/ThemedView";
-import { useThemeColor } from "./themed/useThemeColor";
+import { useColors } from "./themed/useColors";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(50);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const colors = useColors();
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 100;
-  const textColor = useThemeColor({}, "text");
-  const backgroundColor = useThemeColor({}, "background");
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -68,23 +67,23 @@ export const MainPage = () => {
           />
           <BottomSheetModal
             backgroundStyle={{
-              backgroundColor: backgroundColor,
+              backgroundColor: colors.background,
             }}
             enableDismissOnClose={true}
             enableDynamicSizing={false}
             enablePanDownToClose={true}
             handleIndicatorStyle={{
-              backgroundColor: textColor,
+              backgroundColor: colors.text,
             }}
             handleStyle={{
-              backgroundColor: backgroundColor,
+              backgroundColor: colors.background,
             }}
             ref={bottomSheetModalRef}
             snapPoints={[bottomSheetHeight]}
           >
             <BottomSheetView
               style={{
-                backgroundColor: backgroundColor,
+                backgroundColor: colors.background,
               }}
             >
               <ScannerPage

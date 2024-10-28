@@ -1,4 +1,5 @@
 import Svg, { Path, Rect } from "react-native-svg";
+import { useColors } from "./themed/useColors";
 
 interface Props {
   color: "green" | "orange" | "red";
@@ -8,17 +9,19 @@ interface Props {
 
 /** Ionicons v5 battery. https://react-icons.github.io/react-icons/icons/io5/ */
 export const BatteryIcon = (props: Props) => {
+  const colors = useColors();
+
   const percentageBarWidth =
     Math.round(((100 * props.level) / 100) * (292.63 + 32)) / 100;
 
   const hexColor = (() => {
     switch (props.color) {
       case "green":
-        return "#16a34a"; // green-600
+        return colors.green;
       case "orange":
-        return "#f59e0b"; // amber-500
+        return colors.orange;
       case "red":
-        return "#dc2626"; // red-600
+        return colors.red;
     }
   })();
 

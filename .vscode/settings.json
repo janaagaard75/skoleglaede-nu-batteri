@@ -1,6 +1,13 @@
 {
   "cSpell.language": "en,da",
-  "cSpell.words": ["gorhom", "Ionicons", "Nativewind", "qrcode", "skoleglaede"],
+  "cSpell.words": [
+    "gorhom",
+    "Ionicons",
+    "Nativewind",
+    "qrcode",
+    "skoleglaede",
+    "tailwindcss"
+  ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },

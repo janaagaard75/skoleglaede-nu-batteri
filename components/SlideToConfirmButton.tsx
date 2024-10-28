@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useThemeColor } from "./themed/useThemeColor";
+import { useColors } from "./themed/useColors";
 
 interface Props {
   disabled: boolean;
@@ -24,11 +24,9 @@ export const SlideToConfirmButton = memo((props: Props) => {
   const [sliderSize, setSliderSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
+  const colors = useColors();
 
   const animatedPosition = useRef(new Animated.Value(0)).current;
-
-  const disabledTextColor = useThemeColor({}, "disabledText");
-  const textColor = useThemeColor({}, "text");
 
   const end = (
     _evt: GestureResponderEvent,
@@ -100,7 +98,7 @@ export const SlideToConfirmButton = memo((props: Props) => {
   return (
     <View
       style={{
-        borderColor: props.disabled ? disabledTextColor : textColor,
+        borderColor: props.disabled ? colors.disabledText : colors.text,
         borderRadius: 10,
         borderWidth: 2,
         padding: 3,
@@ -130,9 +128,9 @@ export const SlideToConfirmButton = memo((props: Props) => {
             }}
             style={{
               borderRadius: 6,
-              borderColor: props.disabled ? disabledTextColor : textColor,
+              borderColor: props.disabled ? colors.disabledText : colors.text,
               borderWidth: 2,
-              color: props.disabled ? disabledTextColor : textColor,
+              color: props.disabled ? colors.disabledText : colors.text,
               fontSize: 16,
               paddingHorizontal: 10,
               paddingVertical: 6,
