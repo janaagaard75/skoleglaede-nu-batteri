@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import React, { useRef, useState } from "react";
 import { SlideToConfirmButton } from "./SlideToConfirmButton";
 import { ThemedText } from "./themed/ThemedText";
@@ -90,9 +91,9 @@ const getLabel = (scannedQrCode: string | undefined) => {
 
     switch (operation) {
       case "-":
-        return `Tilføj ${percentagePoints} %`;
+        return `+ ${percentagePoints} %`;
       case "+":
-        return `Fratræk ${percentagePoints} %`;
+        return decode(`&minus; ${percentagePoints} %`);
     }
   }
 };
