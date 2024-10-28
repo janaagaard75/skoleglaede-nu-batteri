@@ -73,7 +73,7 @@ export const ScannerPage = (props: Props) => {
       <SlideToConfirmButton
         disabled={scannedQrCode === undefined}
         onConfirm={applyScannedQrCode}
-        title="Bekræft"
+        title="Bekræft &nbsp;&#x21E8;"
       />
     </ThemedView>
   );

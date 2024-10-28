@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import { memo, useRef, useState } from "react";
 import {
   Animated,
@@ -135,7 +136,7 @@ export const SlideToConfirmButton = memo((props: Props) => {
               paddingVertical: 6,
             }}
           >
-            {props.title} &nbsp;&#x21E8;
+            {decode(props.title)}
           </ThemedText>
         </Animated.View>
       </View>
