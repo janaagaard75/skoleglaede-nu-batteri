@@ -87,7 +87,6 @@ export const SlideButton = memo((props: Props) => {
   };
 
   const panResponder = PanResponder.create({
-    // onPanResponderTerminationRequest: (_evt, _gestureState) => true,
     onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
     onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
     onPanResponderEnd: end,
