@@ -53,6 +53,8 @@ export const ScannerPage = (props: Props) => {
       style={{
         height: "100%",
         marginHorizontal: 30,
+        gap: 30,
+        marginTop: 30,
       }}
     >
       <Viewfinder
