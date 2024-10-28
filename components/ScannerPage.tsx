@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import React, { useRef, useState } from "react";
 import { SlideToConfirmButton } from "./SlideToConfirmButton";
 import { ThemedText } from "./themed/ThemedText";
@@ -48,23 +49,51 @@ export const ScannerPage = (props: Props) => {
     setScannedQrCode(newQrCode);
   };
 
+  const label = getLabel(scannedQrCode);
+
   return (
     <ThemedView
       style={{
         height: "100%",
-        marginHorizontal: 20,
+        marginHorizontal: 30,
+        gap: 30,
+        marginTop: 30,
       }}
     >
       <Viewfinder
         onScannedQrCodeChange={updatedScannedQrCode}
         scannedQrCode={scannedQrCode}
       />
-      <ThemedText>{scannedQrCode ?? "Ingenting"}</ThemedText>
+      <ThemedText
+        style={{
+          textAlign: "center",
+        }}
+      >
+        {label}
+      </ThemedText>
       <SlideToConfirmButton
         disabled={scannedQrCode === undefined}
         onConfirm={applyScannedQrCode}
-        title="Bekræft "
+        title="Bekræft &nbsp;&#x21E8;"
       />
     </ThemedView>
   );
+};
+
+const getLabel = (scannedQrCode: string | undefined) => {
+  if (scannedQrCode === undefined) {
+    return "Scan en QR-kode";
+  }
+
+  if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
+    const operation = scannedQrCode[0];
+    const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+
+    switch (operation) {
+      case "-":
+        return `+ ${percentagePoints} %`;
+      case "+":
+        return decode(`&minus; ${percentagePoints} %`);
+    }
+  }
 };

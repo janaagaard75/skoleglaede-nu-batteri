@@ -4,21 +4,21 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef, useState } from "react";
-import { Button, Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
+import { useColors } from "./colors/useColors";
 import { ScannerPage } from "./ScannerPage";
+import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
-import { useThemeColor } from "./themed/useThemeColor";
 
 export const MainPage = () => {
-  const [percentage, setPercentage] = useState(50);
+  const [percentage, setPercentage] = useState(30);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const colors = useColors();
 
   const screenHeight = Dimensions.get("window").height;
-  const bottomSheetHeight = screenHeight - 100;
-  const textColor = useThemeColor({}, "text");
-  const backgroundColor = useThemeColor({}, "background");
+  const bottomSheetHeight = screenHeight - 200;
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -55,44 +55,62 @@ export const MainPage = () => {
       <BottomSheetModalProvider>
         <ThemedView
           style={{
-            gap: 20,
             height: "100%",
-            justifyContent: "center",
+            display: "flex",
           }}
         >
-          <BatteryAndPercentage level={percentage} />
-          <Button
-            onPress={handlePresentModalPress}
-            title="Scan QR-kode"
-            color="gray"
+          <ThemedTextPressable
+            onPress={() => setPercentage(30)}
+            style={{
+              alignSelf: "flex-end",
+              margin: 20,
+            }}
+            title="Nulstil"
           />
-          <BottomSheetModal
-            backgroundStyle={{
-              backgroundColor: backgroundColor,
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              gap: 20,
             }}
-            enableDismissOnClose={true}
-            enableDynamicSizing={false}
-            enablePanDownToClose={true}
-            handleIndicatorStyle={{
-              backgroundColor: textColor,
-            }}
-            handleStyle={{
-              backgroundColor: backgroundColor,
-            }}
-            ref={bottomSheetModalRef}
-            snapPoints={[bottomSheetHeight]}
           >
-            <BottomSheetView
+            <BatteryAndPercentage level={percentage} />
+            <ThemedTextPressable
+              onPress={handlePresentModalPress}
+              title="Scan QR-kode"
               style={{
-                backgroundColor: backgroundColor,
+                alignSelf: "center",
+                marginLeft: 10,
               }}
+            />
+            <BottomSheetModal
+              backgroundStyle={{
+                backgroundColor: colors.background,
+              }}
+              enableDismissOnClose={true}
+              enableDynamicSizing={false}
+              enablePanDownToClose={true}
+              handleIndicatorStyle={{
+                backgroundColor: colors.text,
+              }}
+              handleStyle={{
+                backgroundColor: colors.background,
+              }}
+              ref={bottomSheetModalRef}
+              snapPoints={[bottomSheetHeight]}
             >
-              <ScannerPage
-                onDecrease={decreasePercentage}
-                onIncrease={increasePercentage}
-              />
-            </BottomSheetView>
-          </BottomSheetModal>
+              <BottomSheetView
+                style={{
+                  backgroundColor: colors.background,
+                }}
+              >
+                <ScannerPage
+                  onDecrease={decreasePercentage}
+                  onIncrease={increasePercentage}
+                />
+              </BottomSheetView>
+            </BottomSheetModal>
+          </View>
         </ThemedView>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

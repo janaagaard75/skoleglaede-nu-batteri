@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import { memo, useRef, useState } from "react";
 import {
   Animated,
@@ -6,10 +7,10 @@ import {
   LayoutRectangle,
   PanResponder,
   PanResponderGestureState,
-  Text,
   View,
 } from "react-native";
-import { useThemeColor } from "./themed/useThemeColor";
+import { useColors } from "./colors/useColors";
+import { ThemedText } from "./themed/ThemedText";
 
 interface Props {
   disabled: boolean;
@@ -24,11 +25,9 @@ export const SlideToConfirmButton = memo((props: Props) => {
   const [sliderSize, setSliderSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
+  const colors = useColors();
 
   const animatedPosition = useRef(new Animated.Value(0)).current;
-
-  const disabledTextColor = useThemeColor({}, "disabledText");
-  const textColor = useThemeColor({}, "text");
 
   const end = (
     _evt: GestureResponderEvent,
@@ -100,7 +99,7 @@ export const SlideToConfirmButton = memo((props: Props) => {
   return (
     <View
       style={{
-        borderColor: props.disabled ? disabledTextColor : textColor,
+        borderColor: props.disabled ? colors.disabledText : colors.text,
         borderRadius: 10,
         borderWidth: 2,
         padding: 3,
@@ -124,22 +123,21 @@ export const SlideToConfirmButton = memo((props: Props) => {
           }}
           {...panResponder.panHandlers}
         >
-          <Text
+          <ThemedText
             onLayout={layoutEvent => {
               setButtonSize(layoutEvent.nativeEvent.layout);
             }}
             style={{
               borderRadius: 6,
-              borderColor: props.disabled ? disabledTextColor : textColor,
+              borderColor: props.disabled ? colors.disabledText : colors.text,
               borderWidth: 2,
-              color: props.disabled ? disabledTextColor : textColor,
-              fontSize: 16,
-              paddingHorizontal: 10,
+              color: props.disabled ? colors.disabledText : colors.text,
+              paddingHorizontal: 14,
               paddingVertical: 6,
             }}
           >
-            {props.title} &nbsp;&#x21E8;
-          </Text>
+            {decode(props.title)}
+          </ThemedText>
         </Animated.View>
       </View>
     </View>
