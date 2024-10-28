@@ -1,4 +1,4 @@
-import { Colors } from "@/components/themed/Colors";
+import { Colors } from "@/components/colors/Colors";
 import { useColorScheme } from "react-native";
 
 export function useThemeColor(

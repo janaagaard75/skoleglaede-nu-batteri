@@ -1,5 +1,5 @@
 import { View, type ViewProps } from "react-native";
-import { useColors } from "./useColors";
+import { useColors } from "../colors/useColors";
 
 type Props = ViewProps;
 

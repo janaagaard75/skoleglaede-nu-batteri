@@ -1,5 +1,5 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
-import { useColors } from "./useColors";
+import { useColors } from "../colors/useColors";
 
 type Props = TextProps & {
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";

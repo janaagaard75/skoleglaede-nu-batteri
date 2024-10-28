@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useColors } from "./themed/useColors";
+import { useColors } from "./colors/useColors";
 
 interface Props {
   disabled: boolean;

@@ -7,9 +7,9 @@ import React, { useCallback, useRef, useState } from "react";
 import { Button, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
+import { useColors } from "./colors/useColors";
 import { ScannerPage } from "./ScannerPage";
 import { ThemedView } from "./themed/ThemedView";
-import { useColors } from "./themed/useColors";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(50);

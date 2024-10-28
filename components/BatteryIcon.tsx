@@ -1,5 +1,5 @@
 import Svg, { Path, Rect } from "react-native-svg";
-import { useColors } from "./themed/useColors";
+import { useColors } from "./colors/useColors";
 
 interface Props {
   color: "green" | "orange" | "red";
