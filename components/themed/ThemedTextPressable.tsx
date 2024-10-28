@@ -11,9 +11,16 @@ export function ThemedTextPressable({ style, title, ...otherProps }: Props) {
     <Pressable
       style={[
         {
-          alignItems: "center",
+          alignSelf: "flex-start",
+          borderColor: colors.text,
+          borderRadius: 8,
+          borderWidth: 2,
+          elevation: 4,
+          paddingHorizontal: 16,
+          paddingVertical: 4,
         },
-        // style,
+        // @ts-ignore
+        style,
       ]}
       {...otherProps}
     >
