@@ -21,13 +21,23 @@ export const Viewfinder = (props: Props) => {
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
-  // This aspect ratio of 3:4 seems to be what the QR scanner uses.
-  const viewfinderHeight = 80 * 4;
-  const viewfinderWidth = 80 * 3;
+  const viewfinderSize = 80 * 3;
+  // It seem that the QR scanner area uses an aspect ratio of 3:4.
+  const internalViewfinderHeight = 80 * 4;
 
   const qrCodeScanned = (scanningResult: BarcodeScanningResult) => {
     if (resetScannedQrCodeTimeoutId !== undefined) {
       clearTimeout(resetScannedQrCodeTimeoutId);
+    }
+
+    // Verify that the scanned QR code is entirely within the visible area of the viewfinder.
+    const aboveViewfinder = scanningResult.bounds.origin.y < 0;
+    const belowViewfinder =
+      scanningResult.bounds.origin.y + scanningResult.bounds.size.height >
+      viewfinderSize;
+
+    if (aboveViewfinder || belowViewfinder) {
+      return;
     }
 
     if (scanningResult.data !== props.scannedQrCode) {
@@ -74,12 +84,11 @@ export const Viewfinder = (props: Props) => {
       facing="back"
       onBarcodeScanned={qrCodeScanned}
       style={{
-        height: viewfinderHeight,
+        height: viewfinderSize,
         marginLeft: "auto",
         marginRight: "auto",
-        width: viewfinderWidth,
+        width: viewfinderSize,
       }}
-      zoom={0.004}
     >
       {bounds !== undefined && (
         <View

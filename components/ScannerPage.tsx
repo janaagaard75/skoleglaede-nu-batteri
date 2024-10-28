@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { SlideButton } from "./SlideButton";
+import { SlideToConfirmButton } from "./SlideToConfirmButton";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
@@ -60,9 +60,9 @@ export const ScannerPage = (props: Props) => {
         scannedQrCode={scannedQrCode}
       />
       <ThemedText>{scannedQrCode ?? "Ingenting"}</ThemedText>
-      <SlideButton
+      <SlideToConfirmButton
         disabled={scannedQrCode === undefined}
-        onSlide={applyScannedQrCode}
+        onConfirm={applyScannedQrCode}
         title="Bekræft "
       />
     </ThemedView>
