@@ -1,19 +1,15 @@
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import {
   Animated,
   Easing,
+  GestureResponderEvent,
   LayoutRectangle,
   PanResponder,
+  PanResponderGestureState,
   Text,
   View,
 } from "react-native";
 import { useThemeColor } from "./themed/useThemeColor";
-
-type SliderState =
-  | "animating"
-  | "dropWillCancel"
-  | "dropWillTriggerAction"
-  | "idle";
 
 interface Props {
   disabled: boolean;
@@ -21,8 +17,7 @@ interface Props {
   title: string;
 }
 
-export const SlideButton = (props: Props) => {
-  const [sliderState, setSliderState] = useState<SliderState>("idle");
+export const SlideButton = memo((props: Props) => {
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
@@ -30,73 +25,78 @@ export const SlideButton = (props: Props) => {
     undefined
   );
 
-  const sliderStateRef = useRef<SliderState>("idle");
-  sliderStateRef.current = sliderState;
-  const buttonSizeRef = useRef<LayoutRectangle | undefined>(undefined);
-  buttonSizeRef.current = buttonSize;
-  const sliderSizeRef = useRef<LayoutRectangle | undefined>(undefined);
-  sliderSizeRef.current = sliderSize;
-
   const animatedPosition = useRef(new Animated.Value(0)).current;
 
   const disabledTextColor = useThemeColor({}, "disabledText");
   const textColor = useThemeColor({}, "text");
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onPanResponderEnd: (_evt, _gestureState) => {
-        if (sliderStateRef.current === "dropWillTriggerAction") {
-          console.log("Triggering onSlide");
-          props.onSlide();
-        }
+  const end = (
+    _evt: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
+    if (props.disabled) {
+      return;
+    }
 
-        setSliderState("animating");
+    if (buttonSize === undefined || sliderSize === undefined) {
+      throw new Error("Both buttonSize and sliderSize must be defined.");
+    }
 
-        Animated.timing(animatedPosition, {
-          duration: 100,
-          easing: Easing.ease,
-          toValue: 0,
-          useNativeDriver: true,
-        }).start(() => {
-          if (sliderStateRef.current !== "dropWillCancel") {
-            setSliderState("idle");
-          }
-        });
-      },
+    const maximumDx = sliderSize.width - buttonSize.width;
+    const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
+    const dropZoneWidth = 20;
+    const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
 
-      onPanResponderMove: (_evt, gestureState) => {
-        if (
-          buttonSizeRef.current === undefined ||
-          sliderSizeRef.current === undefined
-        ) {
-          throw new Error("Both buttonSize and sliderSize must be defined.");
-        }
+    if (withinDropZone) {
+      props.onSlide();
+    }
 
-        const maximumDx =
-          sliderSizeRef.current.width - buttonSizeRef.current.width;
-        const restrictedDx = restrict(gestureState.dx, 0, maximumDx);
-        const dropZoneWidth = 20;
-        const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
-        setSliderState(
-          withinDropZone ? "dropWillTriggerAction" : "dropWillCancel"
-        );
+    Animated.timing(animatedPosition, {
+      duration: 100,
+      easing: Easing.ease,
+      toValue: 0,
+      useNativeDriver: true,
+    }).start();
+  };
 
-        animatedPosition.setValue(restrictedDx);
-      },
+  const move = (
+    _evt: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
+    if (props.disabled) {
+      return;
+    }
 
-      onPanResponderStart: (_evt, _gestureState) => {
-        setSliderState("dropWillCancel");
-      },
+    if (buttonSize === undefined || sliderSize === undefined) {
+      throw new Error("Both buttonSize and sliderSize must be defined.");
+    }
 
-      onStartShouldSetPanResponder: (_evt, _gestureState) => true,
+    const maximumDx = sliderSize.width - buttonSize.width;
+    const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
 
-      onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
-      onPanResponderTerminationRequest: (_evt, _gestureState) => true,
-      onShouldBlockNativeResponder: (_evt, _gestureState) => true,
-      onStartShouldSetPanResponderCapture: (_evt, _gestureState) => true,
-    })
-  ).current;
+    animatedPosition.setValue(restrictedDx);
+  };
+
+  const start = (
+    _evt: GestureResponderEvent,
+    _gestureStat: PanResponderGestureState
+  ) => {
+    if (props.disabled) {
+      return;
+    }
+  };
+
+  const panResponder = PanResponder.create({
+    // onPanResponderTerminationRequest: (_evt, _gestureState) => true,
+    onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
+    onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+    onPanResponderEnd: end,
+    onPanResponderMove: move,
+    onPanResponderStart: start,
+    onShouldBlockNativeResponder: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponder: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+  });
 
   return (
     <View
@@ -145,9 +145,9 @@ export const SlideButton = (props: Props) => {
       </View>
     </View>
   );
-};
+});
 
-const restrict = (input: number, minimum: number, maximum: number): number => {
+const clamp = (input: number, minimum: number, maximum: number): number => {
   if (input < minimum) {
     return minimum;
   }
