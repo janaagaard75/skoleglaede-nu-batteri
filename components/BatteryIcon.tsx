@@ -29,8 +29,11 @@ export const BatteryIcon = (props: Props) => {
     <Svg
       stroke={hexColor}
       fill={hexColor}
+      style={{
+        marginLeft: 10, // Push a little to the right to center the battery visually.
+      }}
       strokeWidth="0"
-      viewBox="0 100 496 312"
+      viewBox="0 100 512 312"
       width="100%"
       height="100%"
     >
