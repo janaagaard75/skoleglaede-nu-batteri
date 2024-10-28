@@ -18,7 +18,7 @@ export const MainPage = () => {
   const colors = useColors();
 
   const screenHeight = Dimensions.get("window").height;
-  const bottomSheetHeight = screenHeight - 100;
+  const bottomSheetHeight = screenHeight - 200;
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
