@@ -48,6 +48,8 @@ export const ScannerPage = (props: Props) => {
     setScannedQrCode(newQrCode);
   };
 
+  const label = getLabel(scannedQrCode);
+
   return (
     <ThemedView
       style={{
@@ -61,12 +63,36 @@ export const ScannerPage = (props: Props) => {
         onScannedQrCodeChange={updatedScannedQrCode}
         scannedQrCode={scannedQrCode}
       />
-      <ThemedText>{scannedQrCode ?? "Ingenting"}</ThemedText>
+      <ThemedText
+        style={{
+          textAlign: "center",
+        }}
+      >
+        {label}
+      </ThemedText>
       <SlideToConfirmButton
         disabled={scannedQrCode === undefined}
         onConfirm={applyScannedQrCode}
-        title="Bekræft "
+        title="Bekræft"
       />
     </ThemedView>
   );
+};
+
+const getLabel = (scannedQrCode: string | undefined) => {
+  if (scannedQrCode === undefined) {
+    return "Scan en QR-kode";
+  }
+
+  if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
+    const operation = scannedQrCode[0];
+    const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+
+    switch (operation) {
+      case "-":
+        return `Tilføj ${percentagePoints} %`;
+      case "+":
+        return `Fratræk ${percentagePoints} %`;
+    }
+  }
 };

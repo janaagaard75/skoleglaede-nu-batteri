@@ -131,7 +131,7 @@ export const SlideToConfirmButton = memo((props: Props) => {
               borderColor: props.disabled ? colors.disabledText : colors.text,
               borderWidth: 2,
               color: props.disabled ? colors.disabledText : colors.text,
-              paddingHorizontal: 10,
+              paddingHorizontal: 14,
               paddingVertical: 6,
             }}
           >
