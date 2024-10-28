@@ -52,7 +52,7 @@ export const ScannerPage = (props: Props) => {
     <ThemedView
       style={{
         height: "100%",
-        marginHorizontal: 20,
+        marginHorizontal: 30,
       }}
     >
       <Viewfinder

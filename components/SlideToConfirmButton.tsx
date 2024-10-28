@@ -6,10 +6,10 @@ import {
   LayoutRectangle,
   PanResponder,
   PanResponderGestureState,
-  Text,
   View,
 } from "react-native";
 import { useColors } from "./colors/useColors";
+import { ThemedText } from "./themed/ThemedText";
 
 interface Props {
   disabled: boolean;
@@ -122,7 +122,7 @@ export const SlideToConfirmButton = memo((props: Props) => {
           }}
           {...panResponder.panHandlers}
         >
-          <Text
+          <ThemedText
             onLayout={layoutEvent => {
               setButtonSize(layoutEvent.nativeEvent.layout);
             }}
@@ -131,13 +131,12 @@ export const SlideToConfirmButton = memo((props: Props) => {
               borderColor: props.disabled ? colors.disabledText : colors.text,
               borderWidth: 2,
               color: props.disabled ? colors.disabledText : colors.text,
-              fontSize: 16,
               paddingHorizontal: 10,
               paddingVertical: 6,
             }}
           >
             {props.title} &nbsp;&#x21E8;
-          </Text>
+          </ThemedText>
         </Animated.View>
       </View>
     </View>
