@@ -13,7 +13,7 @@ import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
-  const [percentage, setPercentage] = useState(50);
+  const [percentage, setPercentage] = useState(30);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const colors = useColors();
 
