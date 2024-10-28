@@ -4,11 +4,12 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef, useState } from "react";
-import { Button, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
 import { ScannerPage } from "./ScannerPage";
+import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
@@ -60,10 +61,9 @@ export const MainPage = () => {
           }}
         >
           <BatteryAndPercentage level={percentage} />
-          <Button
+          <ThemedTextPressable
             onPress={handlePresentModalPress}
             title="Scan QR-kode"
-            color="gray"
           />
           <BottomSheetModal
             backgroundStyle={{
