@@ -25,11 +25,6 @@ export const SlideButton = memo((props: Props) => {
     undefined
   );
 
-  const buttonSizeRef = useRef<LayoutRectangle | undefined>(undefined);
-  buttonSizeRef.current = buttonSize;
-  const sliderSizeRef = useRef<LayoutRectangle | undefined>(undefined);
-  sliderSizeRef.current = sliderSize;
-
   const animatedPosition = useRef(new Animated.Value(0)).current;
 
   const disabledTextColor = useThemeColor({}, "disabledText");
@@ -43,14 +38,11 @@ export const SlideButton = memo((props: Props) => {
       return;
     }
 
-    if (
-      buttonSizeRef.current === undefined ||
-      sliderSizeRef.current === undefined
-    ) {
+    if (buttonSize === undefined || sliderSize === undefined) {
       throw new Error("Both buttonSize and sliderSize must be defined.");
     }
 
-    const maximumDx = sliderSizeRef.current.width - buttonSizeRef.current.width;
+    const maximumDx = sliderSize.width - buttonSize.width;
     const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
     const dropZoneWidth = 20;
     const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
@@ -75,14 +67,11 @@ export const SlideButton = memo((props: Props) => {
       return;
     }
 
-    if (
-      buttonSizeRef.current === undefined ||
-      sliderSizeRef.current === undefined
-    ) {
+    if (buttonSize === undefined || sliderSize === undefined) {
       throw new Error("Both buttonSize and sliderSize must be defined.");
     }
 
-    const maximumDx = sliderSizeRef.current.width - buttonSizeRef.current.width;
+    const maximumDx = sliderSize.width - buttonSize.width;
     const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
 
     animatedPosition.setValue(restrictedDx);
