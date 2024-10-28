@@ -11,12 +11,6 @@ import {
 } from "react-native";
 import { useThemeColor } from "./themed/useThemeColor";
 
-type SliderState =
-  | "animating"
-  | "dropWillCancel"
-  | "dropWillTriggerAction"
-  | "idle";
-
 interface Props {
   disabled: boolean;
   onSlide: () => void;
@@ -24,7 +18,6 @@ interface Props {
 }
 
 export const SlideButton = memo((props: Props) => {
-  const [sliderState, setSliderState] = useState<SliderState>("idle");
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
@@ -32,8 +25,6 @@ export const SlideButton = memo((props: Props) => {
     undefined
   );
 
-  const sliderStateRef = useRef<SliderState>("idle");
-  sliderStateRef.current = sliderState;
   const buttonSizeRef = useRef<LayoutRectangle | undefined>(undefined);
   buttonSizeRef.current = buttonSize;
   const sliderSizeRef = useRef<LayoutRectangle | undefined>(undefined);
@@ -46,28 +37,34 @@ export const SlideButton = memo((props: Props) => {
 
   const end = (
     _evt: GestureResponderEvent,
-    _gestureStat: PanResponderGestureState
+    gestureState: PanResponderGestureState
   ) => {
     if (props.disabled) {
       return;
     }
 
-    if (sliderStateRef.current === "dropWillTriggerAction") {
-      props.onSlide();
+    if (
+      buttonSizeRef.current === undefined ||
+      sliderSizeRef.current === undefined
+    ) {
+      throw new Error("Both buttonSize and sliderSize must be defined.");
     }
 
-    setSliderState("animating");
+    const maximumDx = sliderSizeRef.current.width - buttonSizeRef.current.width;
+    const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
+    const dropZoneWidth = 20;
+    const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
+
+    if (withinDropZone) {
+      props.onSlide();
+    }
 
     Animated.timing(animatedPosition, {
       duration: 100,
       easing: Easing.ease,
       toValue: 0,
       useNativeDriver: true,
-    }).start(() => {
-      if (sliderStateRef.current !== "dropWillCancel") {
-        setSliderState("idle");
-      }
-    });
+    }).start();
   };
 
   const move = (
@@ -86,11 +83,7 @@ export const SlideButton = memo((props: Props) => {
     }
 
     const maximumDx = sliderSizeRef.current.width - buttonSizeRef.current.width;
-    const restrictedDx = restrict(gestureState.dx, 0, maximumDx);
-    const dropZoneWidth = 20;
-    const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
-    // TODO: This causes the slider to break. Figure out a solution where this state variable isn't needed. The solution could also be to create the PanResponder in a useEffect hook.
-    setSliderState(withinDropZone ? "dropWillTriggerAction" : "dropWillCancel");
+    const restrictedDx = clamp(gestureState.dx, 0, maximumDx);
 
     animatedPosition.setValue(restrictedDx);
   };
@@ -102,8 +95,6 @@ export const SlideButton = memo((props: Props) => {
     if (props.disabled) {
       return;
     }
-
-    setSliderState("dropWillCancel");
   };
 
   const panResponder = PanResponder.create({
@@ -167,7 +158,7 @@ export const SlideButton = memo((props: Props) => {
   );
 });
 
-const restrict = (input: number, minimum: number, maximum: number): number => {
+const clamp = (input: number, minimum: number, maximum: number): number => {
   if (input < minimum) {
     return minimum;
   }

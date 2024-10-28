@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View } from "react-native";
-import SwipeButton from "rn-swipe-button";
+import { SlideButton } from "./SlideButton";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
@@ -66,67 +65,11 @@ export const ScannerPage = (props: Props) => {
         scannedQrCode={scannedQrCode}
       />
       <ThemedText>{scannedQrCode ?? "Ingenting"}</ThemedText>
-      {/* <SlideButton
+      <SlideButton
         disabled={scannedQrCode === undefined}
         onSlide={applyScannedQrCode}
         title="Bekræft "
-      /> */}
-      {/* <Button
-        title="Bekræft"
-        onPress={applyScannedQrCode}
-      /> */}
-      {/* <SwipeButton
-        thumbIconWidth={100}
-        thumbIconComponent={<CheckoutButton />}
-        disabled={scannedQrCode === undefined}
-        onSwipeStart={() => console.log("Swipe started!")}
-        onSwipeSuccess={applyScannedQrCode}
-        title="Bekræft"
-      /> */}
-      <SwipeButton
-        containerStyles={{
-          borderRadius: 10,
-        }}
-        onSwipeStart={() => setLockScannedQrCode(true)}
-        onSwipeSuccess={() => applyScannedQrCode}
-        titleStyles={{
-          color: "lime",
-
-          // backgroundColor: "lime",
-        }}
-        railStyles={{
-          backgroundColor: "lime",
-          borderColor: "transparent",
-        }}
-        thumbIconWidth={100}
-        thumbIconBorderColor="#000"
-        thumbIconStyles={{
-          borderRadius: 6,
-        }}
-        // @ts-ignore
-        thumbIconComponent={CheckoutButton}
-        title=""
       />
     </ThemedView>
-  );
-};
-
-const CheckoutButton = () => {
-  return (
-    <View
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        width: 100,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 16,
-        }}
-      >
-        Bekræft
-      </Text>
-    </View>
   );
 };
