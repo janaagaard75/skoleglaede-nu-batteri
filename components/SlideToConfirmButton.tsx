@@ -13,11 +13,11 @@ import { useThemeColor } from "./themed/useThemeColor";
 
 interface Props {
   disabled: boolean;
-  onSlide: () => void;
+  onConfirm: () => void;
   title: string;
 }
 
-export const SlideButton = memo((props: Props) => {
+export const SlideToConfirmButton = memo((props: Props) => {
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
@@ -48,7 +48,7 @@ export const SlideButton = memo((props: Props) => {
     const withinDropZone = maximumDx - restrictedDx <= dropZoneWidth;
 
     if (withinDropZone) {
-      props.onSlide();
+      props.onConfirm();
     }
 
     Animated.timing(animatedPosition, {
