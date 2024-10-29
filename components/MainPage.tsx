@@ -3,7 +3,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
@@ -26,9 +26,9 @@ export const MainPage = () => {
     resetSheetRef.current?.present();
   };
 
-  const showScannerSheet = useCallback(() => {
+  const showScannerSheet = () => {
     scannerSheetRef.current?.present();
-  }, []);
+  };
 
   const decreasePercentage = (percentagePoints: number) => {
     const newPercentage = percentage - percentagePoints;
