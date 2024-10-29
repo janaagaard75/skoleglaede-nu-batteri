@@ -90,59 +90,73 @@ export const MainPage = () => {
                 marginLeft: 10,
               }}
             />
-            <BottomSheetModal
-              backgroundStyle={{
-                backgroundColor: colors.background,
-              }}
-              enableDismissOnClose={true}
-              enableDynamicSizing={false}
-              enablePanDownToClose={true}
-              handleIndicatorStyle={{
-                backgroundColor: colors.text,
-              }}
-              handleStyle={{
-                backgroundColor: colors.background,
-              }}
-              ref={resetSheetRef}
-              snapPoints={[bottomSheetHeight]}
-            >
-              <BottomSheetView
-                style={{
-                  backgroundColor: colors.background,
-                }}
-              >
-                <ResetSheet onReset={reset} />
-              </BottomSheetView>
-            </BottomSheetModal>
-            <BottomSheetModal
-              backgroundStyle={{
-                backgroundColor: colors.background,
-              }}
-              enableDismissOnClose={true}
-              enableDynamicSizing={false}
-              enablePanDownToClose={true}
-              handleIndicatorStyle={{
-                backgroundColor: colors.text,
-              }}
-              handleStyle={{
-                backgroundColor: colors.background,
-              }}
-              ref={scannerSheetRef}
-              snapPoints={[bottomSheetHeight]}
-            >
-              <BottomSheetView
-                style={{
-                  backgroundColor: colors.background,
-                }}
-              >
-                <ScannerSheet
-                  onDecrease={decreasePercentage}
-                  onIncrease={increasePercentage}
-                />
-              </BottomSheetView>
-            </BottomSheetModal>
           </View>
         </ThemedView>
+        <BottomSheetModal
+          backdropComponent={props => (
+            <View
+              {...props}
+              style={{
+                backgroundColor: "#000",
+                bottom: 0,
+                left: 0,
+                opacity: 0.5,
+                position: "absolute",
+                right: 0,
+                top: 0,
+              }}
+            />
+          )}
+          backgroundStyle={{
+            backgroundColor: colors.background,
+          }}
+          enableDismissOnClose={true}
+          enableDynamicSizing={false}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={{
+            backgroundColor: colors.text,
+          }}
+          handleStyle={{
+            backgroundColor: colors.background,
+          }}
+          ref={resetSheetRef}
+          snapPoints={[bottomSheetHeight]}
+        >
+          <BottomSheetView
+            style={{
+              backgroundColor: colors.background,
+            }}
+          >
+            <ResetSheet onReset={reset} />
+          </BottomSheetView>
+        </BottomSheetModal>
+        <BottomSheetModal
+          backgroundStyle={{
+            backgroundColor: colors.background,
+          }}
+          enableDismissOnClose={true}
+          enableDynamicSizing={false}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={{
+            backgroundColor: colors.text,
+          }}
+          handleStyle={{
+            backgroundColor: colors.background,
+          }}
+          ref={scannerSheetRef}
+          snapPoints={[bottomSheetHeight]}
+        >
+          <BottomSheetView
+            style={{
+              backgroundColor: colors.background,
+            }}
+          >
+            <ScannerSheet
+              onDecrease={decreasePercentage}
+              onIncrease={increasePercentage}
+            />
+          </BottomSheetView>
+        </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
