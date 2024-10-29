@@ -14,14 +14,14 @@ import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const colors = useColors();
+  const scannerPageModalRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
 
   const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
+    scannerPageModalRef.current?.present();
   }, []);
 
   const decreasePercentage = (percentagePoints: number) => {
@@ -32,7 +32,7 @@ export const MainPage = () => {
       setPercentage(0);
     }
 
-    bottomSheetModalRef.current?.dismiss();
+    scannerPageModalRef.current?.dismiss();
   };
 
   const increasePercentage = (percentagePoints: number) => {
@@ -43,7 +43,7 @@ export const MainPage = () => {
       setPercentage(100);
     }
 
-    bottomSheetModalRef.current?.dismiss();
+    scannerPageModalRef.current?.dismiss();
   };
 
   return (
@@ -96,7 +96,7 @@ export const MainPage = () => {
               handleStyle={{
                 backgroundColor: colors.background,
               }}
-              ref={bottomSheetModalRef}
+              ref={scannerPageModalRef}
               snapPoints={[bottomSheetHeight]}
             >
               <BottomSheetView
