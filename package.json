@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
-    "@gorhom/bottom-sheet": "^5.0.4",
+    "@gorhom/bottom-sheet": "^5.0.5",
     "@react-navigation/native": "^6.1.18",
     "expo": "~51.0.38",
     "expo-camera": "~15.0.16",
