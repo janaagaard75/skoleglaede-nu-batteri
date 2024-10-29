@@ -9,7 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
 import { ResetSheet } from "./ResetSheet";
-import { ScannerPage } from "./ScannerPage";
+import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
@@ -17,7 +17,7 @@ export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
-  const scannerPageModalRef = useRef<BottomSheetModal>(null);
+  const scannerSheetRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
@@ -26,8 +26,8 @@ export const MainPage = () => {
     resetSheetRef.current?.present();
   };
 
-  const handlePresentModalPress = useCallback(() => {
-    scannerPageModalRef.current?.present();
+  const showScannerSheet = useCallback(() => {
+    scannerSheetRef.current?.present();
   }, []);
 
   const decreasePercentage = (percentagePoints: number) => {
@@ -38,7 +38,7 @@ export const MainPage = () => {
       setPercentage(0);
     }
 
-    scannerPageModalRef.current?.dismiss();
+    scannerSheetRef.current?.dismiss();
   };
 
   const increasePercentage = (percentagePoints: number) => {
@@ -49,7 +49,7 @@ export const MainPage = () => {
       setPercentage(100);
     }
 
-    scannerPageModalRef.current?.dismiss();
+    scannerSheetRef.current?.dismiss();
   };
 
   const reset = () => {
@@ -87,7 +87,7 @@ export const MainPage = () => {
           >
             <BatteryAndPercentage level={percentage} />
             <ThemedTextPressable
-              onPress={handlePresentModalPress}
+              onPress={showScannerSheet}
               title="Scan QR-kode"
               style={{
                 alignSelf: "center",
@@ -131,7 +131,7 @@ export const MainPage = () => {
               handleStyle={{
                 backgroundColor: colors.background,
               }}
-              ref={scannerPageModalRef}
+              ref={scannerSheetRef}
               snapPoints={[bottomSheetHeight]}
             >
               <BottomSheetView
@@ -139,7 +139,7 @@ export const MainPage = () => {
                   backgroundColor: colors.background,
                 }}
               >
-                <ScannerPage
+                <ScannerSheet
                   onDecrease={decreasePercentage}
                   onIncrease={increasePercentage}
                 />

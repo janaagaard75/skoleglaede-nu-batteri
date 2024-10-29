@@ -12,7 +12,7 @@ interface Props {
   onIncrease(percentagePoints: number): void;
 }
 
-export const ScannerPage = (props: Props) => {
+export const ScannerSheet = (props: Props) => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
   const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
     undefined,
