@@ -1,28 +1,27 @@
 import {
+  BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
-import { ScannerPage } from "./ScannerPage";
+import { ResetSheet } from "./ResetSheet";
+import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const colors = useColors();
+  const resetSheetRef = useRef<BottomSheetModal>(null);
+  const scannerSheetRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
-
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
 
   const decreasePercentage = (percentagePoints: number) => {
     const newPercentage = percentage - percentagePoints;
@@ -32,7 +31,7 @@ export const MainPage = () => {
       setPercentage(0);
     }
 
-    bottomSheetModalRef.current?.dismiss();
+    scannerSheetRef.current?.dismiss();
   };
 
   const increasePercentage = (percentagePoints: number) => {
@@ -43,7 +42,12 @@ export const MainPage = () => {
       setPercentage(100);
     }
 
-    bottomSheetModalRef.current?.dismiss();
+    scannerSheetRef.current?.dismiss();
+  };
+
+  const reset = () => {
+    setPercentage(30);
+    resetSheetRef.current?.dismiss();
   };
 
   return (
@@ -60,7 +64,9 @@ export const MainPage = () => {
           }}
         >
           <ThemedTextPressable
-            onPress={() => setPercentage(30)}
+            onPress={() => {
+              resetSheetRef.current?.present();
+            }}
             style={{
               alignSelf: "flex-end",
               margin: 20,
@@ -76,43 +82,86 @@ export const MainPage = () => {
           >
             <BatteryAndPercentage level={percentage} />
             <ThemedTextPressable
-              onPress={handlePresentModalPress}
+              onPress={() => {
+                scannerSheetRef.current?.present();
+              }}
               title="Scan QR-kode"
               style={{
                 alignSelf: "center",
                 marginLeft: 10,
               }}
             />
-            <BottomSheetModal
-              backgroundStyle={{
-                backgroundColor: colors.background,
-              }}
-              enableDismissOnClose={true}
-              enableDynamicSizing={false}
-              enablePanDownToClose={true}
-              handleIndicatorStyle={{
-                backgroundColor: colors.text,
-              }}
-              handleStyle={{
-                backgroundColor: colors.background,
-              }}
-              ref={bottomSheetModalRef}
-              snapPoints={[bottomSheetHeight]}
-            >
-              <BottomSheetView
-                style={{
-                  backgroundColor: colors.background,
-                }}
-              >
-                <ScannerPage
-                  onDecrease={decreasePercentage}
-                  onIncrease={increasePercentage}
-                />
-              </BottomSheetView>
-            </BottomSheetModal>
           </View>
         </ThemedView>
+        <BottomSheetModal
+          backdropComponent={Backdrop}
+          backgroundStyle={{
+            backgroundColor: colors.background,
+          }}
+          enableDismissOnClose={true}
+          enableDynamicSizing={false}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={{
+            backgroundColor: colors.text,
+          }}
+          handleStyle={{
+            backgroundColor: colors.background,
+          }}
+          ref={resetSheetRef}
+          snapPoints={[bottomSheetHeight]}
+        >
+          <BottomSheetView
+            style={{
+              backgroundColor: colors.background,
+            }}
+          >
+            <ResetSheet onReset={reset} />
+          </BottomSheetView>
+        </BottomSheetModal>
+        <BottomSheetModal
+          backdropComponent={Backdrop}
+          backgroundStyle={{
+            backgroundColor: colors.background,
+          }}
+          enableDismissOnClose={true}
+          enableDynamicSizing={false}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={{
+            backgroundColor: colors.text,
+          }}
+          handleStyle={{
+            backgroundColor: colors.background,
+          }}
+          ref={scannerSheetRef}
+          snapPoints={[bottomSheetHeight]}
+        >
+          <BottomSheetView
+            style={{
+              backgroundColor: colors.background,
+            }}
+          >
+            <ScannerSheet
+              onDecrease={decreasePercentage}
+              onIncrease={increasePercentage}
+            />
+          </BottomSheetView>
+        </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 };
+
+const Backdrop = (props: BottomSheetBackdropProps) => (
+  <View
+    {...props}
+    style={{
+      backgroundColor: "#000",
+      bottom: 0,
+      left: 0,
+      opacity: 0.5,
+      position: "absolute",
+      right: 0,
+      top: 0,
+    }}
+  />
+);

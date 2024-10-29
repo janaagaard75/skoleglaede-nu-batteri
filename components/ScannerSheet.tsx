@@ -1,7 +1,9 @@
+import { useCameraPermissions } from "expo-camera";
 import { decode } from "html-entities";
-import React, { useRef, useState } from "react";
-import { SlideToConfirmButton } from "./SlideToConfirmButton";
+import React, { useState } from "react";
+import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
+import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
@@ -10,18 +12,13 @@ interface Props {
   onIncrease(percentagePoints: number): void;
 }
 
-export const ScannerPage = (props: Props) => {
+export const ScannerSheet = (props: Props) => {
+  const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
   const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
-    undefined
-  );
-  const [lockScannedQrCode, setLockScannedQrCode] = useState<boolean>(false);
-  const resetScannedQrCodeTimeoutId = useRef<NodeJS.Timeout | undefined>(
-    undefined
+    undefined,
   );
 
   const applyScannedQrCode = () => {
-    setLockScannedQrCode(false);
-
     if (scannedQrCode === undefined) {
       return;
     }
@@ -41,15 +38,51 @@ export const ScannerPage = (props: Props) => {
     }
   };
 
-  const updatedScannedQrCode = (newQrCode: string | undefined) => {
-    if (lockScannedQrCode) {
-      return;
-    }
-
-    setScannedQrCode(newQrCode);
-  };
-
   const label = getLabel(scannedQrCode);
+
+  if (cameraPermissions === null) {
+    return (
+      <ThemedText
+        style={{
+          height: "100%",
+          marginHorizontal: 30,
+          gap: 30,
+          marginTop: 30,
+        }}
+      >
+        Venter på tilladelse til kameraet&hellip;
+      </ThemedText>
+    );
+  }
+
+  if (!cameraPermissions.granted) {
+    return (
+      <ThemedView
+        style={{
+          height: "100%",
+          marginHorizontal: 30,
+          gap: 30,
+          marginTop: 30,
+        }}
+      >
+        <ThemedText
+          style={{
+            marginTop: 20,
+            textAlign: "center",
+          }}
+        >
+          Vi har brug for din tilladelse til at bruge kameraet.
+        </ThemedText>
+        <ThemedTextPressable
+          onPress={requestCameraPermissions}
+          style={{
+            alignSelf: "center",
+          }}
+          title="Giv adgang til kameraet"
+        />
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView
@@ -61,7 +94,7 @@ export const ScannerPage = (props: Props) => {
       }}
     >
       <Viewfinder
-        onScannedQrCodeChange={updatedScannedQrCode}
+        onScannedQrCodeChange={setScannedQrCode}
         scannedQrCode={scannedQrCode}
       />
       <ThemedText
@@ -71,7 +104,7 @@ export const ScannerPage = (props: Props) => {
       >
         {label}
       </ThemedText>
-      <SlideToConfirmButton
+      <SlideToConfirm
         disabled={scannedQrCode === undefined}
         onConfirm={applyScannedQrCode}
         title="Bekræft &nbsp;&#x21E8;"
