@@ -8,6 +8,7 @@ import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
+import { ResetSheet } from "./ResetSheet";
 import { ScannerPage } from "./ScannerPage";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
@@ -15,10 +16,15 @@ import { ThemedView } from "./themed/ThemedView";
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
   const colors = useColors();
+  const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerPageModalRef = useRef<BottomSheetModal>(null);
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
+
+  const presentResetSheet = () => {
+    resetSheetRef.current?.present();
+  };
 
   const handlePresentModalPress = useCallback(() => {
     scannerPageModalRef.current?.present();
@@ -46,6 +52,11 @@ export const MainPage = () => {
     scannerPageModalRef.current?.dismiss();
   };
 
+  const reset = () => {
+    setPercentage(30);
+    resetSheetRef.current?.dismiss();
+  };
+
   return (
     <GestureHandlerRootView
       style={{
@@ -60,7 +71,7 @@ export const MainPage = () => {
           }}
         >
           <ThemedTextPressable
-            onPress={() => setPercentage(30)}
+            onPress={presentResetSheet}
             style={{
               alignSelf: "flex-end",
               margin: 20,
@@ -83,6 +94,30 @@ export const MainPage = () => {
                 marginLeft: 10,
               }}
             />
+            <BottomSheetModal
+              backgroundStyle={{
+                backgroundColor: colors.background,
+              }}
+              enableDismissOnClose={true}
+              enableDynamicSizing={false}
+              enablePanDownToClose={true}
+              handleIndicatorStyle={{
+                backgroundColor: colors.text,
+              }}
+              handleStyle={{
+                backgroundColor: colors.background,
+              }}
+              ref={resetSheetRef}
+              snapPoints={[bottomSheetHeight]}
+            >
+              <BottomSheetView
+                style={{
+                  backgroundColor: colors.background,
+                }}
+              >
+                <ResetSheet onReset={reset} />
+              </BottomSheetView>
+            </BottomSheetModal>
             <BottomSheetModal
               backgroundStyle={{
                 backgroundColor: colors.background,
