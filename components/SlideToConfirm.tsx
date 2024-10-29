@@ -20,10 +20,10 @@ interface Props {
 
 export const SlideToConfirm = memo((props: Props) => {
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
-    undefined
+    undefined,
   );
   const [sliderSize, setSliderSize] = useState<LayoutRectangle | undefined>(
-    undefined
+    undefined,
   );
   const colors = useColors();
 
@@ -31,7 +31,7 @@ export const SlideToConfirm = memo((props: Props) => {
 
   const end = (
     _evt: GestureResponderEvent,
-    gestureState: PanResponderGestureState
+    gestureState: PanResponderGestureState,
   ) => {
     if (props.disabled) {
       return;
@@ -60,7 +60,7 @@ export const SlideToConfirm = memo((props: Props) => {
 
   const move = (
     _evt: GestureResponderEvent,
-    gestureState: PanResponderGestureState
+    gestureState: PanResponderGestureState,
   ) => {
     if (props.disabled) {
       return;
@@ -78,7 +78,7 @@ export const SlideToConfirm = memo((props: Props) => {
 
   const start = (
     _evt: GestureResponderEvent,
-    _gestureStat: PanResponderGestureState
+    _gestureStat: PanResponderGestureState,
   ) => {
     if (props.disabled) {
       return;

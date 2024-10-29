@@ -12,11 +12,11 @@ interface Props {
 
 export const ScannerPage = (props: Props) => {
   const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [lockScannedQrCode, setLockScannedQrCode] = useState<boolean>(false);
   const resetScannedQrCodeTimeoutId = useRef<NodeJS.Timeout | undefined>(
-    undefined
+    undefined,
   );
 
   const applyScannedQrCode = () => {
