@@ -1,4 +1,5 @@
 import {
+  BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
@@ -93,20 +94,7 @@ export const MainPage = () => {
           </View>
         </ThemedView>
         <BottomSheetModal
-          backdropComponent={props => (
-            <View
-              {...props}
-              style={{
-                backgroundColor: "#000",
-                bottom: 0,
-                left: 0,
-                opacity: 0.5,
-                position: "absolute",
-                right: 0,
-                top: 0,
-              }}
-            />
-          )}
+          backdropComponent={Backdrop}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -131,6 +119,7 @@ export const MainPage = () => {
           </BottomSheetView>
         </BottomSheetModal>
         <BottomSheetModal
+          backdropComponent={Backdrop}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -161,3 +150,18 @@ export const MainPage = () => {
     </GestureHandlerRootView>
   );
 };
+
+const Backdrop = (props: BottomSheetBackdropProps) => (
+  <View
+    {...props}
+    style={{
+      backgroundColor: "#000",
+      bottom: 0,
+      left: 0,
+      opacity: 0.5,
+      position: "absolute",
+      right: 0,
+      top: 0,
+    }}
+  />
+);
