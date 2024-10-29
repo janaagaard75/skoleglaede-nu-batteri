@@ -1,13 +1,7 @@
-import {
-  BarcodeScanningResult,
-  CameraView,
-  useCameraPermissions,
-} from "expo-camera";
+import { BarcodeScanningResult, CameraView } from "expo-camera";
 import { BarCodeBounds } from "expo-camera/build/legacy/Camera.types";
 import { useState } from "react";
-import { Button, View } from "react-native";
-import { ThemedText } from "./themed/ThemedText";
-import { ThemedView } from "./themed/ThemedView";
+import { View } from "react-native";
 
 interface Props {
   readonly onScannedQrCodeChange: (scannedQrCode: string | undefined) => void;
@@ -15,7 +9,6 @@ interface Props {
 }
 
 export const Viewfinder = (props: Props) => {
-  const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
   const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
 
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
@@ -50,29 +43,6 @@ export const Viewfinder = (props: Props) => {
     props.onScannedQrCodeChange(undefined);
     setBounds(undefined);
   };
-
-  if (cameraPermissions === null) {
-    return <ThemedText>Venter på tilladelse til kameraet&hellip;</ThemedText>;
-  }
-
-  if (!cameraPermissions.granted) {
-    return (
-      <ThemedView>
-        <ThemedText
-          style={{
-            marginTop: 20,
-            textAlign: "center",
-          }}
-        >
-          Vi har brug for din tilladelse til at bruge kameraet.
-        </ThemedText>
-        <Button
-          onPress={requestCameraPermissions}
-          title="Giv adgang til kameraet"
-        />
-      </ThemedView>
-    );
-  }
 
   return (
     <CameraView

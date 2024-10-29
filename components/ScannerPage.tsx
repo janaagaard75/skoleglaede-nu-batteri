@@ -1,7 +1,9 @@
+import { useCameraPermissions } from "expo-camera";
 import { decode } from "html-entities";
 import React, { useState } from "react";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
+import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export const ScannerPage = (props: Props) => {
+  const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
+
   const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
     undefined,
   );
@@ -47,6 +51,50 @@ export const ScannerPage = (props: Props) => {
   };
 
   const label = getLabel(scannedQrCode);
+
+  if (cameraPermissions === null) {
+    return (
+      <ThemedText
+        style={{
+          height: "100%",
+          marginHorizontal: 30,
+          gap: 30,
+          marginTop: 30,
+        }}
+      >
+        Venter på tilladelse til kameraet&hellip;
+      </ThemedText>
+    );
+  }
+
+  if (!cameraPermissions.granted) {
+    return (
+      <ThemedView
+        style={{
+          height: "100%",
+          marginHorizontal: 30,
+          gap: 30,
+          marginTop: 30,
+        }}
+      >
+        <ThemedText
+          style={{
+            marginTop: 20,
+            textAlign: "center",
+          }}
+        >
+          Vi har brug for din tilladelse til at bruge kameraet.
+        </ThemedText>
+        <ThemedTextPressable
+          onPress={requestCameraPermissions}
+          style={{
+            alignSelf: "center",
+          }}
+          title="Giv adgang til kameraet"
+        />
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView
