@@ -1,5 +1,5 @@
 import { decode } from "html-entities";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
@@ -15,9 +15,6 @@ export const ScannerPage = (props: Props) => {
     undefined,
   );
   const [lockScannedQrCode, setLockScannedQrCode] = useState<boolean>(false);
-  const resetScannedQrCodeTimeoutId = useRef<NodeJS.Timeout | undefined>(
-    undefined,
-  );
 
   const applyScannedQrCode = () => {
     setLockScannedQrCode(false);
