@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "android": "expo start --android",
-    "check-lint": "expo lint",
+    "check-lint": "eslint . --format unix",
     "check-types": "tsc",
     "ios": "expo start --ios",
     "start": "expo start",
