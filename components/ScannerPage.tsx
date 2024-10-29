@@ -1,6 +1,6 @@
 import { decode } from "html-entities";
 import React, { useRef, useState } from "react";
-import { SlideToConfirmButton } from "./SlideToConfirmButton";
+import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
@@ -71,7 +71,7 @@ export const ScannerPage = (props: Props) => {
       >
         {label}
       </ThemedText>
-      <SlideToConfirmButton
+      <SlideToConfirm
         disabled={scannedQrCode === undefined}
         onConfirm={applyScannedQrCode}
         title="Bekræft &nbsp;&#x21E8;"

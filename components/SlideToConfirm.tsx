@@ -18,7 +18,7 @@ interface Props {
   title: string;
 }
 
-export const SlideToConfirmButton = memo((props: Props) => {
+export const SlideToConfirm = memo((props: Props) => {
   const [buttonSize, setButtonSize] = useState<LayoutRectangle | undefined>(
     undefined
   );
