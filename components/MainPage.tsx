@@ -22,14 +22,6 @@ export const MainPage = () => {
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
 
-  const presentResetSheet = () => {
-    resetSheetRef.current?.present();
-  };
-
-  const showScannerSheet = () => {
-    scannerSheetRef.current?.present();
-  };
-
   const decreasePercentage = (percentagePoints: number) => {
     const newPercentage = percentage - percentagePoints;
     if (newPercentage >= 0) {
@@ -71,7 +63,9 @@ export const MainPage = () => {
           }}
         >
           <ThemedTextPressable
-            onPress={presentResetSheet}
+            onPress={() => {
+              resetSheetRef.current?.present();
+            }}
             style={{
               alignSelf: "flex-end",
               margin: 20,
@@ -87,7 +81,9 @@ export const MainPage = () => {
           >
             <BatteryAndPercentage level={percentage} />
             <ThemedTextPressable
-              onPress={showScannerSheet}
+              onPress={() => {
+                scannerSheetRef.current?.present();
+              }}
               title="Scan QR-kode"
               style={{
                 alignSelf: "center",
