@@ -14,15 +14,11 @@ interface Props {
 
 export const ScannerPage = (props: Props) => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
-
   const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
     undefined,
   );
-  const [lockScannedQrCode, setLockScannedQrCode] = useState<boolean>(false);
 
   const applyScannedQrCode = () => {
-    setLockScannedQrCode(false);
-
     if (scannedQrCode === undefined) {
       return;
     }
@@ -40,14 +36,6 @@ export const ScannerPage = (props: Props) => {
           break;
       }
     }
-  };
-
-  const updatedScannedQrCode = (newQrCode: string | undefined) => {
-    if (lockScannedQrCode) {
-      return;
-    }
-
-    setScannedQrCode(newQrCode);
   };
 
   const label = getLabel(scannedQrCode);
@@ -106,7 +94,7 @@ export const ScannerPage = (props: Props) => {
       }}
     >
       <Viewfinder
-        onScannedQrCodeChange={updatedScannedQrCode}
+        onScannedQrCodeChange={setScannedQrCode}
         scannedQrCode={scannedQrCode}
       />
       <ThemedText
