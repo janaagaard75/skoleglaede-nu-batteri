@@ -5,7 +5,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useRef, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Pressable, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
@@ -94,7 +94,12 @@ export const MainPage = () => {
           </View>
         </ThemedView>
         <BottomSheetModal
-          backdropComponent={Backdrop}
+          backdropComponent={props => (
+            <Backdrop
+              {...props}
+              onPress={resetSheetRef.current?.dismiss}
+            />
+          )}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -119,7 +124,12 @@ export const MainPage = () => {
           </BottomSheetView>
         </BottomSheetModal>
         <BottomSheetModal
-          backdropComponent={Backdrop}
+          backdropComponent={props => (
+            <Backdrop
+              {...props}
+              onPress={scannerSheetRef.current?.dismiss}
+            />
+          )}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -151,7 +161,11 @@ export const MainPage = () => {
   );
 };
 
-const Backdrop = (props: BottomSheetBackdropProps) => (
+const Backdrop = (
+  props: BottomSheetBackdropProps & {
+    onPress: (() => void) | undefined;
+  },
+) => (
   <View
     {...props}
     style={{
@@ -163,5 +177,12 @@ const Backdrop = (props: BottomSheetBackdropProps) => (
       right: 0,
       top: 0,
     }}
-  />
+  >
+    <Pressable
+      onPress={props.onPress}
+      style={{
+        flex: 1,
+      }}
+    />
+  </View>
 );
