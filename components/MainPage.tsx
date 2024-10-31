@@ -10,7 +10,10 @@ import { clamp } from "react-native-reanimated";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
+import { FlameIcon } from "./FlameIcon";
+import { FlameOutlineIcon } from "./FlameOutlineIcon";
 import { Hearts } from "./Hearts";
+import { IconRow } from "./IconRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -19,17 +22,18 @@ import { ThemedView } from "./themed/ThemedView";
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
   const [hearts, setHearts] = useState(3);
+  const [flames, setFlames] = useState(4);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
 
-  const maximumHearts = 10;
+  const maximumIcons = 10;
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
 
   const changeHearts = (amount: -1 | 1) => {
-    const newHearts = clamp(hearts + amount, 0, maximumHearts);
+    const newHearts = clamp(hearts + amount, 0, maximumIcons);
     setHearts(newHearts);
     scannerSheetRef.current?.dismiss();
   };
@@ -78,7 +82,13 @@ export const MainPage = () => {
             <BatteryAndPercentage level={percentage} />
             <Hearts
               current={hearts}
-              maximum={maximumHearts}
+              maximum={maximumIcons}
+            />
+            <IconRow
+              currentValue={flames}
+              excludedIcon={<FlameOutlineIcon />}
+              includedIcon={<FlameIcon />}
+              maximum={maximumIcons}
             />
             <ThemedTextPressable
               onPress={() => {
@@ -86,6 +96,7 @@ export const MainPage = () => {
               }}
               title="Scan QR-kode"
               style={{
+                marginTop: 100,
                 alignSelf: "center",
               }}
             />
