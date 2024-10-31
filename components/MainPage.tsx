@@ -1,12 +1,12 @@
 import {
-  BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useRef, useState } from "react";
-import { Dimensions, Pressable, View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
 import { Hearts } from "./Hearts";
@@ -165,29 +165,3 @@ export const MainPage = () => {
     </GestureHandlerRootView>
   );
 };
-
-const Backdrop = (
-  props: BottomSheetBackdropProps & {
-    onPress: (() => void) | undefined;
-  },
-) => (
-  <View
-    {...props}
-    style={{
-      backgroundColor: "#000",
-      bottom: 0,
-      left: 0,
-      opacity: 0.5,
-      position: "absolute",
-      right: 0,
-      top: 0,
-    }}
-  >
-    <Pressable
-      onPress={props.onPress}
-      style={{
-        flex: 1,
-      }}
-    />
-  </View>
-);
