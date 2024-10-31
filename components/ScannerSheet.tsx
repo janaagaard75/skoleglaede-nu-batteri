@@ -8,8 +8,8 @@ import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
 interface Props {
-  onDecrease(percentagePoints: number): void;
-  onIncrease(percentagePoints: number): void;
+  onPercentageDecrease(percentagePoints: number): void;
+  onPercentageIncrease(percentagePoints: number): void;
 }
 
 export const ScannerSheet = (props: Props) => {
@@ -29,10 +29,10 @@ export const ScannerSheet = (props: Props) => {
 
       switch (operation) {
         case "-":
-          props.onDecrease(percentagePoints);
+          props.onPercentageDecrease(percentagePoints);
           break;
         case "+":
-          props.onIncrease(percentagePoints);
+          props.onPercentageIncrease(percentagePoints);
           break;
       }
     }
