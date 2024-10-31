@@ -8,6 +8,7 @@ import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
 interface Props {
+  onFlamesChange(amount: -1 | 1): void;
   onHeartsChange(amount: -1 | 1): void;
   onPercentageChange(percentagePoints: number): void;
 }
@@ -38,6 +39,22 @@ export const ScannerSheet = (props: Props) => {
       })();
 
       props.onPercentageChange(percentagePoints);
+    }
+
+    if (scannedQrCode.match(/^[+-]flame$/)) {
+      const operation = scannedQrCode[0];
+      const value = (() => {
+        switch (operation) {
+          case "-":
+            return -1;
+          case "+":
+            return 1;
+          default:
+            throw new Error(`The operation ${operation} is not supported.`);
+        }
+      })();
+
+      props.onFlamesChange(value);
     }
 
     if (scannedQrCode.match(/^[+-]heart$/)) {

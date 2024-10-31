@@ -33,6 +33,12 @@ export const MainPage = () => {
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
 
+  const changeFlames = (amount: -1 | 1) => {
+    const newFlames = clamp(flames + amount, 0, maximumIcons);
+    setFlames(newFlames);
+    scannerSheetRef.current?.dismiss();
+  };
+
   const changeHearts = (amount: -1 | 1) => {
     const newHearts = clamp(hearts + amount, 0, maximumIcons);
     setHearts(newHearts);
@@ -163,6 +169,7 @@ export const MainPage = () => {
             }}
           >
             <ScannerSheet
+              onFlamesChange={changeFlames}
               onHeartsChange={changeHearts}
               onPercentageChange={changePercentage}
             />
