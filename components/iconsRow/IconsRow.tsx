@@ -8,7 +8,7 @@ interface Props {
   maximum: number;
 }
 
-export const IconRow = (props: Props) => (
+export const IconsRow = (props: Props) => (
   <View
     style={{
       alignSelf: "center",

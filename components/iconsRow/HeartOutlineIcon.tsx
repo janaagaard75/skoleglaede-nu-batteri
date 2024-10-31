@@ -1,5 +1,5 @@
 import Svg, { Path } from "react-native-svg";
-import { useColors } from "./colors/useColors";
+import { useColors } from "../colors/useColors";
 
 export const HeartOutlineIcon = () => {
   const unselected = useColors().unselected;

@@ -10,11 +10,11 @@ import { clamp } from "react-native-reanimated";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
-import { FlameIcon } from "./FlameIcon";
-import { FlameOutlineIcon } from "./FlameOutlineIcon";
-import { HeartIcon } from "./HeartIcon";
-import { HeartOutlineIcon } from "./HeartOutlineIcon";
-import { IconRow } from "./IconRow";
+import { FlameIcon } from "./iconsRow/FlameIcon";
+import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
+import { HeartIcon } from "./iconsRow/HeartIcon";
+import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
+import { IconsRow } from "./iconsRow/IconsRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -81,13 +81,13 @@ export const MainPage = () => {
             }}
           >
             <BatteryAndPercentage level={percentage} />
-            <IconRow
+            <IconsRow
               currentValue={hearts}
               excludedIcon={<HeartOutlineIcon />}
               includedIcon={<HeartIcon />}
               maximum={maximumIcons}
             />
-            <IconRow
+            <IconsRow
               currentValue={flames}
               excludedIcon={<FlameOutlineIcon />}
               includedIcon={<FlameIcon />}
