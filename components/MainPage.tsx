@@ -9,6 +9,7 @@ import { Dimensions, Pressable, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
+import { Hearts } from "./Hearts";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -16,6 +17,7 @@ import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
+  const [hearts, setHearts] = useState(3);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
@@ -81,6 +83,10 @@ export const MainPage = () => {
             }}
           >
             <BatteryAndPercentage level={percentage} />
+            <Hearts
+              current={hearts}
+              maximum={10}
+            />
             <ThemedTextPressable
               onPress={() => {
                 scannerSheetRef.current?.present();
