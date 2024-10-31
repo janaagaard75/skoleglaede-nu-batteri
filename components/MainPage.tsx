@@ -22,8 +22,8 @@ import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
-  const [hearts, setHearts] = useState(3);
-  const [flames, setFlames] = useState(4);
+  const [hearts, setHearts] = useState(0);
+  const [flames, setFlames] = useState(0);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
