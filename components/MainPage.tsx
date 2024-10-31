@@ -1,5 +1,4 @@
 import {
-  BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
@@ -7,8 +6,15 @@ import {
 import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { clamp } from "react-native-reanimated";
+import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
+import { FlameIcon } from "./iconsRow/FlameIcon";
+import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
+import { HeartIcon } from "./iconsRow/HeartIcon";
+import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
+import { IconsRow } from "./iconsRow/IconsRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -16,37 +22,39 @@ import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
   const [percentage, setPercentage] = useState(30);
+  const [hearts, setHearts] = useState(0);
+  const [flames, setFlames] = useState(0);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
 
+  const maximumIcons = 10;
+
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
 
-  const decreasePercentage = (percentagePoints: number) => {
-    const newPercentage = percentage - percentagePoints;
-    if (newPercentage >= 0) {
-      setPercentage(newPercentage);
-    } else {
-      setPercentage(0);
-    }
-
+  const changeFlames = (amount: -1 | 1) => {
+    const newFlames = clamp(flames + amount, 0, maximumIcons);
+    setFlames(newFlames);
     scannerSheetRef.current?.dismiss();
   };
 
-  const increasePercentage = (percentagePoints: number) => {
-    const newPercentage = percentage + percentagePoints;
-    if (newPercentage <= 100) {
-      setPercentage(newPercentage);
-    } else {
-      setPercentage(100);
-    }
+  const changeHearts = (amount: -1 | 1) => {
+    const newHearts = clamp(hearts + amount, 0, maximumIcons);
+    setHearts(newHearts);
+    scannerSheetRef.current?.dismiss();
+  };
 
+  const changePercentage = (percentagePoints: number) => {
+    const newPercentage = clamp(percentage + percentagePoints, 0, 100);
+    setPercentage(newPercentage);
     scannerSheetRef.current?.dismiss();
   };
 
   const reset = () => {
     setPercentage(30);
+    setFlames(0);
+    setHearts(0);
     resetSheetRef.current?.dismiss();
   };
 
@@ -81,20 +89,37 @@ export const MainPage = () => {
             }}
           >
             <BatteryAndPercentage level={percentage} />
+            <IconsRow
+              currentValue={hearts}
+              excludedIcon={<HeartOutlineIcon />}
+              includedIcon={<HeartIcon />}
+              maximum={maximumIcons}
+            />
+            <IconsRow
+              currentValue={flames}
+              excludedIcon={<FlameOutlineIcon />}
+              includedIcon={<FlameIcon />}
+              maximum={maximumIcons}
+            />
             <ThemedTextPressable
               onPress={() => {
                 scannerSheetRef.current?.present();
               }}
               title="Scan QR-kode"
               style={{
+                marginTop: 100,
                 alignSelf: "center",
-                marginLeft: 10,
               }}
             />
           </View>
         </ThemedView>
         <BottomSheetModal
-          backdropComponent={Backdrop}
+          backdropComponent={props => (
+            <Backdrop
+              {...props}
+              onPress={resetSheetRef.current?.dismiss}
+            />
+          )}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -119,7 +144,12 @@ export const MainPage = () => {
           </BottomSheetView>
         </BottomSheetModal>
         <BottomSheetModal
-          backdropComponent={Backdrop}
+          backdropComponent={props => (
+            <Backdrop
+              {...props}
+              onPress={scannerSheetRef.current?.dismiss}
+            />
+          )}
           backgroundStyle={{
             backgroundColor: colors.background,
           }}
@@ -141,8 +171,9 @@ export const MainPage = () => {
             }}
           >
             <ScannerSheet
-              onDecrease={decreasePercentage}
-              onIncrease={increasePercentage}
+              onFlamesChange={changeFlames}
+              onHeartsChange={changeHearts}
+              onPercentageChange={changePercentage}
             />
           </BottomSheetView>
         </BottomSheetModal>
@@ -150,18 +181,3 @@ export const MainPage = () => {
     </GestureHandlerRootView>
   );
 };
-
-const Backdrop = (props: BottomSheetBackdropProps) => (
-  <View
-    {...props}
-    style={{
-      backgroundColor: "#000",
-      bottom: 0,
-      left: 0,
-      opacity: 0.5,
-      position: "absolute",
-      right: 0,
-      top: 0,
-    }}
-  />
-);

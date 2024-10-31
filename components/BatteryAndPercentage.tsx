@@ -40,7 +40,14 @@ export const BatteryAndPercentage = (props: Props) => {
           level={roundedLevel}
         />
       </View>
-      <ThemedText>{props.level} %</ThemedText>
+      <ThemedText
+        style={{
+          fontWeight: "bold",
+          fontSize: 28,
+        }}
+      >
+        {props.level}%
+      </ThemedText>
     </View>
   );
 };

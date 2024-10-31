@@ -8,8 +8,9 @@ import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
 interface Props {
-  onDecrease(percentagePoints: number): void;
-  onIncrease(percentagePoints: number): void;
+  onFlamesChange(amount: -1 | 1): void;
+  onHeartsChange(amount: -1 | 1): void;
+  onPercentageChange(percentagePoints: number): void;
 }
 
 export const ScannerSheet = (props: Props) => {
@@ -25,16 +26,51 @@ export const ScannerSheet = (props: Props) => {
 
     if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
       const operation = scannedQrCode[0];
-      const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+      const absolutePercentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+      const percentagePoints = (() => {
+        switch (operation) {
+          case "-":
+            return -absolutePercentagePoints;
+          case "+":
+            return absolutePercentagePoints;
+          default:
+            throw new Error(`The operation ${operation} is not supported.`);
+        }
+      })();
 
-      switch (operation) {
-        case "-":
-          props.onDecrease(percentagePoints);
-          break;
-        case "+":
-          props.onIncrease(percentagePoints);
-          break;
-      }
+      props.onPercentageChange(percentagePoints);
+    }
+
+    if (scannedQrCode.match(/^[+-]flame$/)) {
+      const operation = scannedQrCode[0];
+      const value = (() => {
+        switch (operation) {
+          case "-":
+            return -1;
+          case "+":
+            return 1;
+          default:
+            throw new Error(`The operation ${operation} is not supported.`);
+        }
+      })();
+
+      props.onFlamesChange(value);
+    }
+
+    if (scannedQrCode.match(/^[+-]heart$/)) {
+      const operation = scannedQrCode[0];
+      const value = (() => {
+        switch (operation) {
+          case "-":
+            return -1;
+          case "+":
+            return 1;
+          default:
+            throw new Error(`The operation ${operation} is not supported.`);
+        }
+      })();
+
+      props.onHeartsChange(value);
     }
   };
 
@@ -124,9 +160,35 @@ const getLabel = (scannedQrCode: string | undefined) => {
 
     switch (operation) {
       case "-":
-        return `+ ${percentagePoints} %`;
+        return decode(`&minus; ${percentagePoints}%`);
       case "+":
-        return decode(`&minus; ${percentagePoints} %`);
+        return `+ ${percentagePoints}%`;
+    }
+  }
+
+  if (scannedQrCode.match(/^[+-]flame$/)) {
+    const operation = scannedQrCode[0];
+
+    switch (operation) {
+      case "-":
+        return decode("&minus;1 flamme");
+      case "+":
+        return "+1 flamme";
+      default:
+        throw new Error(`The operation ${operation} is not supported.`);
+    }
+  }
+
+  if (scannedQrCode.match(/^[+-]heart$/)) {
+    const operation = scannedQrCode[0];
+
+    switch (operation) {
+      case "-":
+        return decode("&minus;1 hjerte");
+      case "+":
+        return "+1 hjerte";
+      default:
+        throw new Error(`The operation ${operation} is not supported.`);
     }
   }
 };

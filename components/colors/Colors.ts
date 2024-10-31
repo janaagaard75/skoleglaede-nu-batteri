@@ -12,6 +12,7 @@ export const Colors = {
     red: twColors.red[600],
     text: twColors.zinc[200],
     tint: tintColorDark,
+    unselected: twColors.zinc[600],
   },
   light: {
     background: twColors.white,
@@ -21,5 +22,6 @@ export const Colors = {
     red: twColors.red[600],
     text: twColors.zinc[800],
     tint: tintColorLight,
+    unselected: twColors.zinc[400],
   },
 };
