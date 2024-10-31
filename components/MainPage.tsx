@@ -12,7 +12,8 @@ import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
 import { FlameIcon } from "./FlameIcon";
 import { FlameOutlineIcon } from "./FlameOutlineIcon";
-import { Hearts } from "./Hearts";
+import { HeartIcon } from "./HeartIcon";
+import { HeartOutlineIcon } from "./HeartOutlineIcon";
 import { IconRow } from "./IconRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
@@ -80,8 +81,10 @@ export const MainPage = () => {
             }}
           >
             <BatteryAndPercentage level={percentage} />
-            <Hearts
-              current={hearts}
+            <IconRow
+              currentValue={hearts}
+              excludedIcon={<HeartOutlineIcon />}
+              includedIcon={<HeartIcon />}
               maximum={maximumIcons}
             />
             <IconRow
