@@ -88,7 +88,6 @@ export const MainPage = () => {
               title="Scan QR-kode"
               style={{
                 alignSelf: "center",
-                marginLeft: 10,
               }}
             />
           </View>
