@@ -6,6 +6,7 @@ import {
 import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { clamp } from "react-native-reanimated";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
@@ -22,8 +23,16 @@ export const MainPage = () => {
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
 
+  const maximumHearts = 10;
+
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
+
+  const changeHearts = (amount: -1 | 1) => {
+    const newHearts = clamp(hearts + amount, 0, maximumHearts);
+    setHearts(newHearts);
+    scannerSheetRef.current?.dismiss();
+  };
 
   const decreasePercentage = (percentagePoints: number) => {
     const newPercentage = percentage - percentagePoints;
@@ -85,7 +94,7 @@ export const MainPage = () => {
             <BatteryAndPercentage level={percentage} />
             <Hearts
               current={hearts}
-              maximum={10}
+              maximum={maximumHearts}
             />
             <ThemedTextPressable
               onPress={() => {
@@ -156,6 +165,7 @@ export const MainPage = () => {
             }}
           >
             <ScannerSheet
+              onHeartsChange={changeHearts}
               onPercentageDecrease={decreasePercentage}
               onPercentageIncrease={increasePercentage}
             />
