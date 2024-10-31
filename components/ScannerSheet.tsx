@@ -160,9 +160,35 @@ const getLabel = (scannedQrCode: string | undefined) => {
 
     switch (operation) {
       case "-":
-        return `+ ${percentagePoints} %`;
+        return decode(`&minus; ${percentagePoints}%`);
       case "+":
-        return decode(`&minus; ${percentagePoints} %`);
+        return `+ ${percentagePoints}%`;
+    }
+  }
+
+  if (scannedQrCode.match(/^[+-]flame$/)) {
+    const operation = scannedQrCode[0];
+
+    switch (operation) {
+      case "-":
+        return decode("&minus;1 flamme");
+      case "+":
+        return "+1 flamme";
+      default:
+        throw new Error(`The operation ${operation} is not supported.`);
+    }
+  }
+
+  if (scannedQrCode.match(/^[+-]heart$/)) {
+    const operation = scannedQrCode[0];
+
+    switch (operation) {
+      case "-":
+        return decode("&minus;1 hjerte");
+      case "+":
+        return "+1 hjerte";
+      default:
+        throw new Error(`The operation ${operation} is not supported.`);
     }
   }
 };
