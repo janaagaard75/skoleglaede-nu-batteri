@@ -34,25 +34,9 @@ export const MainPage = () => {
     scannerSheetRef.current?.dismiss();
   };
 
-  const decreasePercentage = (percentagePoints: number) => {
-    const newPercentage = percentage - percentagePoints;
-    if (newPercentage >= 0) {
-      setPercentage(newPercentage);
-    } else {
-      setPercentage(0);
-    }
-
-    scannerSheetRef.current?.dismiss();
-  };
-
-  const increasePercentage = (percentagePoints: number) => {
-    const newPercentage = percentage + percentagePoints;
-    if (newPercentage <= 100) {
-      setPercentage(newPercentage);
-    } else {
-      setPercentage(100);
-    }
-
+  const changePercentage = (percentagePoints: number) => {
+    const newPercentage = clamp(percentage + percentagePoints, 0, 100);
+    setPercentage(newPercentage);
     scannerSheetRef.current?.dismiss();
   };
 
@@ -166,8 +150,7 @@ export const MainPage = () => {
           >
             <ScannerSheet
               onHeartsChange={changeHearts}
-              onPercentageDecrease={decreasePercentage}
-              onPercentageIncrease={increasePercentage}
+              onPercentageChange={changePercentage}
             />
           </BottomSheetView>
         </BottomSheetModal>

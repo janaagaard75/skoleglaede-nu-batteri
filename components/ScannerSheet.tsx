@@ -9,8 +9,7 @@ import { Viewfinder } from "./Viewfinder";
 
 interface Props {
   onHeartsChange(amount: -1 | 1): void;
-  onPercentageDecrease(percentagePoints: number): void;
-  onPercentageIncrease(percentagePoints: number): void;
+  onPercentageChange(percentagePoints: number): void;
 }
 
 export const ScannerSheet = (props: Props) => {
@@ -26,21 +25,23 @@ export const ScannerSheet = (props: Props) => {
 
     if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
       const operation = scannedQrCode[0];
-      const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+      const absolutePercentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
+      const percentagePoints = (() => {
+        switch (operation) {
+          case "-":
+            return -absolutePercentagePoints;
+          case "+":
+            return absolutePercentagePoints;
+          default:
+            throw new Error(`The operation ${operation} is not supported.`);
+        }
+      })();
 
-      switch (operation) {
-        case "-":
-          props.onPercentageDecrease(percentagePoints);
-          break;
-        case "+":
-          props.onPercentageIncrease(percentagePoints);
-          break;
-      }
+      props.onPercentageChange(percentagePoints);
     }
 
     if (scannedQrCode.match(/^[+-]heart$/)) {
       const operation = scannedQrCode[0];
-
       const value = (() => {
         switch (operation) {
           case "-":
