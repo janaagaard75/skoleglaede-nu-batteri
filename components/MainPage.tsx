@@ -53,6 +53,8 @@ export const MainPage = () => {
 
   const reset = () => {
     setPercentage(30);
+    setFlames(0);
+    setHearts(0);
     resetSheetRef.current?.dismiss();
   };
 
