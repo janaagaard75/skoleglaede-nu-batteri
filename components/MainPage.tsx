@@ -7,6 +7,7 @@ import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { clamp } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
@@ -17,21 +18,29 @@ import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
 import { IconsRow } from "./iconsRow/IconsRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
+import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
-  const [percentage, setPercentage] = useState(30);
-  const [hearts, setHearts] = useState(0);
-  const [flames, setFlames] = useState(0);
+  const initialFlames = 0;
+  const initialHearts = 0;
+  const initialPercentage = 20;
+  const maximumIcons = 10;
+
+  const [flames, setFlames] = useState(initialFlames);
+  const [hearts, setHearts] = useState(initialHearts);
+  const [percentage, setPercentage] = useState(initialPercentage);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
-
-  const maximumIcons = 10;
+  const safeAreaInsets = useSafeAreaInsets();
 
   const screenHeight = Dimensions.get("window").height;
-  const bottomSheetHeight = screenHeight - 200;
+  const verticalInset = safeAreaInsets.top + safeAreaInsets.bottom;
+  const bottomSheetHeight = screenHeight - verticalInset - 90;
+
+  const score = percentage + 100 * hearts + 50 * flames;
 
   const changeFlames = (amount: -1 | 1) => {
     const newFlames = clamp(flames + amount, 0, maximumIcons);
@@ -47,14 +56,20 @@ export const MainPage = () => {
 
   const changePercentage = (percentagePoints: number) => {
     const newPercentage = clamp(percentage + percentagePoints, 0, 100);
-    setPercentage(newPercentage);
+
+    if (newPercentage === 100) {
+      setPercentage(30);
+      changeHearts(+1); // TODO: What it you already have 10 hearts?
+    } else {
+      setPercentage(newPercentage);
+    }
     scannerSheetRef.current?.dismiss();
   };
 
   const reset = () => {
-    setPercentage(30);
-    setFlames(0);
-    setHearts(0);
+    setFlames(initialFlames);
+    setHearts(initialHearts);
+    setPercentage(initialPercentage);
     resetSheetRef.current?.dismiss();
   };
 
@@ -85,32 +100,69 @@ export const MainPage = () => {
             style={{
               flex: 1,
               justifyContent: "center",
-              gap: 20,
             }}
           >
-            <BatteryAndPercentage level={percentage} />
-            <IconsRow
-              currentValue={hearts}
-              excludedIcon={<HeartOutlineIcon />}
-              includedIcon={<HeartIcon />}
-              maximum={maximumIcons}
-            />
-            <IconsRow
-              currentValue={flames}
-              excludedIcon={<FlameOutlineIcon />}
-              includedIcon={<FlameIcon />}
-              maximum={maximumIcons}
-            />
-            <ThemedTextPressable
-              onPress={() => {
-                scannerSheetRef.current?.present();
-              }}
-              title="Scan QR-kode"
+            <View
               style={{
-                marginTop: 100,
-                alignSelf: "center",
+                marginTop: 40,
               }}
-            />
+            >
+              <ThemedText
+                style={{
+                  alignSelf: "center",
+                  fontSize: 28,
+                  fontWeight: "bold",
+                }}
+              >
+                Trivselsscore: {score}
+              </ThemedText>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+              }}
+            >
+              <BatteryAndPercentage level={percentage} />
+              <View
+                style={{
+                  height: 40,
+                }}
+              />
+              <IconsRow
+                currentValue={hearts}
+                excludedIcon={<HeartOutlineIcon />}
+                includedIcon={<HeartIcon />}
+                maximum={maximumIcons}
+              />
+              <View
+                style={{
+                  height: 20,
+                }}
+              />
+              <IconsRow
+                currentValue={flames}
+                excludedIcon={<FlameOutlineIcon />}
+                includedIcon={<FlameIcon />}
+                maximum={maximumIcons}
+              />
+            </View>
+            <View
+              style={{
+                justifyContent: "flex-end",
+              }}
+            >
+              <ThemedTextPressable
+                onPress={() => {
+                  scannerSheetRef.current?.present();
+                }}
+                style={{
+                  alignSelf: "center",
+                  marginBottom: 40,
+                }}
+                title="Scan QR-kode"
+              />
+            </View>
           </View>
         </ThemedView>
         <BottomSheetModal
