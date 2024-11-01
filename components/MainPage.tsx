@@ -56,7 +56,13 @@ export const MainPage = () => {
 
   const changePercentage = (percentagePoints: number) => {
     const newPercentage = clamp(percentage + percentagePoints, 0, 100);
-    setPercentage(newPercentage);
+
+    if (newPercentage === 100) {
+      setPercentage(30);
+      changeHearts(+1); // TODO: What it you already have 10 hearts?
+    } else {
+      setPercentage(newPercentage);
+    }
     scannerSheetRef.current?.dismiss();
   };
 
