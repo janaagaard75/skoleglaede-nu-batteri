@@ -21,14 +21,17 @@ import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
 export const MainPage = () => {
-  const [percentage, setPercentage] = useState(30);
-  const [hearts, setHearts] = useState(0);
-  const [flames, setFlames] = useState(0);
+  const initialFlames = 0;
+  const initialHearts = 0;
+  const initialPercentage = 30;
+  const maximumIcons = 10;
+
+  const [flames, setFlames] = useState(initialFlames);
+  const [hearts, setHearts] = useState(initialHearts);
+  const [percentage, setPercentage] = useState(initialPercentage);
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
-
-  const maximumIcons = 10;
 
   const screenHeight = Dimensions.get("window").height;
   const bottomSheetHeight = screenHeight - 200;
@@ -52,9 +55,9 @@ export const MainPage = () => {
   };
 
   const reset = () => {
-    setPercentage(30);
-    setFlames(0);
-    setHearts(0);
+    setFlames(initialFlames);
+    setHearts(initialHearts);
+    setPercentage(initialPercentage);
     resetSheetRef.current?.dismiss();
   };
 
