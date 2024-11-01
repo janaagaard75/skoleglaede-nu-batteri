@@ -88,32 +88,54 @@ export const MainPage = () => {
             style={{
               flex: 1,
               justifyContent: "center",
-              gap: 20,
             }}
           >
-            <BatteryAndPercentage level={percentage} />
-            <IconsRow
-              currentValue={hearts}
-              excludedIcon={<HeartOutlineIcon />}
-              includedIcon={<HeartIcon />}
-              maximum={maximumIcons}
-            />
-            <IconsRow
-              currentValue={flames}
-              excludedIcon={<FlameOutlineIcon />}
-              includedIcon={<FlameIcon />}
-              maximum={maximumIcons}
-            />
-            <ThemedTextPressable
-              onPress={() => {
-                scannerSheetRef.current?.present();
-              }}
-              title="Scan QR-kode"
+            <View
               style={{
-                marginTop: 100,
-                alignSelf: "center",
+                flex: 1,
+                justifyContent: "center",
               }}
-            />
+            >
+              <BatteryAndPercentage level={percentage} />
+              <View
+                style={{
+                  height: 40,
+                }}
+              />
+              <IconsRow
+                currentValue={hearts}
+                excludedIcon={<HeartOutlineIcon />}
+                includedIcon={<HeartIcon />}
+                maximum={maximumIcons}
+              />
+              <View
+                style={{
+                  height: 20,
+                }}
+              />
+              <IconsRow
+                currentValue={flames}
+                excludedIcon={<FlameOutlineIcon />}
+                includedIcon={<FlameIcon />}
+                maximum={maximumIcons}
+              />
+            </View>
+            <View
+              style={{
+                justifyContent: "flex-end",
+              }}
+            >
+              <ThemedTextPressable
+                onPress={() => {
+                  scannerSheetRef.current?.present();
+                }}
+                style={{
+                  alignSelf: "center",
+                  marginBottom: 40,
+                }}
+                title="Scan QR-kode"
+              />
+            </View>
           </View>
         </ThemedView>
         <BottomSheetModal
