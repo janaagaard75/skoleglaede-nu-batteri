@@ -18,6 +18,7 @@ import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
 import { IconsRow } from "./iconsRow/IconsRow";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
+import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
 
@@ -38,6 +39,8 @@ export const MainPage = () => {
   const screenHeight = Dimensions.get("window").height;
   const verticalInset = safeAreaInsets.top + safeAreaInsets.bottom;
   const bottomSheetHeight = screenHeight - verticalInset - 90;
+
+  const score = percentage + 100 * hearts + 50 * flames;
 
   const changeFlames = (amount: -1 | 1) => {
     const newFlames = clamp(flames + amount, 0, maximumIcons);
@@ -93,6 +96,21 @@ export const MainPage = () => {
               justifyContent: "center",
             }}
           >
+            <View
+              style={{
+                marginTop: 40,
+              }}
+            >
+              <ThemedText
+                style={{
+                  alignSelf: "center",
+                  fontSize: 28,
+                  fontWeight: "bold",
+                }}
+              >
+                Trivselsscore: {score}
+              </ThemedText>
+            </View>
             <View
               style={{
                 flex: 1,
