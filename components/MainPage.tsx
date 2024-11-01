@@ -7,6 +7,7 @@ import React, { useRef, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { clamp } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
@@ -32,9 +33,11 @@ export const MainPage = () => {
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
+  const safeAreaInsets = useSafeAreaInsets();
 
   const screenHeight = Dimensions.get("window").height;
-  const bottomSheetHeight = screenHeight - 200;
+  const verticalInset = safeAreaInsets.top + safeAreaInsets.bottom;
+  const bottomSheetHeight = screenHeight - verticalInset - 90;
 
   const changeFlames = (amount: -1 | 1) => {
     const newFlames = clamp(flames + amount, 0, maximumIcons);
