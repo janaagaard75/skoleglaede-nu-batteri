@@ -23,7 +23,7 @@ import { ThemedView } from "./themed/ThemedView";
 export const MainPage = () => {
   const initialFlames = 0;
   const initialHearts = 0;
-  const initialPercentage = 30;
+  const initialPercentage = 20;
   const maximumIcons = 10;
 
   const [flames, setFlames] = useState(initialFlames);
