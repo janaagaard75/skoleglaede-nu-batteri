@@ -55,7 +55,7 @@ export const BatteryIcon = (props: Props) => {
         stroke={hexColor}
         fill={hexColor}
         style={{
-          marginLeft: 10, // Push a little to the right to center the battery visually.
+          marginLeft: 10, // Push the battery a little to the right to center it visually.
         }}
         strokeWidth="0"
         viewBox="0 100 512 312"
