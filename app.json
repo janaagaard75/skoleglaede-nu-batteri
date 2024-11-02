@@ -16,6 +16,9 @@
       "config": {
         "usesNonExemptEncryption": false
       },
+      "entitlements": {
+        "aps-environment": "development"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.janaagaard75.skoleglaedenubatteri"
     },
