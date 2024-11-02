@@ -3,7 +3,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { clamp } from "react-native-reanimated";
@@ -21,6 +21,7 @@ import { ScannerSheet } from "./ScannerSheet";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
+import { usePersistedState } from "./usePersistedState";
 
 export const MainPage = () => {
   const initialFlames = 0;
@@ -28,9 +29,12 @@ export const MainPage = () => {
   const initialPercentage = 20;
   const maximumIcons = 10;
 
-  const [flames, setFlames] = useState(initialFlames);
-  const [hearts, setHearts] = useState(initialHearts);
-  const [percentage, setPercentage] = useState(initialPercentage);
+  const [flames, setFlames] = usePersistedState("flames", initialFlames);
+  const [hearts, setHearts] = usePersistedState("hearts", initialHearts);
+  const [percentage, setPercentage] = usePersistedState(
+    "percentage",
+    initialPercentage,
+  );
   const colors = useColors();
   const resetSheetRef = useRef<BottomSheetModal>(null);
   const scannerSheetRef = useRef<BottomSheetModal>(null);
