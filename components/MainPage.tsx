@@ -127,7 +127,7 @@ export const MainPage = () => {
                 justifyContent: "center",
               }}
             >
-              <BatteryAndPercentage level={percentage} />
+              <BatteryAndPercentage percentage={percentage} />
               <View
                 style={{
                   height: 40,
@@ -227,9 +227,12 @@ export const MainPage = () => {
             }}
           >
             <ScannerSheet
+              flames={flames}
+              hearts={hearts}
               onFlamesChange={changeFlames}
               onHeartsChange={changeHearts}
               onPercentageChange={changePercentage}
+              percentage={percentage}
             />
           </BottomSheetView>
         </BottomSheetModal>
