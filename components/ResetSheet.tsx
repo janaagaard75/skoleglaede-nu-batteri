@@ -17,8 +17,7 @@ export const ResetSheet = (props: Props) => {
       }}
     >
       <ThemedText>
-        Bekræft at du vil nulstille batteriniveauet til 30 % og fjerne alle
-        hjerter og flammer.
+        Bekræft at du vil nulstille til 20% og fjerne alle hjerter og flammer.
       </ThemedText>
       <SlideToConfirm
         disabled={false}
