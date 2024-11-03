@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { BatteryIcon } from "./BatteryIcon";
+import { Battery } from "./Battery";
 import { ThemedText } from "./themed/ThemedText";
 
 interface Props {
@@ -8,46 +8,20 @@ interface Props {
   level: number;
 }
 
-export const BatteryAndPercentage = (props: Props) => {
-  const roundedLevel = Math.round(props.level);
-
-  const batteryColor = (() => {
-    if (roundedLevel <= 10) {
-      return "red";
-    }
-
-    if (roundedLevel <= 20) {
-      return "orange";
-    }
-
-    return "green";
-  })();
-
-  return (
-    <View
+export const BatteryAndPercentage = (props: Props) => (
+  <View
+    style={{
+      alignItems: "center",
+    }}
+  >
+    <Battery percentage={props.level} />
+    <ThemedText
       style={{
-        alignItems: "center",
+        fontWeight: "bold",
+        fontSize: 28,
       }}
     >
-      <View
-        style={{
-          aspectRatio: 1.5,
-          width: "60%",
-        }}
-      >
-        <BatteryIcon
-          color={batteryColor}
-          level={roundedLevel}
-        />
-      </View>
-      <ThemedText
-        style={{
-          fontWeight: "bold",
-          fontSize: 28,
-        }}
-      >
-        {props.level}%
-      </ThemedText>
-    </View>
-  );
-};
+      {props.level}%
+    </ThemedText>
+  </View>
+);
