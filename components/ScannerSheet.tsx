@@ -1,6 +1,7 @@
 import { useCameraPermissions } from "expo-camera";
 import { decode } from "html-entities";
 import React, { useState } from "react";
+import { View } from "react-native";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -123,28 +124,41 @@ export const ScannerSheet = (props: Props) => {
   return (
     <ThemedView
       style={{
+        display: "flex",
         height: "100%",
-        marginHorizontal: 30,
-        gap: 30,
-        marginTop: 30,
       }}
     >
-      <Viewfinder
-        onScannedQrCodeChange={setScannedQrCode}
-        scannedQrCode={scannedQrCode}
-      />
-      <ThemedText
+      <View
         style={{
-          textAlign: "center",
+          flex: 1,
+          marginTop: 30,
         }}
       >
-        {label}
-      </ThemedText>
-      <SlideToConfirm
-        disabled={scannedQrCode === undefined}
-        onConfirm={applyScannedQrCode}
-        title="Bekræft &nbsp;&#x21E8;"
-      />
+        <Viewfinder
+          onScannedQrCodeChange={setScannedQrCode}
+          scannedQrCode={scannedQrCode}
+        />
+        <ThemedText
+          style={{
+            textAlign: "center",
+          }}
+        >
+          {label}
+        </ThemedText>
+      </View>
+      <View
+        style={{
+          justifyContent: "flex-end",
+          marginBottom: 40,
+          marginHorizontal: 30,
+        }}
+      >
+        <SlideToConfirm
+          disabled={scannedQrCode === undefined}
+          onConfirm={applyScannedQrCode}
+          title="Bekræft &nbsp;&#x21E8;"
+        />
+      </View>
     </ThemedView>
   );
 };
