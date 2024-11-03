@@ -18,9 +18,7 @@ import { Viewfinder } from "./Viewfinder";
 interface Props {
   flames: number;
   hearts: number;
-  onFlamesChange(amount: -1 | 1): void;
-  onHeartsChange(amount: -1 | 1): void;
-  onPercentageChange(percentagePoints: number): void;
+  onQrCodeApply(qrCode: QrCode): void;
   percentage: number;
 }
 
@@ -37,17 +35,7 @@ export const ScannerSheet = (props: Props) => {
       return;
     }
 
-    switch (qrCode.type) {
-      case "flame":
-        props.onFlamesChange(qrCode.amount);
-        break;
-      case "heart":
-        props.onHeartsChange(qrCode.amount);
-        break;
-      case "percentage":
-        props.onPercentageChange(qrCode.amount);
-        break;
-    }
+    props.onQrCodeApply(qrCode);
   };
 
   if (cameraPermissions === null) {

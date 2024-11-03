@@ -6,16 +6,18 @@ import {
 import React, { useRef } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { clamp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { useColors } from "./colors/useColors";
+import { getNewValues } from "./getNewValues";
 import { FlameIcon } from "./iconsRow/FlameIcon";
 import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
 import { HeartIcon } from "./iconsRow/HeartIcon";
 import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
 import { IconsRow } from "./iconsRow/IconsRow";
+import { maximumIcons } from "./maximumIcons";
+import { QrCode } from "./QrCode";
 import { ResetSheet } from "./ResetSheet";
 import { ScannerSheet } from "./ScannerSheet";
 import { ThemedText } from "./themed/ThemedText";
@@ -27,7 +29,6 @@ export const MainPage = () => {
   const initialFlames = 0;
   const initialHearts = 0;
   const initialPercentage = 20;
-  const maximumIcons = 10;
 
   const [flames, setFlames] = usePersistedState("flames", initialFlames);
   const [hearts, setHearts] = usePersistedState("hearts", initialHearts);
@@ -46,27 +47,11 @@ export const MainPage = () => {
 
   const score = percentage + 100 * hearts + 50 * flames;
 
-  const changeFlames = (amount: -1 | 1) => {
-    const newFlames = clamp(flames + amount, 0, maximumIcons);
-    setFlames(newFlames);
-    scannerSheetRef.current?.dismiss();
-  };
-
-  const changeHearts = (amount: -1 | 1) => {
-    const newHearts = clamp(hearts + amount, 0, maximumIcons);
-    setHearts(newHearts);
-    scannerSheetRef.current?.dismiss();
-  };
-
-  const changePercentage = (percentagePoints: number) => {
-    const newPercentage = clamp(percentage + percentagePoints, 0, 100);
-
-    if (newPercentage === 100) {
-      setPercentage(30);
-      changeHearts(+1); // TODO: What it you already have 10 hearts?
-    } else {
-      setPercentage(newPercentage);
-    }
+  const applyQrCode = (qrCode: QrCode) => {
+    const newValues = getNewValues({ flames, hearts, percentage }, qrCode);
+    setFlames(newValues.newFlames);
+    setHearts(newValues.newHearts);
+    setPercentage(newValues.newPercentage);
     scannerSheetRef.current?.dismiss();
   };
 
@@ -233,9 +218,7 @@ export const MainPage = () => {
             <ScannerSheet
               flames={flames}
               hearts={hearts}
-              onFlamesChange={changeFlames}
-              onHeartsChange={changeHearts}
-              onPercentageChange={changePercentage}
+              onQrCodeApply={applyQrCode}
               percentage={percentage}
             />
           </BottomSheetView>
