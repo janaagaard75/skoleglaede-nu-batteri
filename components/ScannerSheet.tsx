@@ -17,11 +17,11 @@ interface Props {
 
 export const ScannerSheet = (props: Props) => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
-  const [scannedQrCode, setScannedQrCode] = useState<string | undefined>(
+  const [qrCodeString, setQrCodeString] = useState<string | undefined>(
     undefined,
   );
 
-  const qrCode = parseQrCodeString(scannedQrCode);
+  const qrCode = parseQrCodeString(qrCodeString);
 
   const applyScannedQrCode = () => {
     if (qrCode === undefined) {
@@ -100,8 +100,8 @@ export const ScannerSheet = (props: Props) => {
         }}
       >
         <Viewfinder
-          onScannedQrCodeChange={setScannedQrCode}
-          scannedQrCode={scannedQrCode}
+          onScannedQrCodeChange={setQrCodeString}
+          scannedQrCode={qrCodeString}
         />
         <ScannedCodeFeedback qrCode={qrCode} />
       </View>
@@ -113,7 +113,7 @@ export const ScannerSheet = (props: Props) => {
         }}
       >
         <SlideToConfirm
-          disabled={scannedQrCode === undefined}
+          disabled={qrCodeString === undefined}
           onConfirm={applyScannedQrCode}
           title="Bekræft &nbsp;&#x21E8;"
         />
