@@ -113,7 +113,7 @@ export const ScannerSheet = (props: Props) => {
         }}
       >
         <SlideToConfirm
-          disabled={qrCodeString === undefined}
+          disabled={qrCode === undefined}
           onConfirm={applyScannedQrCode}
           title="Bekræft &nbsp;&#x21E8;"
         />
