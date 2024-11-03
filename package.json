@@ -11,6 +11,7 @@
     "check-types": "tsc",
     "ios": "expo start --ios",
     "start": "expo start",
+    "submit": "eas submit --platform ios --profile production",
     "test": "jest --watchAll",
     "web": "expo start --web",
     "lint": "eslint ."
