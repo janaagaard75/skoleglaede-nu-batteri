@@ -1,7 +1,8 @@
 import { useCameraPermissions } from "expo-camera";
-import { decode } from "html-entities";
 import React, { useState } from "react";
 import { View } from "react-native";
+import { parseQrCodeString } from "./parseQrCodeString";
+import { QrCode } from "./QrCode";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
@@ -20,62 +21,25 @@ export const ScannerSheet = (props: Props) => {
     undefined,
   );
 
+  const qrCode = parseQrCodeString(scannedQrCode);
+
   const applyScannedQrCode = () => {
-    if (scannedQrCode === undefined) {
+    if (qrCode === undefined) {
       return;
     }
 
-    if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
-      const operation = scannedQrCode[0];
-      const absolutePercentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
-      const percentagePoints = (() => {
-        switch (operation) {
-          case "-":
-            return -absolutePercentagePoints;
-          case "+":
-            return absolutePercentagePoints;
-          default:
-            throw new Error(`The operation ${operation} is not supported.`);
-        }
-      })();
-
-      props.onPercentageChange(percentagePoints);
-    }
-
-    if (scannedQrCode.match(/^[+-]flame$/)) {
-      const operation = scannedQrCode[0];
-      const value = (() => {
-        switch (operation) {
-          case "-":
-            return -1;
-          case "+":
-            return 1;
-          default:
-            throw new Error(`The operation ${operation} is not supported.`);
-        }
-      })();
-
-      props.onFlamesChange(value);
-    }
-
-    if (scannedQrCode.match(/^[+-]heart$/)) {
-      const operation = scannedQrCode[0];
-      const value = (() => {
-        switch (operation) {
-          case "-":
-            return -1;
-          case "+":
-            return 1;
-          default:
-            throw new Error(`The operation ${operation} is not supported.`);
-        }
-      })();
-
-      props.onHeartsChange(value);
+    switch (qrCode.type) {
+      case "flame":
+        props.onFlamesChange(qrCode.amount);
+        break;
+      case "heart":
+        props.onHeartsChange(qrCode.amount);
+        break;
+      case "percentage":
+        props.onPercentageChange(qrCode.amount);
+        break;
     }
   };
-
-  const label = getLabel(scannedQrCode);
 
   if (cameraPermissions === null) {
     return (
@@ -132,19 +96,14 @@ export const ScannerSheet = (props: Props) => {
         style={{
           flex: 1,
           marginTop: 30,
+          gap: 10,
         }}
       >
         <Viewfinder
           onScannedQrCodeChange={setScannedQrCode}
           scannedQrCode={scannedQrCode}
         />
-        <ThemedText
-          style={{
-            textAlign: "center",
-          }}
-        >
-          {label}
-        </ThemedText>
+        <ScannedCodeFeedback qrCode={qrCode} />
       </View>
       <View
         style={{
@@ -163,46 +122,26 @@ export const ScannerSheet = (props: Props) => {
   );
 };
 
-const getLabel = (scannedQrCode: string | undefined) => {
-  if (scannedQrCode === undefined) {
-    return "Scan en QR-kode";
+const ScannedCodeFeedback = ({ qrCode }: { qrCode: QrCode | undefined }) => {
+  if (qrCode === undefined) {
+    return (
+      <ThemedText
+        style={{
+          textAlign: "center",
+        }}
+      >
+        Scan en QR-kode
+      </ThemedText>
+    );
   }
 
-  if (scannedQrCode.match(/^[+-]\d{3}pp$/)) {
-    const operation = scannedQrCode[0];
-    const percentagePoints = parseInt(scannedQrCode.slice(1, 4), 10);
-
-    switch (operation) {
-      case "-":
-        return decode(`&minus; ${percentagePoints}%`);
-      case "+":
-        return `+ ${percentagePoints}%`;
-    }
-  }
-
-  if (scannedQrCode.match(/^[+-]flame$/)) {
-    const operation = scannedQrCode[0];
-
-    switch (operation) {
-      case "-":
-        return decode("&minus;1 flamme");
-      case "+":
-        return "+1 flamme";
-      default:
-        throw new Error(`The operation ${operation} is not supported.`);
-    }
-  }
-
-  if (scannedQrCode.match(/^[+-]heart$/)) {
-    const operation = scannedQrCode[0];
-
-    switch (operation) {
-      case "-":
-        return decode("&minus;1 hjerte");
-      case "+":
-        return "+1 hjerte";
-      default:
-        throw new Error(`The operation ${operation} is not supported.`);
-    }
-  }
+  return (
+    <ThemedText
+      style={{
+        textAlign: "center",
+      }}
+    >
+      "TODO"
+    </ThemedText>
+  );
 };
