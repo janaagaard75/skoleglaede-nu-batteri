@@ -1,13 +1,13 @@
 import { useCameraPermissions } from "expo-camera";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { parseQrCodeString } from "../parseQrCodeString";
-import { QrCode } from "../QrCode";
 import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextPressable } from "../themed/ThemedTextPressable";
 import { ThemedView } from "../themed/ThemedView";
 import { Viewfinder } from "../Viewfinder";
+import { parseQrCodeString } from "./parseQrCodeString";
+import { QrCode } from "./QrCode";
 import { ScannedCodeFeedback } from "./ScannedCodeFeedback";
 
 interface Props {

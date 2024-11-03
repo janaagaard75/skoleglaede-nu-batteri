@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { Battery } from "./Battery";
-import { ThemedText } from "./themed/ThemedText";
+import { Battery } from "../battery/Battery";
+import { ThemedText } from "../themed/ThemedText";
 
 export const BatteryAndPercentage = ({
   percentage,

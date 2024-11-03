@@ -1,6 +1,6 @@
 import { clamp } from "react-native-reanimated";
-import { QrCode } from "./QrCode";
 import { maximumIcons } from "./maximumIcons";
+import { QrCode } from "./scannerSheet/QrCode";
 
 export const getNewValues = (
   currentValues: {

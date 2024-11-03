@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { getNewValues } from "../getNewValues";
-import { QrCode } from "../QrCode";
 import { ThemedText } from "../themed/ThemedText";
+import { QrCode } from "./QrCode";
 import { Summary } from "./Summary";
 
 export const ScannedCodeFeedback = ({

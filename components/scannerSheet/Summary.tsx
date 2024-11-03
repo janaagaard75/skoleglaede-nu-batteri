@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Battery } from "../Battery";
+import { Battery } from "../battery/Battery";
 import { FlameIcon } from "../iconsRow/FlameIcon";
 import { FlameOutlineIcon } from "../iconsRow/FlameOutlineIcon";
 import { HeartIcon } from "../iconsRow/HeartIcon";
