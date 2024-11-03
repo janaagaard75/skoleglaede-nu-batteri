@@ -6,6 +6,7 @@
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
   "scripts": {
     "android": "expo start --android",
+    "build": "eas build --platform ios",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
     "ios": "expo start --ios",
