@@ -4,8 +4,10 @@ import { View } from "react-native";
 interface Props {
   currentValue: number;
   excludedIcon: ReactNode;
+  gap: number;
   includedIcon: ReactNode;
   maximum: number;
+  size: number;
 }
 
 export const IconsRow = (props: Props) => (
@@ -14,7 +16,7 @@ export const IconsRow = (props: Props) => (
       alignSelf: "center",
       display: "flex",
       flexDirection: "row",
-      gap: 3,
+      gap: props.gap,
     }}
   >
     {(() =>
@@ -22,8 +24,8 @@ export const IconsRow = (props: Props) => (
         <View
           key={index}
           style={{
-            height: 30,
-            width: 30,
+            height: props.size,
+            width: props.size,
           }}
         >
           {(() => {

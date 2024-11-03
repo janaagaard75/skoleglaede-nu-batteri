@@ -6,28 +6,29 @@ import {
 import React, { useRef } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { clamp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useColors } from "../colors/useColors";
+import { getNewValues } from "../getNewValues";
+import { FlameIcon } from "../iconsRow/FlameIcon";
+import { FlameOutlineIcon } from "../iconsRow/FlameOutlineIcon";
+import { HeartIcon } from "../iconsRow/HeartIcon";
+import { HeartOutlineIcon } from "../iconsRow/HeartOutlineIcon";
+import { IconsRow } from "../iconsRow/IconsRow";
+import { maximumIcons } from "../maximumIcons";
+import { ResetSheet } from "../ResetSheet";
+import { QrCode } from "../scannerSheet/QrCode";
+import { ScannerSheet } from "../scannerSheet/ScannerSheet";
+import { ThemedText } from "../themed/ThemedText";
+import { ThemedTextPressable } from "../themed/ThemedTextPressable";
+import { ThemedView } from "../themed/ThemedView";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
-import { useColors } from "./colors/useColors";
-import { FlameIcon } from "./iconsRow/FlameIcon";
-import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
-import { HeartIcon } from "./iconsRow/HeartIcon";
-import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
-import { IconsRow } from "./iconsRow/IconsRow";
-import { ResetSheet } from "./ResetSheet";
-import { ScannerSheet } from "./ScannerSheet";
-import { ThemedText } from "./themed/ThemedText";
-import { ThemedTextPressable } from "./themed/ThemedTextPressable";
-import { ThemedView } from "./themed/ThemedView";
 import { usePersistedState } from "./usePersistedState";
 
 export const MainPage = () => {
   const initialFlames = 0;
   const initialHearts = 0;
   const initialPercentage = 20;
-  const maximumIcons = 10;
 
   const [flames, setFlames] = usePersistedState("flames", initialFlames);
   const [hearts, setHearts] = usePersistedState("hearts", initialHearts);
@@ -46,27 +47,11 @@ export const MainPage = () => {
 
   const score = percentage + 100 * hearts + 50 * flames;
 
-  const changeFlames = (amount: -1 | 1) => {
-    const newFlames = clamp(flames + amount, 0, maximumIcons);
-    setFlames(newFlames);
-    scannerSheetRef.current?.dismiss();
-  };
-
-  const changeHearts = (amount: -1 | 1) => {
-    const newHearts = clamp(hearts + amount, 0, maximumIcons);
-    setHearts(newHearts);
-    scannerSheetRef.current?.dismiss();
-  };
-
-  const changePercentage = (percentagePoints: number) => {
-    const newPercentage = clamp(percentage + percentagePoints, 0, 100);
-
-    if (newPercentage === 100) {
-      setPercentage(30);
-      changeHearts(+1); // TODO: What it you already have 10 hearts?
-    } else {
-      setPercentage(newPercentage);
-    }
+  const applyQrCode = (qrCode: QrCode) => {
+    const newValues = getNewValues({ flames, hearts, percentage }, qrCode);
+    setFlames(newValues.newFlames);
+    setHearts(newValues.newHearts);
+    setPercentage(newValues.newPercentage);
     scannerSheetRef.current?.dismiss();
   };
 
@@ -127,7 +112,7 @@ export const MainPage = () => {
                 justifyContent: "center",
               }}
             >
-              <BatteryAndPercentage level={percentage} />
+              <BatteryAndPercentage percentage={percentage} />
               <View
                 style={{
                   height: 40,
@@ -136,8 +121,10 @@ export const MainPage = () => {
               <IconsRow
                 currentValue={hearts}
                 excludedIcon={<HeartOutlineIcon />}
+                gap={3}
                 includedIcon={<HeartIcon />}
                 maximum={maximumIcons}
+                size={30}
               />
               <View
                 style={{
@@ -147,8 +134,10 @@ export const MainPage = () => {
               <IconsRow
                 currentValue={flames}
                 excludedIcon={<FlameOutlineIcon />}
+                gap={3}
                 includedIcon={<FlameIcon />}
                 maximum={maximumIcons}
+                size={30}
               />
             </View>
             <View
@@ -227,9 +216,10 @@ export const MainPage = () => {
             }}
           >
             <ScannerSheet
-              onFlamesChange={changeFlames}
-              onHeartsChange={changeHearts}
-              onPercentageChange={changePercentage}
+              flames={flames}
+              hearts={hearts}
+              onQrCodeApply={applyQrCode}
+              percentage={percentage}
             />
           </BottomSheetView>
         </BottomSheetModal>
