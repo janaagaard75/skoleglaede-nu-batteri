@@ -19,7 +19,7 @@ import { IconsRow } from "./iconsRow/IconsRow";
 import { maximumIcons } from "./maximumIcons";
 import { QrCode } from "./QrCode";
 import { ResetSheet } from "./ResetSheet";
-import { ScannerSheet } from "./ScannerSheet";
+import { ScannerSheet } from "./scannerSheet/ScannerSheet";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedTextPressable } from "./themed/ThemedTextPressable";
 import { ThemedView } from "./themed/ThemedView";
