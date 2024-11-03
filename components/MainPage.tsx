@@ -136,8 +136,10 @@ export const MainPage = () => {
               <IconsRow
                 currentValue={hearts}
                 excludedIcon={<HeartOutlineIcon />}
+                gap={3}
                 includedIcon={<HeartIcon />}
                 maximum={maximumIcons}
+                size={30}
               />
               <View
                 style={{
@@ -147,8 +149,10 @@ export const MainPage = () => {
               <IconsRow
                 currentValue={flames}
                 excludedIcon={<FlameOutlineIcon />}
+                gap={3}
                 includedIcon={<FlameIcon />}
                 maximum={maximumIcons}
+                size={30}
               />
             </View>
             <View

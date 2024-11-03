@@ -1,6 +1,12 @@
 import { useCameraPermissions } from "expo-camera";
 import React, { useState } from "react";
 import { View } from "react-native";
+import { Battery } from "./Battery";
+import { FlameIcon } from "./iconsRow/FlameIcon";
+import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
+import { HeartIcon } from "./iconsRow/HeartIcon";
+import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
+import { IconsRow } from "./iconsRow/IconsRow";
 import { parseQrCodeString } from "./parseQrCodeString";
 import { QrCode } from "./QrCode";
 import { SlideToConfirm } from "./SlideToConfirm";
@@ -10,9 +16,12 @@ import { ThemedView } from "./themed/ThemedView";
 import { Viewfinder } from "./Viewfinder";
 
 interface Props {
+  flames: number;
+  hearts: number;
   onFlamesChange(amount: -1 | 1): void;
   onHeartsChange(amount: -1 | 1): void;
   onPercentageChange(percentagePoints: number): void;
+  percentage: number;
 }
 
 export const ScannerSheet = (props: Props) => {
@@ -89,6 +98,7 @@ export const ScannerSheet = (props: Props) => {
     <ThemedView
       style={{
         display: "flex",
+        gap: 20,
         height: "100%",
       }}
     >
@@ -96,14 +106,25 @@ export const ScannerSheet = (props: Props) => {
         style={{
           flex: 1,
           marginTop: 30,
-          gap: 10,
+          justifyContent: "flex-end",
         }}
       >
         <Viewfinder
           onScannedQrCodeChange={setQrCodeString}
           scannedQrCode={qrCodeString}
         />
-        <ScannedCodeFeedback qrCode={qrCode} />
+      </View>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <ScannedCodeFeedback
+          flames={props.flames}
+          hearts={props.hearts}
+          percentage={props.percentage}
+          qrCode={qrCode}
+        />
       </View>
       <View
         style={{
@@ -122,7 +143,17 @@ export const ScannerSheet = (props: Props) => {
   );
 };
 
-const ScannedCodeFeedback = ({ qrCode }: { qrCode: QrCode | undefined }) => {
+const ScannedCodeFeedback = ({
+  flames,
+  hearts,
+  percentage,
+  qrCode,
+}: {
+  flames: number;
+  hearts: number;
+  percentage: number;
+  qrCode: QrCode | undefined;
+}) => {
   if (qrCode === undefined) {
     return (
       <ThemedText
@@ -136,12 +167,75 @@ const ScannedCodeFeedback = ({ qrCode }: { qrCode: QrCode | undefined }) => {
   }
 
   return (
-    <ThemedText
+    <View
       style={{
-        textAlign: "center",
+        display: "flex",
+        flexDirection: "row",
+        height: "100%",
       }}
     >
-      "TODO"
-    </ThemedText>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+        }}
+      >
+        <View
+          style={{
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              alignContent: "center",
+              marginLeft: 20,
+              width: 80,
+            }}
+          >
+            <Battery percentage={percentage} />
+          </View>
+          <View
+            style={{
+              height: 5,
+            }}
+          />
+          <IconsRow
+            currentValue={flames}
+            excludedIcon={<FlameOutlineIcon />}
+            gap={1}
+            includedIcon={<FlameIcon />}
+            maximum={10}
+            size={12}
+          />
+          <View
+            style={{
+              height: 5,
+            }}
+          />
+          <IconsRow
+            currentValue={hearts}
+            excludedIcon={<HeartOutlineIcon />}
+            gap={1}
+            includedIcon={<HeartIcon />}
+            maximum={10}
+            size={12}
+          />
+        </View>
+      </View>
+      <View
+        style={{
+          width: 40,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ThemedText>&#x21E8;</ThemedText>
+      </View>
+      <View
+        style={{
+          flex: 1,
+        }}
+      ></View>
+    </View>
   );
 };
