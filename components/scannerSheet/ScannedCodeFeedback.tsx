@@ -46,7 +46,7 @@ export const ScannedCodeFeedback = ({
         if (qrCode.amount > 0) {
           return `+ ${qrCode.amount}%`;
         } else {
-          return decode(`&minus; ${qrCode.amount}%`);
+          return decode(`&minus; ${Math.abs(qrCode.amount)}%`);
         }
     }
   })();
