@@ -5,14 +5,12 @@
   "private": true,
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
   "scripts": {
-    "android": "expo start --android",
+    "build": "eas build --platform ios --profile production",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
-    "ios": "expo start --ios",
     "start": "expo start",
-    "test": "jest --watchAll",
-    "web": "expo start --web",
-    "lint": "eslint ."
+    "submit": "eas submit --platform ios --profile production",
+    "test": "jest --watchAll"
   },
   "jest": {
     "preset": "jest-expo"
@@ -31,6 +29,7 @@
     "expo-splash-screen": "~0.27.6",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
+    "expo-updates": "~0.25.27",
     "expo-web-browser": "~13.0.3",
     "html-entities": "^2.5.2",
     "react": "18.2.0",
