@@ -9,6 +9,7 @@ const qrCodes = [
   "-030pp",
   "-040pp",
   "-050pp",
+  "-100pp",
   "-flame",
   "-heart",
   "+005pp",
