@@ -72,23 +72,7 @@ export const Viewfinder = (props: Props) => {
         scannerMargin={scannerMargin}
         viewfinderSize={viewfinderSize}
       />
-      {bounds !== undefined && (
-        <View
-          style={[
-            {
-              borderColor: "green",
-              borderWidth: 2,
-              position: "absolute",
-            },
-            {
-              height: bounds.size.height,
-              left: bounds.origin.x,
-              top: bounds.origin.y,
-              width: bounds.size.width,
-            },
-          ]}
-        />
-      )}
+      <QrCodeHighlighter bounds={bounds} />
     </CameraView>
   );
 };
@@ -161,5 +145,25 @@ const HeadUpDisplay = (props: {
         }}
       />
     </>
+  );
+};
+
+const QrCodeHighlighter = (props: { bounds: BarCodeBounds | undefined }) => {
+  if (props.bounds === undefined) {
+    return <></>;
+  }
+
+  return (
+    <View
+      style={{
+        borderColor: "green",
+        borderWidth: 2,
+        height: props.bounds.size.height,
+        left: props.bounds.origin.x,
+        position: "absolute",
+        top: props.bounds.origin.y,
+        width: props.bounds.size.width,
+      }}
+    />
   );
 };
