@@ -5,10 +5,10 @@ import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextPressable } from "../themed/ThemedTextPressable";
 import { ThemedView } from "../themed/ThemedView";
-import { Viewfinder } from "../Viewfinder";
 import { parseQrCodeString } from "./parseQrCodeString";
 import { QrCode } from "./QrCode";
 import { ScannedCodeFeedback } from "./ScannedCodeFeedback";
+import { Viewfinder } from "./Viewfinder";
 
 interface Props {
   flames: number;
@@ -87,7 +87,7 @@ export const ScannerSheet = (props: Props) => {
     >
       <View
         style={{
-          flex: 1,
+          height: 220,
           marginTop: 30,
           justifyContent: "flex-end",
         }}
@@ -112,8 +112,9 @@ export const ScannerSheet = (props: Props) => {
       <View
         style={{
           justifyContent: "flex-end",
-          marginBottom: 40,
-          marginHorizontal: 30,
+          marginHorizontal: "auto",
+          marginBottom: 60,
+          width: 270,
         }}
       >
         <SlideToConfirm

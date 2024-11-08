@@ -151,7 +151,7 @@ export const MainPage = () => {
                 }}
                 style={{
                   alignSelf: "center",
-                  marginBottom: 40,
+                  marginBottom: 60,
                 }}
                 title="Scan QR-kode"
               />
