@@ -5,10 +5,10 @@ import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextPressable } from "../themed/ThemedTextPressable";
 import { ThemedView } from "../themed/ThemedView";
-import { Viewfinder } from "../Viewfinder";
 import { parseQrCodeString } from "./parseQrCodeString";
 import { QrCode } from "./QrCode";
 import { ScannedCodeFeedback } from "./ScannedCodeFeedback";
+import { Viewfinder } from "./Viewfinder";
 
 interface Props {
   flames: number;
