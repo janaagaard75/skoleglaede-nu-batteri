@@ -112,8 +112,9 @@ export const ScannerSheet = (props: Props) => {
       <View
         style={{
           justifyContent: "flex-end",
-          marginBottom: 40,
-          marginHorizontal: 30,
+          marginHorizontal: "auto",
+          marginBottom: 60,
+          width: 270,
         }}
       >
         <SlideToConfirm
