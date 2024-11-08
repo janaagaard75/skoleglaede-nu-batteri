@@ -87,7 +87,7 @@ export const ScannerSheet = (props: Props) => {
     >
       <View
         style={{
-          flex: 1,
+          height: 220,
           marginTop: 30,
           justifyContent: "flex-end",
         }}
