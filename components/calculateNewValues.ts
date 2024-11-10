@@ -2,7 +2,7 @@ import { clamp } from "react-native-reanimated";
 import { maximumIcons } from "./maximumIcons";
 import { QrCode } from "./scannerSheet/QrCode";
 
-export const getNewValues = (
+export const calculateNewValues = (
   currentValues: {
     flames: number;
     hearts: number;

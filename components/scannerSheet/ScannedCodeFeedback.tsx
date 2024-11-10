@@ -1,6 +1,6 @@
 import { decode } from "html-entities";
 import { View } from "react-native";
-import { getNewValues } from "../getNewValues";
+import { calculateNewValues } from "../calculateNewValues";
 import { ThemedText } from "../themed/ThemedText";
 import { QrCode } from "./QrCode";
 import { Summary } from "./Summary";
@@ -51,7 +51,7 @@ export const ScannedCodeFeedback = ({
     }
   })();
 
-  const newValues = getNewValues({ flames, hearts, percentage }, qrCode);
+  const newValues = calculateNewValues({ flames, hearts, percentage }, qrCode);
 
   return (
     <View

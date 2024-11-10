@@ -7,8 +7,8 @@ import React, { useRef } from "react";
 import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { calculateNewValues } from "../calculateNewValues";
 import { useColors } from "../colors/useColors";
-import { getNewValues } from "../getNewValues";
 import { FlameIcon } from "../iconsRow/FlameIcon";
 import { FlameOutlineIcon } from "../iconsRow/FlameOutlineIcon";
 import { HeartIcon } from "../iconsRow/HeartIcon";
@@ -48,7 +48,10 @@ export const MainPage = () => {
   const score = percentage + 100 * hearts + 50 * flames;
 
   const applyQrCode = (qrCode: QrCode) => {
-    const newValues = getNewValues({ flames, hearts, percentage }, qrCode);
+    const newValues = calculateNewValues(
+      { flames, hearts, percentage },
+      qrCode,
+    );
     setFlames(newValues.newFlames);
     setHearts(newValues.newHearts);
     setPercentage(newValues.newPercentage);
