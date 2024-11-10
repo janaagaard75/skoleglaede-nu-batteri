@@ -17,12 +17,14 @@ export const calculateNewValues = (
         newHearts: currentValues.hearts,
         newPercentage: currentValues.percentage,
       };
+
     case "heart":
       return {
         newFlames: currentValues.flames,
         newHearts: clamp(currentValues.hearts + qrCode.amount, 0, maximumIcons),
         newPercentage: currentValues.percentage,
       };
+
     case "percentage":
       const unrestrictedNewPercentage =
         currentValues.percentage + qrCode.amount;
