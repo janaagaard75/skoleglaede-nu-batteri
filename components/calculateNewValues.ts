@@ -17,15 +17,20 @@ export const calculateNewValues = (
         newHearts: currentValues.hearts,
         newPercentage: currentValues.percentage,
       };
+
     case "heart":
       return {
         newFlames: currentValues.flames,
         newHearts: clamp(currentValues.hearts + qrCode.amount, 0, maximumIcons),
         newPercentage: currentValues.percentage,
       };
+
     case "percentage":
-      const unrestrictedNewPercentage =
-        currentValues.percentage + qrCode.amount;
+      const unrestrictedNewPercentage = clamp(
+        currentValues.percentage + qrCode.amount,
+        0,
+        Number.MAX_SAFE_INTEGER,
+      );
 
       if (unrestrictedNewPercentage <= 100) {
         return {
@@ -44,12 +49,12 @@ export const calculateNewValues = (
       }
 
       const newHearts = currentValues.hearts + 1;
-      const restrictedPercentage = unrestrictedNewPercentage - 100;
+      const overflownPercentage = unrestrictedNewPercentage - 100;
 
       return {
         newHearts: newHearts,
         newFlames: currentValues.flames,
-        newPercentage: restrictedPercentage,
+        newPercentage: overflownPercentage,
       };
   }
 };
