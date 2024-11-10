@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -22,7 +23,10 @@ export const BatteryIcon = (props: Props) => {
     const repeatIndefinitely = -1;
     const revertAnimation = true;
     opacity.value = withRepeat(
-      withTiming(0.5, { duration: 1000 }),
+      withTiming(0.5, {
+        duration: 1000,
+        easing: Easing.inOut(Easing.ease),
+      }),
       repeatIndefinitely,
       revertAnimation,
     );
