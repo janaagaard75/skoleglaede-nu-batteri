@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -10,8 +11,7 @@ import { useColors } from "../colors/useColors";
 
 interface Props {
   color: "green" | "orange" | "red";
-  /** A number between 0 and 100. */
-  level: number;
+  percentage: number;
 }
 
 /** Ionicons v5 battery. https://react-icons.github.io/react-icons/icons/io5/ */
@@ -23,7 +23,10 @@ export const BatteryIcon = (props: Props) => {
     const repeatIndefinitely = -1;
     const revertAnimation = true;
     opacity.value = withRepeat(
-      withTiming(0.5, { duration: 1000 }),
+      withTiming(0.5, {
+        duration: 600,
+        easing: Easing.inOut(Easing.ease),
+      }),
       repeatIndefinitely,
       revertAnimation,
     );
@@ -36,7 +39,7 @@ export const BatteryIcon = (props: Props) => {
   });
 
   const percentageBarWidth =
-    Math.round(((100 * props.level) / 100) * (292.63 + 32)) / 100;
+    Math.round(((100 * props.percentage) / 100) * (292.63 + 32)) / 100;
 
   const hexColor = (() => {
     switch (props.color) {
@@ -50,7 +53,7 @@ export const BatteryIcon = (props: Props) => {
   })();
 
   return (
-    <Animated.View style={[props.level === 0 && animatedOpacity]}>
+    <Animated.View style={[props.percentage === 0 && animatedOpacity]}>
       <Svg
         stroke={hexColor}
         fill={hexColor}
