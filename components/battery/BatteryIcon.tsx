@@ -24,7 +24,7 @@ export const BatteryIcon = (props: Props) => {
     const revertAnimation = true;
     opacity.value = withRepeat(
       withTiming(0.5, {
-        duration: 1000,
+        duration: 600,
         easing: Easing.inOut(Easing.ease),
       }),
       repeatIndefinitely,
