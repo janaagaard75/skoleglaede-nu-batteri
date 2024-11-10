@@ -26,7 +26,7 @@ export const Battery = ({ percentage }: { percentage: number }) => {
     >
       <BatteryIcon
         color={batteryColor}
-        level={roundedPercentage}
+        percentage={roundedPercentage}
       />
     </View>
   );
