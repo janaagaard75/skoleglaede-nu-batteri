@@ -2,7 +2,7 @@ import { clamp } from "react-native-reanimated";
 import { maximumIcons } from "./maximumIcons";
 import { QrCode } from "./scannerSheet/QrCode";
 
-export const getNewValues = (
+export const calculateNewValues = (
   currentValues: {
     flames: number;
     hearts: number;
@@ -24,22 +24,32 @@ export const getNewValues = (
         newPercentage: currentValues.percentage,
       };
     case "percentage":
-      let newPercentage = clamp(
-        currentValues.percentage + qrCode.amount,
-        0,
-        100,
-      );
-      let newHearts = currentValues.hearts;
+      const unrestrictedNewPercentage =
+        currentValues.percentage + qrCode.amount;
 
-      if (newPercentage === 100) {
-        newPercentage = 30;
-        newHearts = clamp(currentValues.hearts + 1, 0, maximumIcons);
+      if (unrestrictedNewPercentage <= 100) {
+        return {
+          newFlames: currentValues.flames,
+          newHearts: currentValues.hearts,
+          newPercentage: unrestrictedNewPercentage,
+        };
       }
+
+      if (currentValues.hearts === maximumIcons) {
+        return {
+          newFlames: currentValues.flames,
+          newHearts: currentValues.hearts,
+          newPercentage: 100,
+        };
+      }
+
+      const newHearts = currentValues.hearts + 1;
+      const restrictedPercentage = unrestrictedNewPercentage - 100;
 
       return {
         newHearts: newHearts,
         newFlames: currentValues.flames,
-        newPercentage: newPercentage,
+        newPercentage: restrictedPercentage,
       };
   }
 };
