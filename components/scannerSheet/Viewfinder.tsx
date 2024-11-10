@@ -14,7 +14,7 @@ export const Viewfinder = (props: Props) => {
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
-  const scannerMargin = 30;
+  const scannerMargin = 50;
   const viewfinderSize = 80 * 3;
 
   const qrCodeScanned = (scanningResult: BarcodeScanningResult) => {
