@@ -2,6 +2,7 @@ import { BarcodeScanningResult, CameraView } from "expo-camera";
 import { BarCodeBounds } from "expo-camera/build/legacy/Camera.types";
 import { useState } from "react";
 import { View } from "react-native";
+import { useColors } from "../colors/useColors";
 
 interface Props {
   readonly onScannedQrCodeChange: (scannedQrCode: string | undefined) => void;
@@ -149,6 +150,8 @@ const HeadUpDisplay = (props: {
 };
 
 const QrCodeHighlighter = (props: { bounds: BarCodeBounds | undefined }) => {
+  const green = useColors().green;
+
   if (props.bounds === undefined) {
     return <></>;
   }
@@ -156,7 +159,7 @@ const QrCodeHighlighter = (props: { bounds: BarCodeBounds | undefined }) => {
   return (
     <View
       style={{
-        borderColor: "green",
+        borderColor: green,
         borderWidth: 2,
         height: props.bounds.size.height,
         left: props.bounds.origin.x,
