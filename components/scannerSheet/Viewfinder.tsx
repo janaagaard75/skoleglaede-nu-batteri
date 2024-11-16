@@ -1,5 +1,4 @@
-import { BarcodeScanningResult, CameraView } from "expo-camera";
-import { BarCodeBounds } from "expo-camera/build/legacy/Camera.types";
+import { BarcodeBounds, BarcodeScanningResult, CameraView } from "expo-camera";
 import { useState } from "react";
 import { View } from "react-native";
 import { useColors } from "../colors/useColors";
@@ -10,7 +9,7 @@ interface Props {
 }
 
 export const Viewfinder = (props: Props) => {
-  const [bounds, setBounds] = useState<BarCodeBounds | undefined>(undefined);
+  const [bounds, setBounds] = useState<BarcodeBounds | undefined>(undefined);
 
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
@@ -149,7 +148,7 @@ const HeadUpDisplay = (props: {
   );
 };
 
-const QrCodeHighlighter = (props: { bounds: BarCodeBounds | undefined }) => {
+const QrCodeHighlighter = (props: { bounds: BarcodeBounds | undefined }) => {
   const green = useColors().green;
 
   if (props.bounds === undefined) {
