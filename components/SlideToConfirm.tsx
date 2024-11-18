@@ -88,7 +88,6 @@ export const SlideToConfirm = memo((props: Props) => {
     onPanResponderEnd: end,
     onPanResponderMove: move,
     onPanResponderStart: start,
-    onShouldBlockNativeResponder: (_evt, _gestureState) => true,
     onStartShouldSetPanResponder: () => true,
     onStartShouldSetPanResponderCapture: () => true,
   });
