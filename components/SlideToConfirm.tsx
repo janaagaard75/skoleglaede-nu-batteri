@@ -76,24 +76,21 @@ export const SlideToConfirm = memo((props: Props) => {
     animatedPosition.setValue(restrictedDx);
   };
 
-  const start = (
-    _evt: GestureResponderEvent,
-    _gestureStat: PanResponderGestureState,
-  ) => {
+  const start = () => {
     if (props.disabled) {
       return;
     }
   };
 
   const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: (_evt, _gestureState) => true,
-    onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+    onMoveShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponderCapture: () => true,
     onPanResponderEnd: end,
     onPanResponderMove: move,
     onPanResponderStart: start,
     onShouldBlockNativeResponder: (_evt, _gestureState) => true,
-    onStartShouldSetPanResponder: (_evt, _gestureState) => true,
-    onStartShouldSetPanResponderCapture: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponder: () => true,
+    onStartShouldSetPanResponderCapture: () => true,
   });
 
   return (
