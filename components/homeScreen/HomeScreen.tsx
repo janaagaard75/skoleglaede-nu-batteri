@@ -3,6 +3,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { Link } from "expo-router";
 import React, { useRef } from "react";
 import { Dimensions, SafeAreaView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -15,7 +16,6 @@ import { HeartIcon } from "../iconsRow/HeartIcon";
 import { HeartOutlineIcon } from "../iconsRow/HeartOutlineIcon";
 import { IconsRow } from "../iconsRow/IconsRow";
 import { maximumIcons } from "../maximumIcons";
-import { ResetSheet } from "../ResetSheet";
 import { QrCode } from "../scannerSheet/QrCode";
 import { ScannerSheet } from "../scannerSheet/ScannerSheet";
 import { ThemedText } from "../themed/ThemedText";
@@ -79,16 +79,7 @@ export const HomeScreen = () => {
               display: "flex",
             }}
           >
-            <ThemedTextPressable
-              onPress={() => {
-                resetSheetRef.current?.present();
-              }}
-              style={{
-                alignSelf: "flex-end",
-                margin: 20,
-              }}
-              title="Nulstil"
-            />
+            <Link href="/reset">Nulstil</Link>
             <View
               style={{
                 flex: 1,
@@ -162,36 +153,6 @@ export const HomeScreen = () => {
               </View>
             </View>
           </ThemedView>
-          <BottomSheetModal
-            backdropComponent={props => (
-              <Backdrop
-                {...props}
-                onPress={resetSheetRef.current?.dismiss}
-              />
-            )}
-            backgroundStyle={{
-              backgroundColor: colors.background,
-            }}
-            enableDismissOnClose={true}
-            enableDynamicSizing={false}
-            enablePanDownToClose={true}
-            handleIndicatorStyle={{
-              backgroundColor: colors.text,
-            }}
-            handleStyle={{
-              backgroundColor: colors.background,
-            }}
-            ref={resetSheetRef}
-            snapPoints={[bottomSheetHeight]}
-          >
-            <BottomSheetView
-              style={{
-                backgroundColor: colors.background,
-              }}
-            >
-              <ResetSheet onReset={reset} />
-            </BottomSheetView>
-          </BottomSheetModal>
           <BottomSheetModal
             backdropComponent={props => (
               <Backdrop

@@ -1,14 +1,17 @@
+import { useRouter } from "expo-router";
 import { View } from "react-native";
 import { Battery } from "./battery/Battery";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
-interface Props {
-  onReset: () => void;
-}
+export const ResetSheet = () => {
+  const router = useRouter();
 
-export const ResetSheet = (props: Props) => {
+  const reset = () => {
+    router.dismiss();
+  };
+
   return (
     <ThemedView
       style={{
@@ -45,7 +48,7 @@ export const ResetSheet = (props: Props) => {
       >
         <SlideToConfirm
           disabled={false}
-          onConfirm={props.onReset}
+          onConfirm={reset}
           title="Bekræft &nbsp;&#x21E8;"
         />
       </View>
