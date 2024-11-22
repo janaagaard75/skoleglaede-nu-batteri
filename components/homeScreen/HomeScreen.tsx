@@ -7,14 +7,14 @@ import React, { useRef } from "react";
 import { Dimensions, SafeAreaView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { calculateNewValues } from "../calculateNewValues";
 import { useColors } from "../colors/useColors";
 import { FlameIcon } from "../iconsRow/FlameIcon";
 import { FlameOutlineIcon } from "../iconsRow/FlameOutlineIcon";
 import { HeartIcon } from "../iconsRow/HeartIcon";
 import { HeartOutlineIcon } from "../iconsRow/HeartOutlineIcon";
 import { IconsRow } from "../iconsRow/IconsRow";
-import { maximumIcons } from "../maximumIcons";
+import { maximumIcons } from "../mainState/maximumIcons";
+import { useMainState } from "../mainState/useMainState";
 import { QrCode } from "../scannerSheet/QrCode";
 import { ScannerSheet } from "../scannerSheet/ScannerSheet";
 import { ThemedLinkButton } from "../themed/ThemedLinkButton";
@@ -23,21 +23,10 @@ import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
-import { usePersistedState } from "./usePersistedState";
 
 export const HomeScreen = () => {
-  const initialFlames = 0;
-  const initialHearts = 0;
-  const initialPercentage = 20;
-
-  const [flames, setFlames] = usePersistedState("flames", initialFlames);
-  const [hearts, setHearts] = usePersistedState("hearts", initialHearts);
-  const [percentage, setPercentage] = usePersistedState(
-    "percentage",
-    initialPercentage,
-  );
   const colors = useColors();
-  const resetSheetRef = useRef<BottomSheetModal>(null);
+  const mainState = useMainState();
   const scannerSheetRef = useRef<BottomSheetModal>(null);
   const safeAreaInsets = useSafeAreaInsets();
 
@@ -45,24 +34,9 @@ export const HomeScreen = () => {
   const verticalInset = safeAreaInsets.top + safeAreaInsets.bottom;
   const bottomSheetHeight = screenHeight - verticalInset - 90;
 
-  const score = percentage + 100 * hearts + 50 * flames;
-
   const applyQrCode = (qrCode: QrCode) => {
-    const newValues = calculateNewValues(
-      { flames, hearts, percentage },
-      qrCode,
-    );
-    setFlames(newValues.newFlames);
-    setHearts(newValues.newHearts);
-    setPercentage(newValues.newPercentage);
+    mainState.applyQrCode(qrCode);
     scannerSheetRef.current?.dismiss();
-  };
-
-  const reset = () => {
-    setFlames(initialFlames);
-    setHearts(initialHearts);
-    setPercentage(initialPercentage);
-    resetSheetRef.current?.dismiss();
   };
 
   return (
@@ -105,7 +79,7 @@ export const HomeScreen = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Trivselsscore: {score}
+                  Trivselsscore: {mainState.score}
                 </ThemedText>
               </View>
               <View
@@ -114,14 +88,14 @@ export const HomeScreen = () => {
                   justifyContent: "center",
                 }}
               >
-                <BatteryAndPercentage percentage={percentage} />
+                <BatteryAndPercentage percentage={mainState.percentage} />
                 <View
                   style={{
                     height: 40,
                   }}
                 />
                 <IconsRow
-                  currentValue={hearts}
+                  currentValue={mainState.hearts}
                   excludedIcon={<HeartOutlineIcon />}
                   gap={3}
                   includedIcon={<HeartIcon />}
@@ -134,7 +108,7 @@ export const HomeScreen = () => {
                   }}
                 />
                 <IconsRow
-                  currentValue={flames}
+                  currentValue={mainState.flames}
                   excludedIcon={<FlameOutlineIcon />}
                   gap={3}
                   includedIcon={<FlameIcon />}
@@ -187,10 +161,10 @@ export const HomeScreen = () => {
               }}
             >
               <ScannerSheet
-                flames={flames}
-                hearts={hearts}
+                flames={mainState.flames}
+                hearts={mainState.hearts}
                 onQrCodeApply={applyQrCode}
-                percentage={percentage}
+                percentage={mainState.percentage}
               />
             </BottomSheetView>
           </BottomSheetModal>

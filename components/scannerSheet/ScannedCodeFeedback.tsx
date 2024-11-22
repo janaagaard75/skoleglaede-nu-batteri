@@ -1,6 +1,6 @@
 import { decode } from "html-entities";
 import { View } from "react-native";
-import { calculateNewValues } from "../calculateNewValues";
+import { calculateNewValues } from "../mainState/calculateNewValues";
 import { ThemedText } from "../themed/ThemedText";
 import { QrCode } from "./QrCode";
 import { Summary } from "./Summary";
