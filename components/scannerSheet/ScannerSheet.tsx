@@ -68,9 +68,6 @@ export const ScannerSheet = (props: Props) => {
         </ThemedText>
         <ThemedTextPressable
           onPress={requestCameraPermissions}
-          style={{
-            alignSelf: "center",
-          }}
           title="Giv adgang til kameraet"
         />
       </ThemedView>

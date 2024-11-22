@@ -145,7 +145,6 @@ export const HomeScreen = () => {
                     scannerSheetRef.current?.present();
                   }}
                   style={{
-                    alignSelf: "center",
                     marginBottom: 60,
                   }}
                   title="Scan QR-kode"
