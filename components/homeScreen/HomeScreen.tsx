@@ -3,7 +3,6 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import { Link } from "expo-router";
 import React, { useRef } from "react";
 import { Dimensions, SafeAreaView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -18,6 +17,7 @@ import { IconsRow } from "../iconsRow/IconsRow";
 import { maximumIcons } from "../maximumIcons";
 import { QrCode } from "../scannerSheet/QrCode";
 import { ScannerSheet } from "../scannerSheet/ScannerSheet";
+import { ThemedLinkButton } from "../themed/ThemedLinkButton";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
@@ -79,7 +79,14 @@ export const HomeScreen = () => {
               display: "flex",
             }}
           >
-            <Link href="/reset">Nulstil</Link>
+            <View
+              style={{
+                alignSelf: "flex-end",
+                margin: 20,
+              }}
+            >
+              <ThemedLinkButton href="/reset">Nulstil</ThemedLinkButton>
+            </View>
             <View
               style={{
                 flex: 1,
