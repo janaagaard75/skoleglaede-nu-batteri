@@ -1,7 +1,7 @@
 import { useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { useMainState } from "../mainState/useMainState";
 import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
@@ -71,51 +71,53 @@ export const ScannerScreen = () => {
   }
 
   return (
-    <ThemedView
-      style={{
-        display: "flex",
-        gap: 20,
-        height: "100%",
-      }}
-    >
-      <View
+    <SafeAreaView>
+      <ThemedView
         style={{
-          height: 220,
-          marginTop: 30,
-          justifyContent: "flex-end",
+          display: "flex",
+          gap: 20,
+          height: "100%",
         }}
       >
-        <Viewfinder
-          onScannedQrCodeChange={setQrCodeString}
-          scannedQrCode={qrCodeString}
-        />
-      </View>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <ScannedCodeFeedback
-          flames={mainState.flames}
-          hearts={mainState.hearts}
-          percentage={mainState.percentage}
-          qrCode={qrCode}
-        />
-      </View>
-      <View
-        style={{
-          justifyContent: "flex-end",
-          marginHorizontal: "auto",
-          marginBottom: 60,
-          width: 270,
-        }}
-      >
-        <SlideToConfirm
-          disabled={qrCode === undefined}
-          onConfirm={applyQrCode}
-          title="Bekræft &nbsp;&#x21E8;"
-        />
-      </View>
-    </ThemedView>
+        <View
+          style={{
+            height: 220,
+            marginTop: 30,
+            justifyContent: "flex-end",
+          }}
+        >
+          <Viewfinder
+            onScannedQrCodeChange={setQrCodeString}
+            scannedQrCode={qrCodeString}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          <ScannedCodeFeedback
+            flames={mainState.flames}
+            hearts={mainState.hearts}
+            percentage={mainState.percentage}
+            qrCode={qrCode}
+          />
+        </View>
+        <View
+          style={{
+            justifyContent: "flex-end",
+            marginHorizontal: "auto",
+            marginBottom: 60,
+            width: 270,
+          }}
+        >
+          <SlideToConfirm
+            disabled={qrCode === undefined}
+            onConfirm={applyQrCode}
+            title="Bekræft &nbsp;&#x21E8;"
+          />
+        </View>
+      </ThemedView>
+    </SafeAreaView>
   );
 };
