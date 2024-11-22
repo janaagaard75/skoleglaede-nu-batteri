@@ -67,8 +67,8 @@ export const ScannerSheet = (props: Props) => {
           Vi har brug for din tilladelse til at bruge kameraet.
         </ThemedText>
         <ThemedTextButton
+          label="Giv adgang til kameraet"
           onPress={requestCameraPermissions}
-          title="Giv adgang til kameraet"
         />
       </ThemedView>
     );

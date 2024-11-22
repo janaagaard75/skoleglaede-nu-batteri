@@ -2,9 +2,9 @@ import { Pressable, type PressableProps } from "react-native";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = PressableProps & { title: string };
+type Props = PressableProps & { label: string };
 
-export function ThemedTextButton({ style, title, ...otherProps }: Props) {
+export function ThemedTextButton({ label, style, ...otherProps }: Props) {
   const colors = useColors();
 
   return (
@@ -24,7 +24,7 @@ export function ThemedTextButton({ style, title, ...otherProps }: Props) {
       ]}
       {...otherProps}
     >
-      <ThemedText>{title}</ThemedText>
+      <ThemedText>{label}</ThemedText>
     </Pressable>
   );
 }

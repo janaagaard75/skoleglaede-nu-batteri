@@ -141,13 +141,13 @@ export const HomeScreen = () => {
                 }}
               >
                 <ThemedTextButton
+                  label="Scan QR-kode"
                   onPress={() => {
                     scannerSheetRef.current?.present();
                   }}
                   style={{
                     marginBottom: 60,
                   }}
-                  title="Scan QR-kode"
                 />
               </View>
             </View>
