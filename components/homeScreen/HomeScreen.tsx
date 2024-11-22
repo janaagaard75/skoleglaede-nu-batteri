@@ -19,7 +19,7 @@ import { maximumIcons } from "../maximumIcons";
 import { QrCode } from "../scannerSheet/QrCode";
 import { ScannerSheet } from "../scannerSheet/ScannerSheet";
 import { ThemedText } from "../themed/ThemedText";
-import { ThemedTextPressable } from "../themed/ThemedTextPressable";
+import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
 import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
@@ -140,7 +140,7 @@ export const HomeScreen = () => {
                   justifyContent: "flex-end",
                 }}
               >
-                <ThemedTextPressable
+                <ThemedTextButton
                   onPress={() => {
                     scannerSheetRef.current?.present();
                   }}

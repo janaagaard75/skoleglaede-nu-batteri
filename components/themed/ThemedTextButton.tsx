@@ -4,7 +4,7 @@ import { ThemedText } from "./ThemedText";
 
 type Props = PressableProps & { title: string };
 
-export function ThemedTextPressable({ style, title, ...otherProps }: Props) {
+export function ThemedTextButton({ style, title, ...otherProps }: Props) {
   const colors = useColors();
 
   return (

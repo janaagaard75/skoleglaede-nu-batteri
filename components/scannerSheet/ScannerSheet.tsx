@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
-import { ThemedTextPressable } from "../themed/ThemedTextPressable";
+import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
 import { parseQrCodeString } from "./parseQrCodeString";
 import { QrCode } from "./QrCode";
@@ -66,7 +66,7 @@ export const ScannerSheet = (props: Props) => {
         >
           Vi har brug for din tilladelse til at bruge kameraet.
         </ThemedText>
-        <ThemedTextPressable
+        <ThemedTextButton
           onPress={requestCameraPermissions}
           title="Giv adgang til kameraet"
         />
