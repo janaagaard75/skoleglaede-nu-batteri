@@ -1,5 +1,5 @@
-import { ResetSheet } from "@/components/ResetSheet";
+import { ResetScreen } from "@/components/ResetScreen";
 
 export default function Reset() {
-  return <ResetSheet />;
+  return <ResetScreen />;
 }

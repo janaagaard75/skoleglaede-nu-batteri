@@ -5,7 +5,7 @@ import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
-export const ResetSheet = () => {
+export const ResetScreen = () => {
   const router = useRouter();
 
   const reset = () => {
