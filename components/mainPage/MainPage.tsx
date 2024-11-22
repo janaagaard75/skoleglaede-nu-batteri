@@ -4,7 +4,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { useRef } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, SafeAreaView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { calculateNewValues } from "../calculateNewValues";
@@ -66,167 +66,169 @@ export const MainPage = () => {
   };
 
   return (
-    <GestureHandlerRootView
-      style={{
-        height: "100%",
-      }}
-    >
-      <BottomSheetModalProvider>
-        <ThemedView
-          style={{
-            height: "100%",
-            display: "flex",
-          }}
-        >
-          <ThemedTextPressable
-            onPress={() => {
-              resetSheetRef.current?.present();
-            }}
+    <SafeAreaView>
+      <GestureHandlerRootView
+        style={{
+          height: "100%",
+        }}
+      >
+        <BottomSheetModalProvider>
+          <ThemedView
             style={{
-              alignSelf: "flex-end",
-              margin: 20,
-            }}
-            title="Nulstil"
-          />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
+              height: "100%",
+              display: "flex",
             }}
           >
-            <View
-              style={{
-                marginTop: 40,
+            <ThemedTextPressable
+              onPress={() => {
+                resetSheetRef.current?.present();
               }}
-            >
-              <ThemedText
-                style={{
-                  alignSelf: "center",
-                  fontSize: 28,
-                  fontWeight: "bold",
-                }}
-              >
-                Trivselsscore: {score}
-              </ThemedText>
-            </View>
+              style={{
+                alignSelf: "flex-end",
+                margin: 20,
+              }}
+              title="Nulstil"
+            />
             <View
               style={{
                 flex: 1,
                 justifyContent: "center",
               }}
             >
-              <BatteryAndPercentage percentage={percentage} />
               <View
                 style={{
-                  height: 40,
+                  marginTop: 40,
                 }}
-              />
-              <IconsRow
-                currentValue={hearts}
-                excludedIcon={<HeartOutlineIcon />}
-                gap={3}
-                includedIcon={<HeartIcon />}
-                maximum={maximumIcons}
-                size={30}
-              />
+              >
+                <ThemedText
+                  style={{
+                    alignSelf: "center",
+                    fontSize: 28,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Trivselsscore: {score}
+                </ThemedText>
+              </View>
               <View
                 style={{
-                  height: 20,
+                  flex: 1,
+                  justifyContent: "center",
                 }}
-              />
-              <IconsRow
-                currentValue={flames}
-                excludedIcon={<FlameOutlineIcon />}
-                gap={3}
-                includedIcon={<FlameIcon />}
-                maximum={maximumIcons}
-                size={30}
-              />
+              >
+                <BatteryAndPercentage percentage={percentage} />
+                <View
+                  style={{
+                    height: 40,
+                  }}
+                />
+                <IconsRow
+                  currentValue={hearts}
+                  excludedIcon={<HeartOutlineIcon />}
+                  gap={3}
+                  includedIcon={<HeartIcon />}
+                  maximum={maximumIcons}
+                  size={30}
+                />
+                <View
+                  style={{
+                    height: 20,
+                  }}
+                />
+                <IconsRow
+                  currentValue={flames}
+                  excludedIcon={<FlameOutlineIcon />}
+                  gap={3}
+                  includedIcon={<FlameIcon />}
+                  maximum={maximumIcons}
+                  size={30}
+                />
+              </View>
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                }}
+              >
+                <ThemedTextPressable
+                  onPress={() => {
+                    scannerSheetRef.current?.present();
+                  }}
+                  style={{
+                    alignSelf: "center",
+                    marginBottom: 60,
+                  }}
+                  title="Scan QR-kode"
+                />
+              </View>
             </View>
-            <View
+          </ThemedView>
+          <BottomSheetModal
+            backdropComponent={props => (
+              <Backdrop
+                {...props}
+                onPress={resetSheetRef.current?.dismiss}
+              />
+            )}
+            backgroundStyle={{
+              backgroundColor: colors.background,
+            }}
+            enableDismissOnClose={true}
+            enableDynamicSizing={false}
+            enablePanDownToClose={true}
+            handleIndicatorStyle={{
+              backgroundColor: colors.text,
+            }}
+            handleStyle={{
+              backgroundColor: colors.background,
+            }}
+            ref={resetSheetRef}
+            snapPoints={[bottomSheetHeight]}
+          >
+            <BottomSheetView
               style={{
-                justifyContent: "flex-end",
+                backgroundColor: colors.background,
               }}
             >
-              <ThemedTextPressable
-                onPress={() => {
-                  scannerSheetRef.current?.present();
-                }}
-                style={{
-                  alignSelf: "center",
-                  marginBottom: 60,
-                }}
-                title="Scan QR-kode"
+              <ResetSheet onReset={reset} />
+            </BottomSheetView>
+          </BottomSheetModal>
+          <BottomSheetModal
+            backdropComponent={props => (
+              <Backdrop
+                {...props}
+                onPress={scannerSheetRef.current?.dismiss}
               />
-            </View>
-          </View>
-        </ThemedView>
-        <BottomSheetModal
-          backdropComponent={props => (
-            <Backdrop
-              {...props}
-              onPress={resetSheetRef.current?.dismiss}
-            />
-          )}
-          backgroundStyle={{
-            backgroundColor: colors.background,
-          }}
-          enableDismissOnClose={true}
-          enableDynamicSizing={false}
-          enablePanDownToClose={true}
-          handleIndicatorStyle={{
-            backgroundColor: colors.text,
-          }}
-          handleStyle={{
-            backgroundColor: colors.background,
-          }}
-          ref={resetSheetRef}
-          snapPoints={[bottomSheetHeight]}
-        >
-          <BottomSheetView
-            style={{
+            )}
+            backgroundStyle={{
               backgroundColor: colors.background,
             }}
-          >
-            <ResetSheet onReset={reset} />
-          </BottomSheetView>
-        </BottomSheetModal>
-        <BottomSheetModal
-          backdropComponent={props => (
-            <Backdrop
-              {...props}
-              onPress={scannerSheetRef.current?.dismiss}
-            />
-          )}
-          backgroundStyle={{
-            backgroundColor: colors.background,
-          }}
-          enableDismissOnClose={true}
-          enableDynamicSizing={false}
-          enablePanDownToClose={true}
-          handleIndicatorStyle={{
-            backgroundColor: colors.text,
-          }}
-          handleStyle={{
-            backgroundColor: colors.background,
-          }}
-          ref={scannerSheetRef}
-          snapPoints={[bottomSheetHeight]}
-        >
-          <BottomSheetView
-            style={{
+            enableDismissOnClose={true}
+            enableDynamicSizing={false}
+            enablePanDownToClose={true}
+            handleIndicatorStyle={{
+              backgroundColor: colors.text,
+            }}
+            handleStyle={{
               backgroundColor: colors.background,
             }}
+            ref={scannerSheetRef}
+            snapPoints={[bottomSheetHeight]}
           >
-            <ScannerSheet
-              flames={flames}
-              hearts={hearts}
-              onQrCodeApply={applyQrCode}
-              percentage={percentage}
-            />
-          </BottomSheetView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+            <BottomSheetView
+              style={{
+                backgroundColor: colors.background,
+              }}
+            >
+              <ScannerSheet
+                flames={flames}
+                hearts={hearts}
+                onQrCodeApply={applyQrCode}
+                percentage={percentage}
+              />
+            </BottomSheetView>
+          </BottomSheetModal>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
