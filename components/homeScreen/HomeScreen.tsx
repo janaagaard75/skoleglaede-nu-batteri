@@ -25,7 +25,7 @@ import { Backdrop } from "./Backdrop";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 import { usePersistedState } from "./usePersistedState";
 
-export const MainPage = () => {
+export const HomeScreen = () => {
   const initialFlames = 0;
   const initialHearts = 0;
   const initialPercentage = 20;
