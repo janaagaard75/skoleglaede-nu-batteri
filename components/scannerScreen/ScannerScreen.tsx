@@ -1,27 +1,23 @@
 import { useCameraPermissions } from "expo-camera";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { View } from "react-native";
+import { useMainState } from "../mainState/useMainState";
 import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
 import { parseQrCodeString } from "./parseQrCodeString";
-import { QrCode } from "./QrCode";
 import { ScannedCodeFeedback } from "./ScannedCodeFeedback";
 import { Viewfinder } from "./Viewfinder";
 
-interface Props {
-  flames: number;
-  hearts: number;
-  onQrCodeApply(qrCode: QrCode): void;
-  percentage: number;
-}
-
-export const ScannerSheet = (props: Props) => {
+export const ScannerScreen = () => {
   const [cameraPermissions, requestCameraPermissions] = useCameraPermissions();
   const [qrCodeString, setQrCodeString] = useState<string | undefined>(
     undefined,
   );
+  const mainState = useMainState();
+  const router = useRouter();
 
   const qrCode = parseQrCodeString(qrCodeString);
 
@@ -30,7 +26,8 @@ export const ScannerSheet = (props: Props) => {
       return;
     }
 
-    props.onQrCodeApply(qrCode);
+    mainState.applyQrCode(qrCode);
+    router.dismiss();
   };
 
   if (cameraPermissions === null) {
@@ -53,14 +50,13 @@ export const ScannerSheet = (props: Props) => {
       <ThemedView
         style={{
           height: "100%",
-          marginHorizontal: 30,
           gap: 30,
-          marginTop: 30,
         }}
       >
         <ThemedText
           style={{
-            marginTop: 20,
+            marginHorizontal: 30,
+            marginTop: 40,
             textAlign: "center",
           }}
         >
@@ -100,9 +96,9 @@ export const ScannerSheet = (props: Props) => {
         }}
       >
         <ScannedCodeFeedback
-          flames={props.flames}
-          hearts={props.hearts}
-          percentage={props.percentage}
+          flames={mainState.flames}
+          hearts={mainState.hearts}
+          percentage={mainState.percentage}
           qrCode={qrCode}
         />
       </View>

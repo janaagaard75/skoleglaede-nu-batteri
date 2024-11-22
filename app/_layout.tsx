@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/components/colors/useColorScheme";
+import { MainStateProvider } from "@/components/mainState/MainStateProvider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -33,19 +34,27 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen
-            name="reset"
-            options={{
-              presentation: "modal",
+        <MainStateProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
             }}
-          />
-        </Stack>
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen
+              name="reset"
+              options={{
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
+              name="scan"
+              options={{
+                presentation: "modal",
+              }}
+            />
+          </Stack>
+        </MainStateProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

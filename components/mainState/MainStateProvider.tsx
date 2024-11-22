@@ -1,5 +1,5 @@
 import { createContext, ReactNode } from "react";
-import { QrCode } from "../scannerSheet/QrCode";
+import { QrCode } from "./QrCode";
 import { calculateNewValues } from "./calculateNewValues";
 import { usePersistedState } from "./usePersistedState";
 

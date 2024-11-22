@@ -25,7 +25,7 @@ export const ResetScreen = () => {
     >
       <ThemedText
         style={{
-          marginTop: 30,
+          marginTop: 40,
           marginHorizontal: 30,
         }}
       >

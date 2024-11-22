@@ -1,5 +1,5 @@
 import { clamp } from "react-native-reanimated";
-import { QrCode } from "../scannerSheet/QrCode";
+import { QrCode } from "./QrCode";
 import { maximumIcons } from "./maximumIcons";
 
 export const calculateNewValues = (
