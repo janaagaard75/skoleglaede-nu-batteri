@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -35,25 +36,27 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
         <MainStateProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="index" />
-            <Stack.Screen
-              name="reset"
-              options={{
-                presentation: "modal",
+          <GestureHandlerRootView>
+            <Stack
+              screenOptions={{
+                headerShown: false,
               }}
-            />
-            <Stack.Screen
-              name="scan"
-              options={{
-                presentation: "modal",
-              }}
-            />
-          </Stack>
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="reset"
+                options={{
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="scan"
+                options={{
+                  presentation: "modal",
+                }}
+              />
+            </Stack>
+          </GestureHandlerRootView>
         </MainStateProvider>
       </SafeAreaProvider>
     </ThemeProvider>
