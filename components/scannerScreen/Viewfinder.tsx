@@ -10,12 +10,13 @@ interface Props {
 
 export const Viewfinder = (props: Props) => {
   const [bounds, setBounds] = useState<BarcodeBounds | undefined>(undefined);
+  const colors = useColors();
 
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
     useState<NodeJS.Timeout | undefined>(undefined);
 
   const scannerMargin = 50;
-  const viewfinderSize = 80 * 3;
+  const viewfinderSize = 90 * 3;
 
   const qrCodeScanned = (scanningResult: BarcodeScanningResult) => {
     if (resetScannedQrCodeTimeoutId !== undefined) {
@@ -71,6 +72,7 @@ export const Viewfinder = (props: Props) => {
       facing="back"
       onBarcodeScanned={qrCodeScanned}
       style={{
+        backgroundColor: colors.disabledText,
         height: viewfinderSize,
         marginLeft: "auto",
         marginRight: "auto",
