@@ -114,8 +114,9 @@ export const ScannerScreen = () => {
           <SlideToConfirm
             disabled={qrCode === undefined}
             onConfirm={applyQrCode}
-            title="Bekræft &nbsp;&#x21E8;"
-          />
+          >
+            Bekræft &nbsp;&#x21E8;
+          </SlideToConfirm>
         </View>
       </ThemedView>
     </SafeAreaView>

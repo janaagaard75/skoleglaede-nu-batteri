@@ -13,9 +13,9 @@ import { useColors } from "./colors/useColors";
 import { ThemedText } from "./themed/ThemedText";
 
 interface Props {
+  children: string;
   disabled: boolean;
   onConfirm: () => void;
-  title: string;
 }
 
 export const SlideToConfirm = memo((props: Props) => {
@@ -132,7 +132,7 @@ export const SlideToConfirm = memo((props: Props) => {
               paddingVertical: 6,
             }}
           >
-            {decode(props.title)}
+            {decode(props.children)}
           </ThemedText>
         </Animated.View>
       </View>

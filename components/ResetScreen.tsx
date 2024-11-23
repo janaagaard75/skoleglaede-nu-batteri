@@ -53,8 +53,9 @@ export const ResetScreen = () => {
           <SlideToConfirm
             disabled={false}
             onConfirm={reset}
-            title="Bekræft &nbsp;&#x21E8;"
-          />
+          >
+            Bekræft &nbsp;&#x21E8;
+          </SlideToConfirm>
         </View>
       </ThemedView>
     </SafeAreaView>
