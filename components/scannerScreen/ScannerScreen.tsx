@@ -2,6 +2,7 @@ import { useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, View } from "react-native";
+import { useColors } from "../colors/useColors";
 import { useMainState } from "../mainState/useMainState";
 import { SlideToConfirm } from "../SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
@@ -16,6 +17,7 @@ export const ScannerScreen = () => {
   const [qrCodeString, setQrCodeString] = useState<string | undefined>(
     undefined,
   );
+  const colors = useColors();
   const mainState = useMainState();
   const router = useRouter();
 
@@ -34,6 +36,7 @@ export const ScannerScreen = () => {
     return (
       <SafeAreaView
         style={{
+          backgroundColor: colors.background,
           flex: 1,
         }}
       >
@@ -55,6 +58,7 @@ export const ScannerScreen = () => {
     return (
       <SafeAreaView
         style={{
+          backgroundColor: colors.background,
           flex: 1,
         }}
       >
@@ -84,6 +88,7 @@ export const ScannerScreen = () => {
   return (
     <SafeAreaView
       style={{
+        backgroundColor: colors.background,
         flex: 1,
       }}
     >

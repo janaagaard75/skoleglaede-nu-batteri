@@ -1,12 +1,14 @@
 import { useRouter } from "expo-router";
 import { SafeAreaView, View } from "react-native";
 import { Battery } from "./battery/Battery";
+import { useColors } from "./colors/useColors";
 import { useMainState } from "./mainState/useMainState";
 import { SlideToConfirm } from "./SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
 export const ResetScreen = () => {
+  const colors = useColors();
   const router = useRouter();
   const mainState = useMainState();
 
@@ -18,6 +20,7 @@ export const ResetScreen = () => {
   return (
     <SafeAreaView
       style={{
+        backgroundColor: colors.background,
         flex: 1,
       }}
     >

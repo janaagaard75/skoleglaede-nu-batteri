@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, View } from "react-native";
+import { useColors } from "../colors/useColors";
 import { FlameIcon } from "../iconsRow/FlameIcon";
 import { FlameOutlineIcon } from "../iconsRow/FlameOutlineIcon";
 import { HeartIcon } from "../iconsRow/HeartIcon";
@@ -13,11 +14,13 @@ import { ThemedView } from "../themed/ThemedView";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
 
 export const HomeScreen = () => {
+  const colors = useColors();
   const mainState = useMainState();
 
   return (
     <SafeAreaView
       style={{
+        backgroundColor: colors.background,
         flex: 1,
       }}
     >

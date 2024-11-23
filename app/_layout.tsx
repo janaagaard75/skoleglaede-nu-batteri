@@ -1,3 +1,4 @@
+import { useColors } from "@/components/colors/useColors";
 import { useColorScheme } from "@/components/colors/useColorScheme";
 import { MainStateProvider } from "@/components/mainState/MainStateProvider";
 import {
@@ -18,6 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const colors = useColors();
   const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -39,12 +41,32 @@ export default function RootLayout() {
           <GestureHandlerRootView>
             <Stack
               screenOptions={{
-                headerShown: false,
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.background,
+                },
+                headerShadowVisible: false,
               }}
             >
-              <Stack.Screen name="index" />
-              <Stack.Screen name="reset" />
-              <Stack.Screen name="scan" />
+              <Stack.Screen
+                name="index"
+                options={{
+                  headerShown: false,
+                  headerTitle: "Forsiden",
+                }}
+              />
+              <Stack.Screen
+                name="reset"
+                options={{
+                  headerTitle: "Nulstil",
+                }}
+              />
+              <Stack.Screen
+                name="scan"
+                options={{
+                  headerTitle: "Scan QR-kode",
+                }}
+              />
             </Stack>
           </GestureHandlerRootView>
         </MainStateProvider>
