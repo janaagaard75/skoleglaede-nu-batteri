@@ -44,7 +44,16 @@ export const Viewfinder = (props: Props) => {
     if (scanningResult.data !== props.scannedQrCode) {
       props.onScannedQrCodeChange(scanningResult.data);
     }
-    setBounds(scanningResult.bounds);
+
+    if (
+      bounds === undefined ||
+      bounds.origin.x !== scanningResult.bounds.origin.x ||
+      bounds.origin.y !== scanningResult.bounds.origin.y ||
+      bounds.size.height !== scanningResult.bounds.size.height ||
+      bounds.size.width !== scanningResult.bounds.size.width
+    ) {
+      setBounds(scanningResult.bounds);
+    }
 
     setResetScannedQrCodeTimeoutId(setTimeout(resetScannedQrCode, 3_000));
   };
