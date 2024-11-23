@@ -98,7 +98,7 @@ export const HomeScreen = () => {
             <ThemedLinkButton
               href="/scan"
               style={{
-                marginBottom: 60,
+                marginBottom: 80,
               }}
             >
               Scan QR-kode
