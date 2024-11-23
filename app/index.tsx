@@ -1,10 +1,5 @@
-import { MainPage } from "@/components/mainPage/MainPage";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { HomeScreen } from "@/components/homeScreen/HomeScreen";
 
-export default function HomeScreen() {
-  return (
-    <SafeAreaView>
-      <MainPage />
-    </SafeAreaView>
-  );
+export default function Index() {
+  return <HomeScreen />;
 }

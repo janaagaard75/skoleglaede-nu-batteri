@@ -1,4 +1,4 @@
-import { QrCode } from "./QrCode";
+import { QrCode } from "../mainState/QrCode";
 
 export const parseQrCodeString = (
   qrCodeString: string | undefined,

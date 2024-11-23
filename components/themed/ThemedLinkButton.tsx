@@ -1,17 +1,24 @@
-import { Pressable, type PressableProps } from "react-native";
+import { Link, LinkProps } from "expo-router";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = PressableProps & { title: string };
+type Props = Omit<LinkProps, "children"> & {
+  children: string;
+};
 
-export function ThemedTextPressable({ style, title, ...otherProps }: Props) {
+export function ThemedLinkButton({
+  children,
+  href,
+  style,
+  ...otherProps
+}: Props) {
   const colors = useColors();
 
   return (
-    <Pressable
+    <Link
       style={[
         {
-          alignSelf: "flex-start",
+          alignSelf: "center",
           borderColor: colors.text,
           borderRadius: 8,
           borderWidth: 2,
@@ -22,9 +29,10 @@ export function ThemedTextPressable({ style, title, ...otherProps }: Props) {
         // @ts-ignore
         style,
       ]}
+      href={href}
       {...otherProps}
     >
-      <ThemedText>{title}</ThemedText>
-    </Pressable>
+      <ThemedText>{children}</ThemedText>
+    </Link>
   );
 }

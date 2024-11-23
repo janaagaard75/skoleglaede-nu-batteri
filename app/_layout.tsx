@@ -1,4 +1,6 @@
+import { useColors } from "@/components/colors/useColors";
 import { useColorScheme } from "@/components/colors/useColorScheme";
+import { MainStateProvider } from "@/components/mainState/MainStateProvider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -8,6 +10,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -16,6 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const colors = useColors();
   const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -33,11 +37,39 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
+        <MainStateProvider>
+          <GestureHandlerRootView>
+            <Stack
+              screenOptions={{
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: colors.background,
+                },
+                headerShadowVisible: false,
+              }}
+            >
+              <Stack.Screen
+                name="index"
+                options={{
+                  headerShown: false,
+                  headerTitle: "Forsiden",
+                }}
+              />
+              <Stack.Screen
+                name="reset"
+                options={{
+                  headerTitle: "Nulstil",
+                }}
+              />
+              <Stack.Screen
+                name="scan"
+                options={{
+                  headerTitle: "Scan QR-kode",
+                }}
+              />
+            </Stack>
+          </GestureHandlerRootView>
+        </MainStateProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

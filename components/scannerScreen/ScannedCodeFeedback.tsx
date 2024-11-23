@@ -1,22 +1,19 @@
 import { decode } from "html-entities";
 import { View } from "react-native";
-import { calculateNewValues } from "../calculateNewValues";
+import { calculateNewValues } from "../mainState/calculateNewValues";
+import { QrCode } from "../mainState/QrCode";
 import { ThemedText } from "../themed/ThemedText";
-import { QrCode } from "./QrCode";
 import { Summary } from "./Summary";
 
-export const ScannedCodeFeedback = ({
-  flames,
-  hearts,
-  percentage,
-  qrCode,
-}: {
+interface Props {
   flames: number;
   hearts: number;
   percentage: number;
   qrCode: QrCode | undefined;
-}) => {
-  if (qrCode === undefined) {
+}
+
+export const ScannedCodeFeedback = (props: Props) => {
+  if (props.qrCode === undefined) {
     return (
       <ThemedText
         style={{
@@ -29,35 +26,44 @@ export const ScannedCodeFeedback = ({
   }
 
   const label = (() => {
-    switch (qrCode.type) {
+    switch (props.qrCode.type) {
       case "flame":
-        if (qrCode.amount === 1) {
+        if (props.qrCode.amount === 1) {
           return "+1 flamme";
         } else {
           return decode("&minus; 1 flamme");
         }
+
       case "heart":
-        if (qrCode.amount === 1) {
+        if (props.qrCode.amount === 1) {
           return "+ 1 hjerte";
         } else {
           return decode("&minus; 1 hjerte");
         }
+
       case "percentage":
-        if (qrCode.amount > 0) {
-          return `+ ${qrCode.amount}%`;
+        if (props.qrCode.amount > 0) {
+          return `+ ${props.qrCode.amount}%`;
         } else {
-          return decode(`&minus; ${Math.abs(qrCode.amount)}%`);
+          return decode(`&minus; ${Math.abs(props.qrCode.amount)}%`);
         }
     }
   })();
 
-  const newValues = calculateNewValues({ flames, hearts, percentage }, qrCode);
+  const newValues = calculateNewValues(
+    {
+      flames: props.flames,
+      hearts: props.hearts,
+      percentage: props.percentage,
+    },
+    props.qrCode,
+  );
 
   return (
     <View
       style={{
+        flex: 1,
         display: "flex",
-        height: "100%",
       }}
     >
       <ThemedText
@@ -75,9 +81,9 @@ export const ScannedCodeFeedback = ({
         }}
       >
         <Summary
-          flames={flames}
-          hearts={hearts}
-          percentage={percentage}
+          flames={props.flames}
+          hearts={props.hearts}
+          percentage={props.percentage}
         />
         <View
           style={{
