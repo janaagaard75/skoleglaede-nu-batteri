@@ -62,10 +62,9 @@ export const ScannerScreen = () => {
         >
           Vi har brug for din tilladelse til at bruge kameraet.
         </ThemedText>
-        <ThemedTextButton
-          label="Giv adgang til kameraet"
-          onPress={requestCameraPermissions}
-        />
+        <ThemedTextButton onPress={requestCameraPermissions}>
+          Giv adgang til kameraet
+        </ThemedTextButton>
       </ThemedView>
     );
   }
