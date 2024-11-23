@@ -47,12 +47,13 @@ export const ResetScreen = () => {
             justifyContent: "flex-end",
             marginHorizontal: "auto",
             marginBottom: 60,
-            width: 270,
           }}
         >
           <SlideToConfirm
+            buttonWidth={140}
             disabled={false}
             onConfirm={reset}
+            sliderWidth={250}
           >
             Bekræft &nbsp;&#x21E8;
           </SlideToConfirm>
