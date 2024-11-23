@@ -16,17 +16,22 @@ export const ResetScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        marginBottom: 100,
+        flex: 1,
+      }}
+    >
       <ThemedView
         style={{
           display: "flex",
-          height: "100%",
+          flex: 1,
           gap: 30,
         }}
       >
         <ThemedText
           style={{
-            marginTop: 40,
+            marginTop: 200,
             marginHorizontal: 30,
           }}
         >
@@ -46,7 +51,7 @@ export const ResetScreen = () => {
             flex: 1,
             justifyContent: "flex-end",
             marginHorizontal: "auto",
-            marginBottom: 60,
+            marginBottom: 80,
           }}
         >
           <SlideToConfirm

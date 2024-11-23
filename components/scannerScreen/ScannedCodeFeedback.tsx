@@ -62,8 +62,8 @@ export const ScannedCodeFeedback = (props: Props) => {
   return (
     <View
       style={{
+        flex: 1,
         display: "flex",
-        height: "100%",
       }}
     >
       <ThemedText

@@ -16,11 +16,15 @@ export const HomeScreen = () => {
   const mainState = useMainState();
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
       <ThemedView
         style={{
-          height: "100%",
           display: "flex",
+          flex: 1,
         }}
       >
         <View

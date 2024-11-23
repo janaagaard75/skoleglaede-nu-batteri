@@ -32,40 +32,52 @@ export const ScannerScreen = () => {
 
   if (cameraPermissions === null) {
     return (
-      <ThemedText
+      <SafeAreaView
         style={{
-          height: "100%",
-          marginHorizontal: 30,
-          gap: 30,
-          marginTop: 30,
+          flex: 1,
         }}
       >
-        Venter på tilladelse til kameraet&hellip;
-      </ThemedText>
+        <ThemedText
+          style={{
+            flex: 1,
+            gap: 30,
+            marginHorizontal: 30,
+            marginTop: 30,
+          }}
+        >
+          Venter på tilladelse til kameraet&hellip;
+        </ThemedText>
+      </SafeAreaView>
     );
   }
 
   if (!cameraPermissions.granted) {
     return (
-      <ThemedView
+      <SafeAreaView
         style={{
-          height: "100%",
-          gap: 30,
+          flex: 1,
         }}
       >
-        <ThemedText
+        <ThemedView
           style={{
-            marginHorizontal: 30,
-            marginTop: 40,
-            textAlign: "center",
+            flex: 1,
+            gap: 30,
           }}
         >
-          Vi har brug for din tilladelse til at bruge kameraet.
-        </ThemedText>
-        <ThemedTextButton onPress={requestCameraPermissions}>
-          Giv adgang til kameraet
-        </ThemedTextButton>
-      </ThemedView>
+          <ThemedText
+            style={{
+              marginHorizontal: 30,
+              marginTop: 40,
+              textAlign: "center",
+            }}
+          >
+            Vi har brug for din tilladelse til at bruge kameraet.
+          </ThemedText>
+          <ThemedTextButton onPress={requestCameraPermissions}>
+            Giv adgang til kameraet
+          </ThemedTextButton>
+        </ThemedView>
+      </SafeAreaView>
     );
   }
 
