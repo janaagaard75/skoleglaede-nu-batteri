@@ -82,18 +82,22 @@ export const ScannerScreen = () => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
       <ThemedView
         style={{
           display: "flex",
+          flex: 1,
           gap: 20,
-          height: "100%",
         }}
       >
         <View
           style={{
             height: 220,
-            marginTop: 30,
+            marginTop: 20 + 50,
             justifyContent: "flex-end",
           }}
         >
@@ -118,7 +122,7 @@ export const ScannerScreen = () => {
           style={{
             justifyContent: "flex-end",
             marginHorizontal: "auto",
-            marginBottom: 60,
+            marginBottom: 80,
             width: 270,
           }}
         >

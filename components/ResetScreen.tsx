@@ -18,7 +18,6 @@ export const ResetScreen = () => {
   return (
     <SafeAreaView
       style={{
-        marginBottom: 100,
         flex: 1,
       }}
     >

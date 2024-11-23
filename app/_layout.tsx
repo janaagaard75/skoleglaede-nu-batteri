@@ -43,18 +43,8 @@ export default function RootLayout() {
               }}
             >
               <Stack.Screen name="index" />
-              <Stack.Screen
-                name="reset"
-                options={{
-                  presentation: "modal",
-                }}
-              />
-              <Stack.Screen
-                name="scan"
-                options={{
-                  presentation: "modal",
-                }}
-              />
+              <Stack.Screen name="reset" />
+              <Stack.Screen name="scan" />
             </Stack>
           </GestureHandlerRootView>
         </MainStateProvider>
