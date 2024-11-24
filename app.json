@@ -3,7 +3,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/images/icon-light.png"
+        "foregroundImage": "./assets/icon-light.png"
       },
       "package": "com.janaagaard75.skoleglaedenubatteri",
       "permissions": ["android.permission.CAMERA"]
@@ -16,7 +16,7 @@
         "projectId": "4445138c-8d76-4f8e-a92c-e6e56c81924c"
       }
     },
-    "icon": "./assets/images/icon-light.png",
+    "icon": "./assets/icon-light.png",
     "ios": {
       "bundleIdentifier": "com.janaagaard75.skoleglaedenubatteri",
       "config": {
