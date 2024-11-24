@@ -3,7 +3,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/images/icon.png"
+        "foregroundImage": "./assets/images/icon-light.png"
       },
       "package": "com.janaagaard75.skoleglaedenubatteri",
       "permissions": ["android.permission.CAMERA"]
@@ -16,7 +16,7 @@
         "projectId": "4445138c-8d76-4f8e-a92c-e6e56c81924c"
       }
     },
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icon-light.png",
     "ios": {
       "bundleIdentifier": "com.janaagaard75.skoleglaedenubatteri",
       "config": {
@@ -40,18 +40,25 @@
       ],
       "expo-font",
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/icon-light.png",
+          "dark": {
+            "image": "./assets/icon-dark.png",
+            "backgroundColor": "#000000"
+          },
+          "imageWidth": 200
+        }
+      ]
     ],
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "scheme": "myapp",
     "slug": "skoleglaede-nu-batteri",
-    "splash": {
-      "image": "./assets/images/icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "userInterfaceStyle": "automatic",
     "updates": {
       "url": "https://u.expo.dev/4445138c-8d76-4f8e-a92c-e6e56c81924c"

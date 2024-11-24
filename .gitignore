@@ -16,3 +16,6 @@ npm-debug.*
 
 # macOS
 .DS_Store
+
+# Affinity Designer
+.afdesign~lock~
