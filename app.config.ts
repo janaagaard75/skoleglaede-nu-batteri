@@ -29,6 +29,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     supportsTablet: true,
   },
+  locales: {
+    da: "./da.json",
+  },
   name: "Skoleglæde.nu Batteri",
   newArchEnabled: true,
   orientation: "portrait",
