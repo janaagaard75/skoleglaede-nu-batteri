@@ -3,10 +3,6 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   android: {
-    adaptiveIcon: {
-      backgroundColor: "#ffffff",
-      foregroundImage: "./assets/icon-light.png",
-    },
     package: "com.janaagaard75.skoleglaedenubatteri",
     permissions: ["android.permission.CAMERA"],
   },
