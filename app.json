@@ -34,7 +34,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Tillad at $(PRODUCT_NAME) får adgang til kameraet",
+          "cameraPermission": "Tillad at $(PRODUCT_NAME) får adgang til kameraet.",
           "recordAudioAndroid": false
         }
       ],
