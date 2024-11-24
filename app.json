@@ -38,9 +38,9 @@
           "recordAudioAndroid": false
         }
       ],
+      "expo-font",
       "expo-router",
-      "expo-secure-store",
-      "expo-font"
+      "expo-secure-store"
     ],
     "runtimeVersion": {
       "policy": "appVersion"
