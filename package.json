@@ -5,11 +5,9 @@
   "private": true,
   "packageManager": "yarn@1.22.22",
   "scripts": {
-    "android": "expo run:android",
     "build": "eas build --platform ios --profile production",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
-    "ios": "expo run:ios",
     "start": "yarn install && expo start",
     "submit": "eas submit --platform ios --profile production",
     "test": "jest --watchAll"
