@@ -5,6 +5,7 @@
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/images/icon.png"
       },
+      "package": "com.janaagaard75.skoleglaedenubatteri",
       "permissions": ["android.permission.CAMERA"]
     },
     "experiments": {
