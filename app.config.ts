@@ -3,7 +3,7 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   android: {
-    package: "com.janaagaard75.skoleglaedenubatteri",
+    package: "nu.skoleglaede.batteri",
     permissions: ["android.permission.CAMERA"],
   },
   experiments: {
@@ -16,7 +16,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   icon: "./assets/icon-light.png",
   ios: {
-    bundleIdentifier: "com.janaagaard75.skoleglaedenubatteri",
+    bundleIdentifier: "nu.skoleglaede.batteri",
     config: {
       usesNonExemptEncryption: false,
     },
