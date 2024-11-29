@@ -8,6 +8,7 @@
     "build": "eas build --platform ios --profile production",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
+    "optimize-icons": "npx --package imagemin-cli imagemin ./assets-src/*.png --out-dir ./assets",
     "start": "yarn install && expo start",
     "submit": "eas submit --platform ios --profile production",
     "test": "jest --watchAll"
