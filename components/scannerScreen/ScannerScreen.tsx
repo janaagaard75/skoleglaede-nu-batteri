@@ -29,7 +29,11 @@ export const ScannerScreen = () => {
     }
 
     mainState.applyQrCode(qrCode);
-    router.dismiss();
+
+    // Wrapping in this conditional removes a warning from the router. Don't know why.
+    if (router.canGoBack()) {
+      router.back();
+    }
   };
 
   if (cameraPermissions === null) {
@@ -70,6 +74,7 @@ export const ScannerScreen = () => {
         >
           <ThemedText
             style={{
+              fontSize: 30,
               marginHorizontal: 30,
               marginTop: 40,
               textAlign: "center",

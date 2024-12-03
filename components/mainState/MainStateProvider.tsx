@@ -28,7 +28,9 @@ export const MainStateProvider = (props: Props) => {
     initialPercentage,
   );
 
-  const score = percentage + 100 * hearts + 50 * flames;
+  const heartValue = 125;
+  const flameValue = 50;
+  const score = percentage + hearts * heartValue + flames * flameValue;
 
   const applyQrCode = (qrCode: QrCode) => {
     const newValues = calculateNewValues(

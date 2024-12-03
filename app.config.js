@@ -1,7 +1,4 @@
-import { ConfigContext, ExpoConfig } from "expo/config";
-
-export default ({ config }: ConfigContext): ExpoConfig => ({
-  ...config,
+module.exports = {
   android: {
     package: "nu.skoleglaede.batteri",
     permissions: ["android.permission.CAMERA"],
@@ -65,4 +62,4 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     url: "https://u.expo.dev/4445138c-8d76-4f8e-a92c-e6e56c81924c",
   },
   version: "1.0.0",
-});
+};

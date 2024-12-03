@@ -14,7 +14,11 @@ export const ResetScreen = () => {
 
   const reset = () => {
     mainState.reset();
-    router.dismiss();
+
+    // Wrapping in this conditional removes a warning from the router. Don't know why.
+    if (router.canGoBack()) {
+      router.back();
+    }
   };
 
   return (
