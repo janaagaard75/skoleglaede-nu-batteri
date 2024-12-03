@@ -17,6 +17,7 @@ export const ScannedCodeFeedback = (props: Props) => {
     return (
       <ThemedText
         style={{
+          fontSize: 30,
           textAlign: "center",
         }}
       >
@@ -68,6 +69,7 @@ export const ScannedCodeFeedback = (props: Props) => {
     >
       <ThemedText
         style={{
+          fontSize: 30,
           textAlign: "center",
         }}
       >

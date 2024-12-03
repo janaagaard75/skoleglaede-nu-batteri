@@ -74,6 +74,7 @@ export const ScannerScreen = () => {
         >
           <ThemedText
             style={{
+              fontSize: 30,
               marginHorizontal: 30,
               marginTop: 40,
               textAlign: "center",
