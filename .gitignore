@@ -1,5 +1,7 @@
 .expo/
+android/
 dist/
+ios/
 node_modules/
 web-build/
 
@@ -14,3 +16,6 @@ npm-debug.*
 
 # macOS
 .DS_Store
+
+# Affinity Designer
+.afdesign~lock~
