@@ -10,7 +10,6 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -39,37 +38,35 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
         <MainStateProvider>
-          <GestureHandlerRootView>
-            <Stack
-              screenOptions={{
-                headerShown: true,
-                headerStyle: {
-                  backgroundColor: colors.background,
-                },
-                headerShadowVisible: false,
+          <Stack
+            screenOptions={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: colors.background,
+              },
+              headerShadowVisible: false,
+            }}
+          >
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false,
+                headerTitle: "Forsiden",
               }}
-            >
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerShown: false,
-                  headerTitle: "Forsiden",
-                }}
-              />
-              <Stack.Screen
-                name="reset"
-                options={{
-                  headerTitle: "Nulstil",
-                }}
-              />
-              <Stack.Screen
-                name="scan"
-                options={{
-                  headerTitle: "Scan QR-kode",
-                }}
-              />
-            </Stack>
-          </GestureHandlerRootView>
+            />
+            <Stack.Screen
+              name="reset"
+              options={{
+                headerTitle: "Nulstil",
+              }}
+            />
+            <Stack.Screen
+              name="scan"
+              options={{
+                headerTitle: "Scan QR-kode",
+              }}
+            />
+          </Stack>
         </MainStateProvider>
       </SafeAreaProvider>
     </ThemeProvider>
