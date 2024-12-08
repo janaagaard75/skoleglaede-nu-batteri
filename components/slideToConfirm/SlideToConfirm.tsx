@@ -1,4 +1,3 @@
-import { decode } from "html-entities";
 import { memo, useCallback, useRef } from "react";
 import { Animated, GestureResponderEvent, View } from "react-native";
 import { clamp } from "react-native-reanimated";
@@ -108,7 +107,7 @@ export const SlideToConfirm = memo((props: Props) => {
               color: props.disabled ? colors.disabledText : colors.text,
             }}
           >
-            {decode(props.children + " &nbsp;&#x21E8;")}
+            {props.children + " &nbsp;&#x21E8;"}
           </ThemedText>
         </View>
       </Animated.View>

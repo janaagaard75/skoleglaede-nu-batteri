@@ -1,9 +1,10 @@
+import { decode } from "html-entities";
 import { Text, type TextProps } from "react-native";
 import { useColors } from "../colors/useColors";
 
-type Props = TextProps;
+type Props = TextProps & { children: string };
 
-export function ThemedText({ style, ...otherProps }: Props) {
+export function ThemedText({ style, children, ...otherProps }: Props) {
   const colors = useColors();
 
   return (
@@ -17,6 +18,8 @@ export function ThemedText({ style, ...otherProps }: Props) {
         style,
       ]}
       {...otherProps}
-    />
+    >
+      {decode(children)}
+    </Text>
   );
 }
