@@ -2,8 +2,8 @@ import { decode } from "html-entities";
 import { memo, useCallback, useRef } from "react";
 import { Animated, GestureResponderEvent, View } from "react-native";
 import { clamp } from "react-native-reanimated";
-import { useColors } from "./colors/useColors";
-import { ThemedText } from "./themed/ThemedText";
+import { useColors } from "../colors/useColors";
+import { ThemedText } from "../themed/ThemedText";
 
 interface Props {
   buttonWidth: number;

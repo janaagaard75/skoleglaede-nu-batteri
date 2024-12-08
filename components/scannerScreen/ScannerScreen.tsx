@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useColors } from "../colors/useColors";
 import { useMainState } from "../mainState/useMainState";
-import { SlideToConfirm } from "../SlideToConfirm";
+import { SlideToConfirm } from "../slideToConfirm/SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedTextButton } from "../themed/ThemedTextButton";
 import { ThemedView } from "../themed/ThemedView";
