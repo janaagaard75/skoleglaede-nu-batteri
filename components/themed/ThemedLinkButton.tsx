@@ -25,7 +25,6 @@ export function ThemedLinkButton({
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
-        // @ts-ignore
         style,
       ]}
       href={href}

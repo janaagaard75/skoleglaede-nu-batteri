@@ -18,7 +18,7 @@ export function ThemedTextButton({ children, style, ...otherProps }: Props) {
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
-        // @ts-ignore
+        // @ts-ignore - don't know why TSC doesn't accept using 'style' here.
         style,
       ]}
       {...otherProps}
