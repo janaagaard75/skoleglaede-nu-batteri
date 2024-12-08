@@ -3,6 +3,7 @@ import { Animated, GestureResponderEvent, View } from "react-native";
 import { clamp } from "react-native-reanimated";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "../themed/ThemedText";
+import { ArrowRightIcon } from "./ArrowRightIcon";
 
 interface Props {
   buttonWidth: number;
@@ -97,6 +98,8 @@ export const SlideToConfirm = memo((props: Props) => {
             borderColor: props.disabled ? colors.disabledText : colors.text,
             borderRadius: 6,
             borderWidth: 2,
+            flexDirection: "row",
+            gap: 10,
             paddingHorizontal: 14,
             paddingVertical: 6,
             width: props.buttonWidth,
@@ -107,8 +110,9 @@ export const SlideToConfirm = memo((props: Props) => {
               color: props.disabled ? colors.disabledText : colors.text,
             }}
           >
-            {props.children + " &nbsp;&#x21E8;"}
+            {props.children}
           </ThemedText>
+          <ArrowRightIcon />
         </View>
       </Animated.View>
     </View>
