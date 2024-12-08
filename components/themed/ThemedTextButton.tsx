@@ -1,8 +1,8 @@
-import { Pressable, type PressableProps } from "react-native";
+import { Pressable, View, type PressableProps } from "react-native";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = PressableProps & { children: string };
+type Props = PressableProps & React.RefAttributes<View> & { children: string };
 
 export function ThemedTextButton({ children, style, ...otherProps }: Props) {
   const colors = useColors();
@@ -15,11 +15,10 @@ export function ThemedTextButton({ children, style, ...otherProps }: Props) {
           borderColor: colors.text,
           borderRadius: 8,
           borderWidth: 2,
-          elevation: 4,
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
-        // @ts-ignore
+        // @ts-ignore - don't know why TSC doesn't accept using 'style' here.
         style,
       ]}
       {...otherProps}

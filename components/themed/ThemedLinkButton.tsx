@@ -2,7 +2,7 @@ import { Link, LinkProps } from "expo-router";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = Omit<LinkProps, "children"> & {
+type Props = LinkProps & {
   children: string;
 };
 
@@ -22,11 +22,9 @@ export function ThemedLinkButton({
           borderColor: colors.text,
           borderRadius: 8,
           borderWidth: 2,
-          elevation: 4,
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
-        // @ts-ignore
         style,
       ]}
       href={href}

@@ -1,4 +1,3 @@
-import { decode } from "html-entities";
 import { View } from "react-native";
 import { calculateNewValues } from "../mainState/calculateNewValues";
 import { QrCode } from "../mainState/QrCode";
@@ -32,21 +31,21 @@ export const ScannedCodeFeedback = (props: Props) => {
         if (props.qrCode.amount === 1) {
           return "+1 flamme";
         } else {
-          return decode("&minus; 1 flamme");
+          return "&minus; 1 flamme";
         }
 
       case "heart":
         if (props.qrCode.amount === 1) {
           return "+ 1 hjerte";
         } else {
-          return decode("&minus; 1 hjerte");
+          return "&minus; 1 hjerte";
         }
 
       case "percentage":
         if (props.qrCode.amount > 0) {
           return `+ ${props.qrCode.amount}%`;
         } else {
-          return decode(`&minus; ${Math.abs(props.qrCode.amount)}%`);
+          return `&minus; ${Math.abs(props.qrCode.amount)}%`;
         }
     }
   })();

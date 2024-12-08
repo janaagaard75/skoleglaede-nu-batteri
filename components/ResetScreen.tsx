@@ -3,7 +3,7 @@ import { SafeAreaView, View } from "react-native";
 import { Battery } from "./battery/Battery";
 import { useColors } from "./colors/useColors";
 import { useMainState } from "./mainState/useMainState";
-import { SlideToConfirm } from "./SlideToConfirm";
+import { SlideToConfirm } from "./slideToConfirm/SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
 import { ThemedView } from "./themed/ThemedView";
 
@@ -66,7 +66,7 @@ export const ResetScreen = () => {
             onConfirm={reset}
             sliderWidth={250}
           >
-            Bekræft &nbsp;&#x21E8;
+            Bekræft
           </SlideToConfirm>
         </View>
       </ThemedView>

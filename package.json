@@ -5,13 +5,16 @@
   "private": true,
   "packageManager": "yarn@1.22.22",
   "scripts": {
-    "build": "eas build --platform ios --profile production",
+    "android": "expo run:android",
+    "build": "eas build --profile production",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
+    "ios": "expo run:ios",
     "optimize-icons": "npx --package imagemin-cli imagemin ./assets-src/*.png --out-dir ./assets",
     "start": "yarn install && expo start",
     "submit": "eas submit --platform ios --profile production",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "update-dependencies": "npx expo install --check"
   },
   "jest": {
     "preset": "jest-expo"
