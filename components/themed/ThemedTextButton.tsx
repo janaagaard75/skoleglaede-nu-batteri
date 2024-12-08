@@ -1,8 +1,8 @@
-import { Pressable, type PressableProps } from "react-native";
+import { Pressable, View, type PressableProps } from "react-native";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = PressableProps & { children: string };
+type Props = PressableProps & React.RefAttributes<View> & { children: string };
 
 export function ThemedTextButton({ children, style, ...otherProps }: Props) {
   const colors = useColors();

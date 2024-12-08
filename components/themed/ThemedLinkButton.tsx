@@ -2,7 +2,7 @@ import { Link, LinkProps } from "expo-router";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "./ThemedText";
 
-type Props = Omit<LinkProps, "children"> & {
+type Props = LinkProps & {
   children: string;
 };
 
