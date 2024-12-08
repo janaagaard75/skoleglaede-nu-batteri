@@ -108,7 +108,7 @@ export const SlideToConfirm = memo((props: Props) => {
               color: props.disabled ? colors.disabledText : colors.text,
             }}
           >
-            {decode(props.children)}
+            {decode(props.children + " &nbsp;&#x21E8;")}
           </ThemedText>
         </View>
       </Animated.View>

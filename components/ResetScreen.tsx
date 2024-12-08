@@ -66,7 +66,7 @@ export const ResetScreen = () => {
             onConfirm={reset}
             sliderWidth={250}
           >
-            Bekræft &nbsp;&#x21E8;
+            Bekræft
           </SlideToConfirm>
         </View>
       </ThemedView>

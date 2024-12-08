@@ -142,7 +142,7 @@ export const ScannerScreen = () => {
             onConfirm={applyQrCode}
             sliderWidth={250}
           >
-            Bekræft &nbsp;&#x21E8;
+            Bekræft
           </SlideToConfirm>
         </View>
       </ThemedView>
