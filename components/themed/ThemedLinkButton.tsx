@@ -22,7 +22,6 @@ export function ThemedLinkButton({
           borderColor: colors.text,
           borderRadius: 8,
           borderWidth: 2,
-          elevation: 4,
           paddingHorizontal: 16,
           paddingVertical: 4,
         },

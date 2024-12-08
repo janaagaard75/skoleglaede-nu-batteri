@@ -15,7 +15,6 @@ export function ThemedTextButton({ children, style, ...otherProps }: Props) {
           borderColor: colors.text,
           borderRadius: 8,
           borderWidth: 2,
-          elevation: 4,
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
