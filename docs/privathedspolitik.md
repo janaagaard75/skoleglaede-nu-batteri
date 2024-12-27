@@ -12,7 +12,7 @@ App’en kræver adgang til kameraet for at kunne scanne QR-koder. (Bemærk, at 
 
 ### Kontakt os
 
-Har du spørgsmål eller forslag til ændringer af denne privathedspolitik, er du velkommen til at kontakte os på [support@skoleglaede.nu](mailto:support@skoleglaede.nu).
+Har du spørgsmål eller forslag til ændringer af denne privathedspolitik, er du velkommen til at kontakte os på [support@skoleglæde.nu](mailto:support@skoleglæde.nu).
 
 ---
 
@@ -30,4 +30,4 @@ _The app requires access to the camera to scan QR codes. (Granting camera access
 
 ### _Contact us_
 
-_If you have any questions or suggestions regarding this Privacy Policy, please contact us at [support@skoleglaede.nu](mailto:support@skoleglaede.nu)._
+_If you have any questions or suggestions regarding this Privacy Policy, please contact us at [support@skoleglæde.nu](mailto:support@skoleglæde.nu)._
