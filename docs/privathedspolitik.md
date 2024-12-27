@@ -1,33 +1,33 @@
 ## Privathedspolitik
 
-App'en **Skoleglæde<span></span>.nu Bank** er lavet af og ejet af Jan Aagaard. Den er lavet til [Skoleglæde.nu](https://skoleglæde.nu).
+App'en **Skoleglæde.nu Batteri** er ejet af [Skoleglæde.nu](https://skoleglaede.nu). Den er udviklet og distributet af Jan Aagaard.
 
-Hvis du bruger app'en, så accepterer du denne privathedspolitik.
+Ved at bruge app’en accepterer du denne privathedspolitik.
 
-App'en er gratis, men de services, som Skoleglæde.nu tilbyder er ikke.
+App'en er gratis, men de services, som Skoleglæde.nu tilbyder, er ikke.
 
-App'en sporer ikke brugen af den, og indsamler ikke nogle data om brugerne af den.
+App’en sporer ikke din brug og indsamler ingen data om dig som bruger.
 
-App'en skal have adgang til at bruge kameraet for at kunne scanne QR-koder. (Apps får ikke adgang til den billeder når de får adgang til kameraet.)
+App’en kræver adgang til kameraet for at kunne scanne QR-koder. (Bemærk, at adgang til kameraet ikke giver app’en adgang til dine billeder.)
 
 ### Kontakt os
 
-Du er meget velkommen til at kontakte os [support@skoleglæde.nu](mailto:support@skoleglæde.nu), hvis du har spørgsmål eller ændringsforslag til denne privathedspolitik.
+Har du spørgsmål eller forslag til ændringer af denne privathedspolitik, er du velkommen til at kontakte os på [support@skoleglaede.nu](mailto:support@skoleglaede.nu).
 
 ---
 
 ## _Privacy policy_
 
-_The app **Skoleglæde<span></span>.nu Bank** is built by and owned by Jan Aagaard. It has been created for [Skoleglæde.nu](https://skoleglæde.nu)._
+_The app **Skoleglæde.nu Batteri** is owned by [Skoleglæde.nu](https://skoleglaede.nu). It is developed and distributed by Jan Aagaard._
 
 _If you use this app, then you agree to the terms in this policy._
 
 _The app is free, but the services that Skoleglæde.nu provide are not._
 
-_The app does not track usage and does not collect any data about the users._
+_The app does not track your usage and does not collect any data about you as a user._
 
-_The app needs access to the camera to be able to scan QR codes. (Granting an app access to the camera does not allow it to access your pictures.)_
+_The app requires access to the camera to scan QR codes. (Granting camera access does not give the app access to your photos.)_
 
 ### _Contact us_
 
-_If you have any questions or suggestions about this Privacy Policy, do not hesitate to contact us at [support@skoleglæde.nu](mailto:support@skoleglæde.nu)._
+_If you have any questions or suggestions regarding this Privacy Policy, please contact us at [support@skoleglaede.nu](mailto:support@skoleglaede.nu)._

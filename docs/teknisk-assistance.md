@@ -1,7 +1,7 @@
 ## Teknisk assistance
 
-Du er meget velkommen til at kontakte os [support@skoleglæde.nu](mailto:support@skoleglæde.nu), hvis du har spørgsmål eller forslag til app'en.
+Hvis du har spørgsmål, oplever tekniske problemer, eller har forslag til app’en, er du meget velkommen til at kontakte os på [support@skoleglaede.nu](mailto:support@skoleglaede.nu).
 
 ## _Support_
 
-_You are very welcome to contact us at [support@skoleglæde.nu](mailto:support@skoleglæde.nu), should you have any questions or suggestions for the app._
+_If you have any questions, encounter technical issues, or have suggestions for the app, please feel free to contact us at [support@skoleglaede.nu](mailto:support@skoleglaede.nu)._
