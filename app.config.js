@@ -20,6 +20,7 @@ module.exports = {
     entitlements: {
       "aps-environment": "development",
     },
+    language: "da-DK",
     supportsTablet: true,
   },
   locales: {
