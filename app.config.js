@@ -20,7 +20,8 @@ module.exports = {
     entitlements: {
       "aps-environment": "development",
     },
-    supportsTablet: true,
+    language: "da-DK",
+    supportsTablet: false,
   },
   locales: {
     da: "./da.json",
