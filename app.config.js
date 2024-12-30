@@ -21,7 +21,7 @@ module.exports = {
       "aps-environment": "development",
     },
     language: "da-DK",
-    supportsTablet: true,
+    supportsTablet: false,
   },
   locales: {
     da: "./da.json",
