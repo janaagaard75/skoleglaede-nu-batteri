@@ -1,6 +1,6 @@
 ## Privathedspolitik
 
-App'en **Skoleglæde.nu Batteri** er ejet af [Skoleglæde.nu](https://skoleglaede.nu). Den er udviklet og distributet af Jan Aagaard.
+App'en **Skoleglæde.nu Batteri** er ejet af [Skoleglæde.nu](https://skoleglaede.nu). Den er udviklet i samarbejdet med og distributet af Jan Aagaard.
 
 Ved at bruge app’en accepterer du denne privathedspolitik.
 
@@ -18,7 +18,7 @@ Har du spørgsmål eller forslag til ændringer af denne privathedspolitik, er d
 
 ## _Privacy policy_
 
-_The app **Skoleglæde.nu Batteri** is owned by [Skoleglæde.nu](https://skoleglaede.nu). It is developed and distributed by Jan Aagaard._
+_The app **Skoleglæde.nu Batteri** is owned by [Skoleglæde.nu](https://skoleglaede.nu). It is developed in collaboration with and distributed by Jan Aagaard._
 
 _If you use this app, then you agree to the terms in this policy._
 
