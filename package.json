@@ -7,6 +7,7 @@
   "scripts": {
     "android": "expo run:android",
     "build": "eas build --profile production",
+    "build-ios": "eas build --platform ios --profile production",
     "check-lint": "eslint . --format unix",
     "check-types": "tsc",
     "ios": "expo run:ios",
