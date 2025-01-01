@@ -3,9 +3,9 @@ import { QrCode } from "./QrCode";
 import { calculateNewValues } from "./calculateNewValues";
 import { usePersistedState } from "./usePersistedState";
 
-const initialFlames = 0;
-const initialHearts = 0;
-const initialPercentage = 20;
+const initialFlames = 4;
+const initialHearts = 3;
+const initialPercentage = 40;
 
 export const MainStateContext = createContext({
   applyQrCode: (qrCode: QrCode) => {},
