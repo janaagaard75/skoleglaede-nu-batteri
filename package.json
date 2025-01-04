@@ -15,7 +15,7 @@
     "start": "yarn install && expo start",
     "submit-ios": "eas submit --platform ios --profile production",
     "test": "jest --watchAll",
-    "update-dependencies": "npx expo install --check"
+    "update-dependencies": "npx expo install --fix && rm yarn.lock && yarn install"
   },
   "jest": {
     "preset": "jest-expo"
