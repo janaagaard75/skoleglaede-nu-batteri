@@ -13,9 +13,9 @@
     "ios": "expo run:ios",
     "optimize-icons": "npx --package imagemin-cli imagemin ./assets-src/*.png --out-dir ./assets",
     "start": "yarn install && expo start",
-    "submit": "eas submit --platform ios --profile production",
+    "submit-ios": "eas submit --platform ios --profile production",
     "test": "jest --watchAll",
-    "update-dependencies": "npx expo install --check"
+    "update-dependencies": "npx expo install --fix && rm yarn.lock && yarn install"
   },
   "jest": {
     "preset": "jest-expo"
