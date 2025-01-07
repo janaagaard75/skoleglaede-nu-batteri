@@ -23,9 +23,6 @@ module.exports = {
     language: "da-DK",
     supportsTablet: false,
   },
-  locales: {
-    da: "./da.json",
-  },
   name: "Skoleglæde.nu Batteri",
   newArchEnabled: true,
   orientation: "portrait",
@@ -33,7 +30,8 @@ module.exports = {
     [
       "expo-camera",
       {
-        cameraPermission: "Tillad at $(PRODUCT_NAME) får adgang til kameraet.",
+        cameraPermission:
+          "App'en har brug for adgang til kameraet for at kunne scanne QR-koderne i spillet.",
         recordAudioAndroid: false,
       },
     ],
