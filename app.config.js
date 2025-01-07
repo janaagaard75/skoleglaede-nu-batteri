@@ -23,9 +23,6 @@ module.exports = {
     language: "da-DK",
     supportsTablet: false,
   },
-  locales: {
-    da: "./da.json",
-  },
   name: "Skoleglæde.nu Batteri",
   newArchEnabled: true,
   orientation: "portrait",
