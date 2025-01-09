@@ -80,7 +80,7 @@ export const ScannerScreen = () => {
               textAlign: "center",
             }}
           >
-            Vi har brug for din tilladelse til at bruge kameraet.
+            Afventer tilladelse til at benytte kameraet
           </ThemedText>
           <ThemedTextButton onPress={requestCameraPermissions}>
             Giv adgang til kameraet
