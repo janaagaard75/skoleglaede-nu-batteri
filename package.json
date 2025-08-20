@@ -16,7 +16,7 @@
     "start": "yarn install && expo start",
     "submit-ios": "eas submit --platform ios --profile production",
     "test": "jest --watchAll",
-    "update-dependencies": "npx expo install --fix && rm yarn.lock && yarn install"
+    "update-dependencies": "yarn upgrade-interactive && rm yarn.lock && yarn install"
   },
   "jest": {
     "preset": "jest-expo"
@@ -40,7 +40,7 @@
     "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "6.0.0-rc.1",
-    "eslint-plugin-react-hooks-extra": "^1.52.5",
+    "eslint-plugin-react-hooks-extra": "^1.52.6",
     "eslint-plugin-react-native": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "expo": "^53.0.20",
@@ -54,8 +54,8 @@
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.10",
     "expo-updates": "~0.28.17",
-    "html-entities": "^2.5.2",
-    "prettier": "^3.4.1",
+    "html-entities": "^2.6.0",
+    "prettier": "^3.6.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
@@ -64,8 +64,8 @@
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
-    "tailwindcss": "^3.4.15",
+    "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1"
+    "typescript-eslint": "^8.40.0"
   }
 }
