@@ -1,4 +1,4 @@
-import * as SecureStore from "expo-secure-store";
+import { getItemAsync, setItemAsync } from "expo-secure-store";
 import { useEffect, useState } from "react";
 
 export const usePersistedState = (key: string, initialValue: number) => {
@@ -6,7 +6,7 @@ export const usePersistedState = (key: string, initialValue: number) => {
 
   useEffect(() => {
     const loadStoredValue = async () => {
-      const storedValue = await SecureStore.getItemAsync(key);
+      const storedValue = await getItemAsync(key);
       if (storedValue === null) {
         return;
       }
@@ -19,7 +19,7 @@ export const usePersistedState = (key: string, initialValue: number) => {
 
   const setAndSaveValue = async (newValue: number) => {
     setValue(newValue);
-    await SecureStore.setItemAsync(key, newValue.toString());
+    await setItemAsync(key, newValue.toString());
   };
 
   return [value, setAndSaveValue] as const;
