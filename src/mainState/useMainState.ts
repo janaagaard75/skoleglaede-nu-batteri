@@ -1,4 +1,4 @@
 import { useContext } from "react";
-import { MainStateContext } from "./MainStateProvider";
+import { MainStateContext } from "./MainStateContext";
 
 export const useMainState = () => useContext(MainStateContext);

@@ -1,20 +1,13 @@
-import { createContext, ReactNode } from "react";
+import { ReactNode } from "react";
+import { MainStateContext } from "./MainStateContext";
 import { QrCode } from "./QrCode";
 import { calculateNewValues } from "./calculateNewValues";
+import {
+  initialFlames,
+  initialHearts,
+  initialPercentage,
+} from "./initialValues";
 import { usePersistedState } from "./usePersistedState";
-
-const initialFlames = 0;
-const initialHearts = 0;
-const initialPercentage = 20;
-
-export const MainStateContext = createContext({
-  applyQrCode: (qrCode: QrCode) => {},
-  flames: initialFlames,
-  hearts: initialHearts,
-  percentage: initialPercentage,
-  reset: () => {},
-  score: 0,
-});
 
 type Props = {
   children: ReactNode;
