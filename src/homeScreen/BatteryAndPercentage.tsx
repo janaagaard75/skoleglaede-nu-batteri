@@ -20,7 +20,7 @@ export const BatteryAndPercentage = ({
         fontSize: 28,
       }}
     >
-      {percentage}%
+      {`${percentage}%`}
     </ThemedText>
   </View>
 );

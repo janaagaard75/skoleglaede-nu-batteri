@@ -56,7 +56,7 @@ export const HomeScreen = () => {
                 fontWeight: "bold",
               }}
             >
-              Trivselsscore: {mainState.score}
+              {`Trivselsscore: ${mainState.score}`}
             </ThemedText>
           </View>
           <View
