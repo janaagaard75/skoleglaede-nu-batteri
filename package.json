@@ -37,7 +37,7 @@
     "eslint-config-expo": "~8.0.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "expo": "^52.0.23",
+    "expo": "^53.0.20",
     "expo-camera": "~16.0.10",
     "expo-constants": "~17.0.3",
     "expo-font": "~13.0.2",
