@@ -7,10 +7,14 @@ import {
 import { QrCode } from "./QrCode";
 
 export const MainStateContext = createContext({
-  applyQrCode: (qrCode: QrCode) => {},
+  applyQrCode: (_qrCode: QrCode) => {
+    // Not yet defined.
+  },
   flames: initialFlames,
   hearts: initialHearts,
   percentage: initialPercentage,
-  reset: () => {},
+  reset: () => {
+    // Not yet defined.
+  },
   score: 0,
 });
