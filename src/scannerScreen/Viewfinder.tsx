@@ -3,10 +3,10 @@ import { memo, useState } from "react";
 import { View } from "react-native";
 import { useColors } from "../colors/useColors";
 
-interface Props {
+type Props = {
   readonly onScannedQrCodeChange: (scannedQrCode: string | undefined) => void;
   readonly scannedQrCode: string | undefined;
-}
+};
 
 export const Viewfinder = (props: Props) => {
   const [bounds, setBounds] = useState<BarcodeBounds | undefined>(undefined);

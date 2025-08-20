@@ -1,4 +1,3 @@
-import React from "react";
 import { View } from "react-native";
 import { Battery } from "../battery/Battery";
 import { ThemedText } from "../themed/ThemedText";
@@ -16,8 +15,8 @@ export const BatteryAndPercentage = ({
     <Battery percentage={percentage} />
     <ThemedText
       style={{
-        fontWeight: "bold",
         fontSize: 28,
+        fontWeight: "bold",
       }}
     >
       {`${percentage}%`}

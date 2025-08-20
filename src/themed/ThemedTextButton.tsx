@@ -4,7 +4,7 @@ import { ThemedText } from "./ThemedText";
 
 type Props = PressableProps & React.RefAttributes<View> & { children: string };
 
-export function ThemedTextButton({ children, style, ...otherProps }: Props) {
+export const ThemedTextButton = ({ children, style, ...otherProps }: Props) => {
   const colors = useColors();
 
   return (
@@ -18,7 +18,7 @@ export function ThemedTextButton({ children, style, ...otherProps }: Props) {
           paddingHorizontal: 16,
           paddingVertical: 4,
         },
-        // @ts-ignore - don't know why TSC doesn't accept using 'style' here.
+        // @ts-expect-error - Don't know why TSC doesn't accept using 'style' here.
         style,
       ]}
       {...otherProps}
@@ -26,4 +26,4 @@ export function ThemedTextButton({ children, style, ...otherProps }: Props) {
       <ThemedText>{children}</ThemedText>
     </Pressable>
   );
-}
+};

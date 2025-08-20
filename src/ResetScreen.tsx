@@ -37,16 +37,16 @@ export const ResetScreen = () => {
       >
         <ThemedText
           style={{
-            marginTop: 200,
             marginHorizontal: 30,
+            marginTop: 200,
           }}
         >
           Bekræft at du vil nulstille til 20% og fjerne alle hjerter og flammer.
         </ThemedText>
         <View
           style={{
-            alignSelf: "center",
             alignItems: "center",
+            alignSelf: "center",
             width: 200,
           }}
         >
@@ -56,8 +56,8 @@ export const ResetScreen = () => {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            marginHorizontal: "auto",
             marginBottom: 80,
+            marginHorizontal: "auto",
           }}
         >
           <SlideToConfirm

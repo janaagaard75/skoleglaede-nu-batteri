@@ -6,16 +6,17 @@ type Props = LinkProps & {
   children: string;
 };
 
-export function ThemedLinkButton({
+export const ThemedLinkButton = ({
   children,
   href,
   style,
   ...otherProps
-}: Props) {
+}: Props) => {
   const colors = useColors();
 
   return (
     <Link
+      href={href}
       style={[
         {
           alignSelf: "center",
@@ -27,10 +28,9 @@ export function ThemedLinkButton({
         },
         style,
       ]}
-      href={href}
       {...otherProps}
     >
       <ThemedText>{children}</ThemedText>
     </Link>
   );
-}
+};

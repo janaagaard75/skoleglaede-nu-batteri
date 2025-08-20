@@ -1,6 +1,6 @@
 import { useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useColors } from "../colors/useColors";
 import { useMainState } from "../mainState/useMainState";
@@ -107,8 +107,8 @@ export const ScannerScreen = () => {
         <View
           style={{
             height: 220,
-            marginTop: 20 + 50,
             justifyContent: "flex-end",
+            marginTop: 20 + 50,
           }}
         >
           <Viewfinder
@@ -131,8 +131,8 @@ export const ScannerScreen = () => {
         <View
           style={{
             justifyContent: "flex-end",
-            marginHorizontal: "auto",
             marginBottom: 80,
+            marginHorizontal: "auto",
             width: 270,
           }}
         >

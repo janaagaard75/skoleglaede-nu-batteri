@@ -4,12 +4,12 @@ import { QrCode } from "../mainState/QrCode";
 import { ThemedText } from "../themed/ThemedText";
 import { Summary } from "./Summary";
 
-interface Props {
+type Props = {
   flames: number;
   hearts: number;
   percentage: number;
   qrCode: QrCode | undefined;
-}
+};
 
 export const ScannedCodeFeedback = (props: Props) => {
   if (props.qrCode === undefined) {
@@ -30,23 +30,20 @@ export const ScannedCodeFeedback = (props: Props) => {
       case "flame":
         if (props.qrCode.amount === 1) {
           return "+1 flamme";
-        } else {
-          return "&minus; 1 flamme";
         }
+        return "&minus; 1 flamme";
 
       case "heart":
         if (props.qrCode.amount === 1) {
           return "+ 1 hjerte";
-        } else {
-          return "&minus; 1 hjerte";
         }
+        return "&minus; 1 hjerte";
 
       case "percentage":
         if (props.qrCode.amount > 0) {
           return `+ ${props.qrCode.amount}%`;
-        } else {
-          return `&minus; ${Math.abs(props.qrCode.amount)}%`;
         }
+        return `&minus; ${Math.abs(props.qrCode.amount)}%`;
     }
   })();
 
@@ -62,8 +59,8 @@ export const ScannedCodeFeedback = (props: Props) => {
   return (
     <View
       style={{
-        flex: 1,
         display: "flex",
+        flex: 1,
       }}
     >
       <ThemedText
@@ -88,9 +85,9 @@ export const ScannedCodeFeedback = (props: Props) => {
         />
         <View
           style={{
-            width: 40,
-            justifyContent: "center",
             alignItems: "center",
+            justifyContent: "center",
+            width: 40,
           }}
         >
           <ThemedText>&#x21E8;</ThemedText>

@@ -1,14 +1,14 @@
 import { ReactNode } from "react";
 import { View } from "react-native";
 
-interface Props {
+type Props = {
   currentValue: number;
   excludedIcon: ReactNode;
   gap: number;
   includedIcon: ReactNode;
   maximum: number;
   size: number;
-}
+};
 
 export const IconsRow = (props: Props) => (
   <View
@@ -31,9 +31,8 @@ export const IconsRow = (props: Props) => (
           {(() => {
             if (index < props.currentValue) {
               return props.includedIcon;
-            } else {
-              return props.excludedIcon;
             }
+            return props.excludedIcon;
           })()}
         </View>
       )))()}

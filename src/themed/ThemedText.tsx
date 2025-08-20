@@ -4,7 +4,7 @@ import { useColors } from "../colors/useColors";
 
 type Props = TextProps & { children: string };
 
-export function ThemedText({ style, children, ...otherProps }: Props) {
+export const ThemedText = ({ children, style, ...otherProps }: Props) => {
   const colors = useColors();
 
   return (
@@ -22,4 +22,4 @@ export function ThemedText({ style, children, ...otherProps }: Props) {
       {decode(children)}
     </Text>
   );
-}
+};

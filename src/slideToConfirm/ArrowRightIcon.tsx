@@ -9,17 +9,17 @@ export const ArrowRightIcon = () => {
     <Svg
       fill="none"
       height="24"
+      stroke={textColor}
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
-      stroke={textColor}
       viewBox="0 0 24 24"
       width="24"
     >
       <Path
-        stroke="none"
         d="M0 0h24v24H0z"
         fill="none"
+        stroke="none"
       />
       <Path d="M12 9v-3.586a1 1 0 0 1 1.707 -.707l6.586 6.586a1 1 0 0 1 0 1.414l-6.586 6.586a1 1 0 0 1 -1.707 -.707v-3.586h-3v-6h3z" />
       <Path d="M3 9v6" />

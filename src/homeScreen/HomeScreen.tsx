@@ -1,4 +1,3 @@
-import React from "react";
 import { SafeAreaView, View } from "react-native";
 import { useColors } from "../colors/useColors";
 import { FlameIcon } from "../iconsRow/FlameIcon";

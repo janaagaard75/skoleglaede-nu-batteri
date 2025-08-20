@@ -3,7 +3,7 @@ import { useColors } from "../colors/useColors";
 
 type Props = ViewProps;
 
-export function ThemedView({ style, ...otherProps }: Props) {
+export const ThemedView = ({ style, ...otherProps }: Props) => {
   const colors = useColors();
 
   return (
@@ -17,4 +17,4 @@ export function ThemedView({ style, ...otherProps }: Props) {
       {...otherProps}
     />
   );
-}
+};

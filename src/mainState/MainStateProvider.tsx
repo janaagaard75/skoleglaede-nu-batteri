@@ -16,9 +16,9 @@ export const MainStateContext = createContext({
   score: 0,
 });
 
-interface Props {
+type Props = {
   children: ReactNode;
-}
+};
 
 export const MainStateProvider = (props: Props) => {
   const [flames, setFlames] = usePersistedState("flames", initialFlames);
@@ -32,7 +32,7 @@ export const MainStateProvider = (props: Props) => {
   const flameValue = 50;
   const score = percentage + hearts * heartValue + flames * flameValue;
 
-  const applyQrCode = (qrCode: QrCode) => {
+  const applyQrCode = async (qrCode: QrCode) => {
     const newValues = calculateNewValues(
       {
         flames: flames,
@@ -41,15 +41,15 @@ export const MainStateProvider = (props: Props) => {
       },
       qrCode,
     );
-    setFlames(newValues.newFlames);
-    setHearts(newValues.newHearts);
-    setPercentage(newValues.newPercentage);
+    await setFlames(newValues.newFlames);
+    await setHearts(newValues.newHearts);
+    await setPercentage(newValues.newPercentage);
   };
 
-  const reset = () => {
-    setFlames(initialFlames);
-    setHearts(initialHearts);
-    setPercentage(initialPercentage);
+  const reset = async () => {
+    await setFlames(initialFlames);
+    await setHearts(initialHearts);
+    await setPercentage(initialPercentage);
   };
 
   return (

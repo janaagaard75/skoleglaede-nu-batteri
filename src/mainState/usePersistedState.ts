@@ -14,7 +14,7 @@ export const usePersistedState = (key: string, initialValue: number) => {
       setValue(parseInt(storedValue, 10));
     };
 
-    loadStoredValue();
+    void loadStoredValue();
   }, [key]);
 
   const setAndSaveValue = async (newValue: number) => {

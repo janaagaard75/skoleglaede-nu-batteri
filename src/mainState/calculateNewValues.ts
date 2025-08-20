@@ -25,7 +25,7 @@ export const calculateNewValues = (
         newPercentage: currentValues.percentage,
       };
 
-    case "percentage":
+    case "percentage": {
       const unrestrictedNewPercentage = clamp(
         currentValues.percentage + qrCode.amount,
         0,
@@ -52,9 +52,10 @@ export const calculateNewValues = (
       const overflownPercentage = unrestrictedNewPercentage - 100;
 
       return {
-        newHearts: newHearts,
         newFlames: currentValues.flames,
+        newHearts: newHearts,
         newPercentage: overflownPercentage,
       };
+    }
   }
 };

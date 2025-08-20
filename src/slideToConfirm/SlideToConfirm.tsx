@@ -5,13 +5,13 @@ import { useColors } from "../colors/useColors";
 import { ThemedText } from "../themed/ThemedText";
 import { ArrowRightIcon } from "./ArrowRightIcon";
 
-interface Props {
+type Props = {
   buttonWidth: number;
   children: string;
   disabled: boolean;
   onConfirm: () => void;
   sliderWidth: number;
-}
+};
 
 export const SlideToConfirm = memo((props: Props) => {
   const colors = useColors();

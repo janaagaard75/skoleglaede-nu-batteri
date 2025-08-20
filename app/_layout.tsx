@@ -20,11 +20,11 @@ export default function RootLayout() {
         <MainStateProvider>
           <Stack
             screenOptions={{
+              headerShadowVisible: false,
               headerShown: true,
               headerStyle: {
                 backgroundColor: colors.background,
               },
-              headerShadowVisible: false,
             }}
           >
             <Stack.Screen
