@@ -13,7 +13,7 @@ export const Viewfinder = (props: Props) => {
   const colors = useColors();
 
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
-    useState<NodeJS.Timeout | undefined>(undefined);
+    useState<number | undefined>(undefined);
 
   const scannerMargin = 50;
   const viewfinderSize = 90 * 3;
@@ -26,18 +26,18 @@ export const Viewfinder = (props: Props) => {
     // Verify that the scanned QR code is entirely within the visible area of the viewfinder.
     const aboveScanningArea = scanningResult.bounds.origin.y < scannerMargin;
     const belowScanningArea =
-      scanningResult.bounds.origin.y + scanningResult.bounds.size.height >
-      viewfinderSize - scannerMargin;
+      scanningResult.bounds.origin.y + scanningResult.bounds.size.height
+      > viewfinderSize - scannerMargin;
     const leftOfScanningArea = scanningResult.bounds.origin.x < scannerMargin;
     const rightOfScanningArea =
-      scanningResult.bounds.origin.x + scanningResult.bounds.size.width >
-      viewfinderSize - scannerMargin;
+      scanningResult.bounds.origin.x + scanningResult.bounds.size.width
+      > viewfinderSize - scannerMargin;
 
     if (
-      aboveScanningArea ||
-      belowScanningArea ||
-      leftOfScanningArea ||
-      rightOfScanningArea
+      aboveScanningArea
+      || belowScanningArea
+      || leftOfScanningArea
+      || rightOfScanningArea
     ) {
       return;
     }
@@ -47,11 +47,11 @@ export const Viewfinder = (props: Props) => {
     }
 
     if (
-      bounds === undefined ||
-      bounds.origin.x !== scanningResult.bounds.origin.x ||
-      bounds.origin.y !== scanningResult.bounds.origin.y ||
-      bounds.size.height !== scanningResult.bounds.size.height ||
-      bounds.size.width !== scanningResult.bounds.size.width
+      bounds === undefined
+      || bounds.origin.x !== scanningResult.bounds.origin.x
+      || bounds.origin.y !== scanningResult.bounds.origin.y
+      || bounds.size.height !== scanningResult.bounds.size.height
+      || bounds.size.width !== scanningResult.bounds.size.width
     ) {
       setBounds(scanningResult.bounds);
     }
