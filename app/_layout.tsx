@@ -1,6 +1,6 @@
-import { useColors } from "@/components/colors/useColors";
-import { useColorScheme } from "@/components/colors/useColorScheme";
-import { MainStateProvider } from "@/components/mainState/MainStateProvider";
+import { useColors } from "@/src/colors/useColors";
+import { useColorScheme } from "@/src/colors/useColorScheme";
+import { MainStateProvider } from "@/src/mainState/MainStateProvider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -20,11 +20,11 @@ export default function RootLayout() {
         <MainStateProvider>
           <Stack
             screenOptions={{
+              headerShadowVisible: false,
               headerShown: true,
               headerStyle: {
                 backgroundColor: colors.background,
               },
-              headerShadowVisible: false,
             }}
           >
             <Stack.Screen

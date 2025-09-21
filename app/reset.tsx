@@ -1,4 +1,4 @@
-import { ResetScreen } from "@/components/ResetScreen";
+import { ResetScreen } from "@/src/ResetScreen";
 
 export default function Reset() {
   return <ResetScreen />;

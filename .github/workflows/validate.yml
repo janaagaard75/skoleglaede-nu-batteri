@@ -1,0 +1,35 @@
+name: Validate
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
+
+      - name: Install packages
+        run: yarn install --immutable
+
+      - name: Check types
+        run: yarn run check-types
+
+      - name: Check for lint issues
+        run: yarn run check-lint
+
+      - name: Check formatting
+        run: yarn check-formatting

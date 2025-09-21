@@ -1,4 +1,4 @@
-import { ScannerScreen } from "@/components/scannerScreen/ScannerScreen";
+import { ScannerScreen } from "@/src/scannerScreen/ScannerScreen";
 
 export default function Reset() {
   return <ScannerScreen />;
