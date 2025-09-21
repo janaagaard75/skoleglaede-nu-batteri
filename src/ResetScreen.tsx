@@ -16,10 +16,12 @@ export const ResetScreen = () => {
   const reset = () => {
     mainState.reset();
 
-    // Wrapping in this conditional removes a warning from the router. Don't know why.
-    if (router.canGoBack()) {
-      router.back();
-    }
+    // Defer navigation to next tick to avoid timing issues.
+    setTimeout(() => {
+      if (router.canGoBack()) {
+        router.back();
+      }
+    });
   };
 
   return (
