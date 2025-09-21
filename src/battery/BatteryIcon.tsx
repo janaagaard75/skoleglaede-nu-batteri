@@ -73,9 +73,8 @@ export const BatteryIcon = (props: Props) => {
           strokeLinecap="square"
           strokeMiterlimit="10"
           strokeWidth="32"
+          transform="translate(32, 144)"
           width="400"
-          x="32"
-          y="144"
         />
         <Rect
           height={114.13 + 32}
@@ -83,9 +82,8 @@ export const BatteryIcon = (props: Props) => {
           ry={15}
           strokeLinecap="square"
           strokeMiterlimit="10"
+          transform={`translate(${85.69 - 16}, ${198.93 - 16})`}
           width={percentageBarWidth}
-          x={85.69 - 16}
-          y={198.93 - 16}
         />
         <Path
           d="M480 218.67v74.66"
