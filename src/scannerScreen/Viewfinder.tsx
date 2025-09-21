@@ -13,7 +13,8 @@ export const Viewfinder = (props: Props) => {
   const colors = useColors();
 
   const [resetScannedQrCodeTimeoutId, setResetScannedQrCodeTimeoutId] =
-    useState<number | undefined>(undefined);
+    // Using ReturnType<typeof setTimeout> because on GitHub the return type is Timeout and not number. 🤷‍♂️
+    useState<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const scannerMargin = 50;
   const viewfinderSize = 90 * 3;
