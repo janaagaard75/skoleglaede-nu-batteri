@@ -9,7 +9,8 @@
     "qrcode",
     "skoleglaede",
     "skoleglaedenubatteri",
-    "tailwindcss"
+    "tailwindcss",
+    "worklets"
   ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
