@@ -10,6 +10,7 @@
     "build-ios": "yarn eas build --platform ios --profile production",
     "check-lint": "eslint --format unix --max-warnings 0",
     "check-types": "tsc",
+    "check-formatting": "prettier --check ./src/",
     "eas": "yarn dlx --package eas-cli --quiet eas",
     "eas-build-pre-install": "corepack enable",
     "ios": "expo run:ios",
