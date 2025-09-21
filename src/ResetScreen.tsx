@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Battery } from "./battery/Battery";
 import { useColors } from "./colors/useColors";
 import { useMainState } from "./mainState/useMainState";
