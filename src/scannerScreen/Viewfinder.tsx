@@ -66,26 +66,30 @@ export const Viewfinder = (props: Props) => {
   };
 
   return (
-    <CameraView
-      barcodeScannerSettings={{
-        barcodeTypes: ["qr"],
-      }}
-      facing="back"
-      onBarcodeScanned={qrCodeScanned}
+    <View
       style={{
-        backgroundColor: colors.disabledText,
         height: viewfinderSize,
         marginLeft: "auto",
         marginRight: "auto",
         width: viewfinderSize,
       }}
     >
+      <CameraView
+        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+        facing="back"
+        onBarcodeScanned={qrCodeScanned}
+        style={{
+          backgroundColor: colors.disabledText,
+          height: "100%",
+          width: "100%",
+        }}
+      />
       <HeadUpDisplay
         scannerMargin={scannerMargin}
         viewfinderSize={viewfinderSize}
       />
       <QrCodeHighlighter bounds={bounds} />
-    </CameraView>
+    </View>
   );
 };
 
