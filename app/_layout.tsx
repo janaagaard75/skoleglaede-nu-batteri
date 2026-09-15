@@ -1,3 +1,4 @@
+import { HeaderCloseButton } from "@/src/HeaderCloseButton";
 import { useColors } from "@/src/colors/useColors";
 import { useColorScheme } from "@/src/colors/useColorScheme";
 import { MainStateProvider } from "@/src/mainState/MainStateProvider";
@@ -34,13 +35,17 @@ export default function RootLayout() {
               <Stack.Screen
                 name="reset"
                 options={{
+                  headerRight: () => <HeaderCloseButton />,
                   headerTitle: "Nulstil",
+                  presentation: "fullScreenModal",
                 }}
               />
               <Stack.Screen
                 name="scan"
                 options={{
+                  headerRight: () => <HeaderCloseButton />,
                   headerTitle: "Scan QR-kode",
+                  presentation: "fullScreenModal",
                 }}
               />
             </Stack>
