@@ -21,7 +21,7 @@ export const MainStateProvider = (props: Props) => {
     initialPercentage,
   );
 
-  const heartValue = 125;
+  const heartValue = 100;
   const flameValue = 50;
   const score = percentage + hearts * heartValue + flames * flameValue;
 
