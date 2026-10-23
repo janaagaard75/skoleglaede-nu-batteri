@@ -7,15 +7,17 @@ import { HeartIcon } from "../iconsRow/HeartIcon";
 import { HeartOutlineIcon } from "../iconsRow/HeartOutlineIcon";
 import { IconsRow } from "../iconsRow/IconsRow";
 import { maximumIcons } from "../mainState/maximumIcons";
-import { useMainState } from "../mainState/useMainState";
 import { ThemedLinkButton } from "../themed/ThemedLinkButton";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedView } from "../themed/ThemedView";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
+import { groupDigitsWithSpaces } from "./groupDigitsWithSpaces";
+import { useQrChangeAnimation } from "./useQrChangeAnimation";
 
 export const HomeScreen = () => {
   const colors = useColors();
-  const mainState = useMainState();
+  const { displayedScore, displayedValues, isAnimating } =
+    useQrChangeAnimation();
 
   return (
     <SafeAreaView
@@ -52,11 +54,22 @@ export const HomeScreen = () => {
             <ThemedText
               style={{
                 alignSelf: "center",
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: "bold",
               }}
             >
-              {`Trivselsscore: ${mainState.score}`}
+              {"Trivselsscore"}
+            </ThemedText>
+            <ThemedText
+              accessibilityLabel={`Trivselsscore ${displayedScore}`}
+              style={{
+                alignSelf: "center",
+                fontSize: 64,
+                fontWeight: "bold",
+                lineHeight: 76,
+              }}
+            >
+              {groupDigitsWithSpaces(displayedScore)}
             </ThemedText>
           </View>
           <View
@@ -65,14 +78,16 @@ export const HomeScreen = () => {
               justifyContent: "center",
             }}
           >
-            <BatteryAndPercentage percentage={mainState.percentage} />
+            <BatteryAndPercentage percentage={displayedValues.percentage} />
             <View
               style={{
                 height: 40,
               }}
             />
             <IconsRow
-              currentValue={mainState.hearts}
+              accessibilityLabel={`${displayedValues.hearts} hjerter`}
+              animateChanges={isAnimating}
+              currentValue={displayedValues.hearts}
               excludedIcon={<HeartOutlineIcon />}
               gap={3}
               includedIcon={<HeartIcon />}
@@ -85,7 +100,9 @@ export const HomeScreen = () => {
               }}
             />
             <IconsRow
-              currentValue={mainState.flames}
+              accessibilityLabel={`${displayedValues.flames} flammer`}
+              animateChanges={isAnimating}
+              currentValue={displayedValues.flames}
               excludedIcon={<FlameOutlineIcon />}
               gap={3}
               includedIcon={<FlameIcon />}
