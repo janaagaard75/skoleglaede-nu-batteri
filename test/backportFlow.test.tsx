@@ -19,6 +19,7 @@ import { ScannerScreen } from "../src/scannerScreen/ScannerScreen";
 type Route = "/" | "/scan" | "/reset";
 const mockStorage = new Map<string, string>();
 let mockRoute: Route = "/";
+let mockCanGoBack = true;
 let mockNavigate: (route: Route) => void;
 
 jest.mock("expo-secure-store", () => ({
@@ -45,7 +46,7 @@ jest.mock("expo-router", () => {
     jest.requireActual<typeof import("react-native")>("react-native");
   return {
     useRouter: () => ({
-      canGoBack: () => mockRoute !== "/",
+      canGoBack: () => mockCanGoBack && mockRoute !== "/",
       back: () => mockNavigate("/"),
       replace: (route: Route) => mockNavigate(route),
     }),
@@ -64,8 +65,8 @@ jest.mock("@react-navigation/native", () => ({
 
 // Router and native camera/storage are the outer boundaries. All screens, the
 // confirmation control, parsing, calculations and persistence orchestration are real.
-const AppHost = () => {
-  const [route, setRoute] = useState<Route>("/");
+const AppHost = ({ initialRoute = "/" }: { initialRoute?: Route }) => {
+  const [route, setRoute] = useState<Route>(initialRoute);
   mockRoute = route;
   mockNavigate = setRoute;
   return (
@@ -111,8 +112,8 @@ const seed = (percentage = 20, hearts = 0, flames = 0) => {
   mockStorage.set("flames", flames.toString());
 };
 
-const mount = async () => {
-  const result = render(<AppHost />);
+const mount = async (initialRoute: Route = "/") => {
+  const result = render(<AppHost initialRoute={initialRoute} />);
   await flush();
   return result;
 };
@@ -153,6 +154,7 @@ beforeEach(() => {
   jest.useFakeTimers();
   jest.clearAllMocks();
   mockStorage.clear();
+  mockCanGoBack = true;
   seed();
   jest.mocked(useReducedMotion).mockReturnValue(true);
   jest
@@ -440,4 +442,16 @@ test("reset remains open until persistence completes and permits retry after fai
     hearts: "0",
     flames: "0",
   });
+});
+
+test("a directly opened scanner replaces its route with home after confirmation", async () => {
+  mockCanGoBack = false;
+  await mount("/scan");
+  scan("+025pp");
+  confirm();
+  await finishFeedback();
+  expect(screen.queryByTestId("camera")).toBeNull();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+  expect(mockStorage.get("percentage")).toBe("45");
+  expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
 });
