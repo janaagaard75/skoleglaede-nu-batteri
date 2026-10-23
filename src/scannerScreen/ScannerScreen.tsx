@@ -72,8 +72,12 @@ export const ScannerScreen = () => {
     setApplying(true);
     try {
       await Promise.resolve(mainState.applyQrCode(selected));
-      if (mounted.current && router.canGoBack()) {
-        router.back();
+      if (mounted.current) {
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace("/");
+        }
       }
     } catch {
       if (mounted.current) {
