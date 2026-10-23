@@ -34,3 +34,24 @@ actual VoiceOver delivery. Before release, verify:
 
 Simulator observations are useful for layout and navigation. Camera behavior
 still needs a physical device and the actual printed board.
+
+## Verified on iOS 27
+
+On 23 October 2026, the merged app was run in Expo Go 54.0.6 on the iPhone 18 Pro
+simulator with iOS 27.0. The live simulator was inspected and operated through
+its browser mirror. Verified:
+
+- Home layout and reset preview in light and dark appearance.
+- Reset preview includes a 20-percent battery, ten empty hearts and ten empty
+  flames, with the original themed button appearance.
+- Reset and scanner present as native modal sheets with visible close buttons.
+- An incomplete reset slide stays on the confirmation screen; closing it keeps
+  the home values unchanged. A full drag confirms and returns home at 20 percent.
+- With camera permission granted, the scanner shows its framing and empty-code
+  prompt; dragging its disabled confirmation control does not apply a change.
+- Closing the scanner returns home without changing values.
+
+The simulator has no real camera feed. Printed-code recognition, the actual
+result animations following a camera scan, and audible VoiceOver delivery still
+need a physical-device check. Automated integration tests cover the corresponding
+state transitions, announcements and reduced-motion final values.
