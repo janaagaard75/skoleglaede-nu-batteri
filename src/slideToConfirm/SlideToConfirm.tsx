@@ -1,6 +1,11 @@
-import { memo, useCallback, useRef } from "react";
-import { Animated, GestureResponderEvent, View } from "react-native";
-import { clamp } from "react-native-reanimated";
+import { memo, useEffect, useRef } from "react";
+import {
+  AccessibilityActionEvent,
+  Animated,
+  GestureResponderEvent,
+  View,
+} from "react-native";
+import { clamp, useReducedMotion } from "react-native-reanimated";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "../themed/ThemedText";
 import { ArrowRightIcon } from "./ArrowRightIcon";
@@ -10,65 +15,95 @@ type Props = {
   children: string;
   disabled: boolean;
   onConfirm: () => void;
+  onInteractionCancel?: () => void;
+  onInteractionStart?: () => void;
   sliderWidth: number;
 };
 
 export const SlideToConfirm = memo((props: Props) => {
   const colors = useColors();
   const startPageX = useRef(0);
+  const active = useRef(false);
   const animatedPosition = useRef(new Animated.Value(0)).current;
+  const reducedMotion = useReducedMotion();
 
   const dropZoneWidth = 20;
   const maxDx = props.sliderWidth - props.buttonWidth;
 
-  const end = useCallback(
-    (event: GestureResponderEvent) => {
-      if (props.disabled) {
-        return;
-      }
+  useEffect(() => () => animatedPosition.stopAnimation(), [animatedPosition]);
 
-      const dx = event.nativeEvent.pageX - startPageX.current;
-      const withinDropZone = maxDx - dx <= dropZoneWidth;
+  const resetPosition = () => {
+    Animated.timing(animatedPosition, {
+      duration: reducedMotion ? 0 : 100,
+      toValue: 0,
+      useNativeDriver: false,
+    }).start();
+  };
 
-      if (withinDropZone) {
-        props.onConfirm();
-      }
+  const cancel = () => {
+    if (active.current) {
+      active.current = false;
+      props.onInteractionCancel?.();
+    }
+    resetPosition();
+  };
 
-      Animated.timing(animatedPosition, {
-        duration: 100,
-        toValue: 0,
-        useNativeDriver: false,
-      }).start();
-    },
-    [animatedPosition, maxDx, props],
-  );
+  const end = (event: GestureResponderEvent) => {
+    if (!active.current) {
+      return;
+    }
+    active.current = false;
+    const dx = event.nativeEvent.pageX - startPageX.current;
+    if (!props.disabled && maxDx - dx <= dropZoneWidth) {
+      props.onConfirm();
+    } else {
+      props.onInteractionCancel?.();
+    }
+    resetPosition();
+  };
 
-  const move = useCallback(
-    (event: GestureResponderEvent) => {
-      if (props.disabled) {
-        return;
-      }
+  const move = (event: GestureResponderEvent) => {
+    if (!active.current || props.disabled) {
+      return;
+    }
+    const dx = event.nativeEvent.pageX - startPageX.current;
+    animatedPosition.setValue(clamp(dx, 0, maxDx));
+  };
 
-      const dx = event.nativeEvent.pageX - startPageX.current;
-      const clampedDx = clamp(dx, 0, maxDx);
-      animatedPosition.setValue(clampedDx);
-    },
-    [animatedPosition, maxDx, props.disabled],
-  );
+  const start = (event: GestureResponderEvent) => {
+    if (props.disabled) {
+      return;
+    }
+    animatedPosition.stopAnimation();
+    animatedPosition.setValue(0);
+    startPageX.current = event.nativeEvent.pageX;
+    active.current = true;
+    props.onInteractionStart?.();
+  };
 
-  const start = useCallback(
-    (event: GestureResponderEvent) => {
-      if (props.disabled) {
-        return;
-      }
+  const confirmAccessibly = () => {
+    if (props.disabled) {
+      return;
+    }
+    props.onInteractionStart?.();
+    props.onConfirm();
+  };
 
-      startPageX.current = event.nativeEvent.pageX;
-    },
-    [props.disabled],
-  );
+  const handleAccessibilityAction = (event: AccessibilityActionEvent) => {
+    if (event.nativeEvent.actionName === "activate") {
+      confirmAccessibly();
+    }
+  };
 
   return (
     <View
+      accessibilityActions={[{ name: "activate" }]}
+      accessibilityLabel={props.children}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: props.disabled }}
+      accessible={true}
+      onAccessibilityAction={handleAccessibilityAction}
+      onAccessibilityTap={confirmAccessibly}
       style={{
         borderColor: props.disabled ? colors.disabledText : colors.text,
         borderRadius: 10,
@@ -78,18 +113,19 @@ export const SlideToConfirm = memo((props: Props) => {
       }}
     >
       <Animated.View
-        onTouchCancel={end}
-        onTouchEnd={end}
-        onTouchEndCapture={end}
-        onTouchMove={move}
-        onTouchStart={start}
+        onResponderGrant={start}
+        onResponderMove={move}
+        onResponderRelease={end}
+        onResponderTerminate={cancel}
+        onResponderTerminationRequest={() => true}
+        onStartShouldSetResponder={() => !props.disabled}
         style={{
           transform: [
             {
               translateX: animatedPosition,
             },
           ],
-          width: props.sliderWidth,
+          width: props.buttonWidth,
         }}
       >
         <View
