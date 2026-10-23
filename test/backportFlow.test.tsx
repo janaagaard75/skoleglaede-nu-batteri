@@ -455,3 +455,20 @@ test("a directly opened scanner replaces its route with home after confirmation"
   expect(mockStorage.get("percentage")).toBe("45");
   expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
 });
+
+test("reset previews empty hearts and flames without changing earned progress", async () => {
+  seed(80, 2, 3);
+  await mount();
+  fireEvent.press(screen.getByText("Nulstil"));
+  expect(screen.getByLabelText("0 hjerter")).toBeOnTheScreen();
+  expect(screen.getByLabelText("0 flammer")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+  expect(Object.fromEntries(mockStorage)).toEqual({
+    percentage: "80",
+    hearts: "2",
+    flames: "3",
+  });
+  fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+  expect(screen.getByLabelText("2 hjerter")).toBeOnTheScreen();
+  expect(screen.getByLabelText("3 flammer")).toBeOnTheScreen();
+});

@@ -4,6 +4,12 @@ import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Battery } from "./battery/Battery";
 import { useColors } from "./colors/useColors";
+import { FlameIcon } from "./iconsRow/FlameIcon";
+import { FlameOutlineIcon } from "./iconsRow/FlameOutlineIcon";
+import { HeartIcon } from "./iconsRow/HeartIcon";
+import { HeartOutlineIcon } from "./iconsRow/HeartOutlineIcon";
+import { IconsRow } from "./iconsRow/IconsRow";
+import { maximumIcons } from "./mainState/maximumIcons";
 import { useMainState } from "./mainState/useMainState";
 import { SlideToConfirm } from "./slideToConfirm/SlideToConfirm";
 import { ThemedText } from "./themed/ThemedText";
@@ -82,6 +88,26 @@ export const ResetScreen = () => {
             }}
           >
             <Battery percentage={20} />
+          </View>
+          <View style={{ gap: 16 }}>
+            <IconsRow
+              accessibilityLabel="0 hjerter"
+              currentValue={0}
+              excludedIcon={<HeartOutlineIcon />}
+              gap={2}
+              includedIcon={<HeartIcon />}
+              maximum={maximumIcons}
+              size={24}
+            />
+            <IconsRow
+              accessibilityLabel="0 flammer"
+              currentValue={0}
+              excludedIcon={<FlameOutlineIcon />}
+              gap={2}
+              includedIcon={<FlameIcon />}
+              maximum={maximumIcons}
+              size={24}
+            />
           </View>
           {error && (
             <ThemedText accessibilityRole="alert">
