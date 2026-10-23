@@ -8,6 +8,8 @@ export const BatteryAndPercentage = ({
   percentage: number;
 }) => (
   <View
+    accessibilityLabel={`Batteri ${percentage} procent`}
+    accessible
     style={{
       alignItems: "center",
     }}
