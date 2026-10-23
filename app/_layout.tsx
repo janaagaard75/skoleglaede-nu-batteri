@@ -1,6 +1,7 @@
 import { useColors } from "@/src/colors/useColors";
 import { useColorScheme } from "@/src/colors/useColorScheme";
 import { MainStateProvider } from "@/src/mainState/MainStateProvider";
+import { CloseModalButton } from "@/src/themed/CloseModalButton";
 import {
   DarkTheme,
   DefaultTheme,
@@ -37,13 +38,23 @@ export default function RootLayout() {
             <Stack.Screen
               name="reset"
               options={{
+                headerBackVisible: false,
+                headerRight: () => (
+                  <CloseModalButton accessibilityLabel="Luk nulstilling" />
+                ),
                 headerTitle: "Nulstil",
+                presentation: "modal",
               }}
             />
             <Stack.Screen
               name="scan"
               options={{
+                headerBackVisible: false,
+                headerRight: () => (
+                  <CloseModalButton accessibilityLabel="Luk scanner" />
+                ),
                 headerTitle: "Scan QR-kode",
+                presentation: "modal",
               }}
             />
           </Stack>
