@@ -24,7 +24,6 @@ module.exports = {
     supportsTablet: false,
   },
   name: "Skoleglæde.nu Batteri",
-  newArchEnabled: true,
   orientation: "portrait",
   plugins: [
     [
@@ -38,6 +37,7 @@ module.exports = {
     "expo-font",
     "expo-router",
     "expo-secure-store",
+    "expo-status-bar",
     [
       "expo-splash-screen",
       {
@@ -60,5 +60,5 @@ module.exports = {
   updates: {
     url: "https://u.expo.dev/4445138c-8d76-4f8e-a92c-e6e56c81924c",
   },
-  version: "1.0.2",
+  version: "1.0.3",
 };

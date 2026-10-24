@@ -27,6 +27,7 @@ const viewfinderSize = 90 * 3;
 
 export const Viewfinder = (props: Props) => {
   const { onScannedQrCodeChange, paused, scannedQrCode } = props;
+  const scannedQrCodeRef = useRef(scannedQrCode);
   const [bounds, setBounds] = useState<BarcodeBounds | undefined>(undefined);
   const challengerRef = useRef<Challenger | undefined>(undefined);
   const colors = useColors();
@@ -34,9 +35,14 @@ export const Viewfinder = (props: Props) => {
   const scannedQrCodeLastSeenAtRef = useRef(0);
   const wasPausedRef = useRef(paused);
 
+  useEffect(() => {
+    scannedQrCodeRef.current = scannedQrCode;
+  }, [paused, scannedQrCode]);
+
   const resetScannedQrCode = useCallback(() => {
     resetTimeoutRef.current = undefined;
     challengerRef.current = undefined;
+    scannedQrCodeRef.current = undefined;
     scannedQrCodeLastSeenAtRef.current = 0;
     onScannedQrCodeChange(undefined);
     setBounds(undefined);
@@ -115,11 +121,15 @@ export const Viewfinder = (props: Props) => {
 
     const now = Date.now();
 
-    if (scannedQrCode === undefined || scanningResult.data === scannedQrCode) {
+    if (
+      scannedQrCodeRef.current === undefined
+      || scanningResult.data === scannedQrCodeRef.current
+    ) {
       scannedQrCodeLastSeenAtRef.current = now;
       challengerRef.current = undefined;
 
-      if (scanningResult.data !== scannedQrCode) {
+      if (scanningResult.data !== scannedQrCodeRef.current) {
+        scannedQrCodeRef.current = scanningResult.data;
         onScannedQrCodeChange(scanningResult.data);
       }
 
@@ -134,6 +144,7 @@ export const Viewfinder = (props: Props) => {
 
       if (!scannedQrCodeKeepsItsLock && challengerHasBeenInSightLongEnough) {
         scannedQrCodeLastSeenAtRef.current = now;
+        scannedQrCodeRef.current = updatedChallenger.data;
         onScannedQrCodeChange(updatedChallenger.data);
         updateBounds(updatedChallenger.bounds);
         challengerRef.current = undefined;

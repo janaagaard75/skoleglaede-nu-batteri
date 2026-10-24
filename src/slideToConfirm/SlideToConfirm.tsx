@@ -1,11 +1,15 @@
-import { memo, useEffect, useRef } from "react";
-import {
-  AccessibilityActionEvent,
-  Animated,
-  GestureResponderEvent,
-  View,
-} from "react-native";
-import { clamp, useReducedMotion } from "react-native-reanimated";
+import { useEffect, useRef } from "react";
+import { AccessibilityActionEvent, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  cancelAnimation,
+  clamp,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import { useColors } from "../colors/useColors";
 import { ThemedText } from "../themed/ThemedText";
 import { ArrowRightIcon } from "./ArrowRightIcon";
@@ -20,73 +24,87 @@ type Props = {
   sliderWidth: number;
 };
 
-export const SlideToConfirm = memo((props: Props) => {
+export const SlideToConfirm = (props: Props) => {
   const colors = useColors();
-  const startPageX = useRef(0);
-  const active = useRef(false);
-  const animatedPosition = useRef(new Animated.Value(0)).current;
+  const animatedPosition = useSharedValue(0);
   const reducedMotion = useReducedMotion();
-
+  const active = useRef(false);
+  const mounted = useRef(true);
   const dropZoneWidth = 20;
   const maxDx = props.sliderWidth - props.buttonWidth;
 
-  useEffect(() => () => animatedPosition.stopAnimation(), [animatedPosition]);
-
-  const resetPosition = () => {
-    Animated.timing(animatedPosition, {
-      duration: reducedMotion ? 0 : 100,
-      toValue: 0,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const cancel = () => {
-    if (active.current) {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
       active.current = false;
-      props.onInteractionCancel?.();
-    }
-    resetPosition();
-  };
+      cancelAnimation(animatedPosition);
+    };
+  }, [animatedPosition]);
 
-  const end = (event: GestureResponderEvent) => {
-    if (!active.current) {
+  const beginInteraction = () => {
+    if (!mounted.current || props.disabled) {
       return;
     }
-    active.current = false;
-    const dx = event.nativeEvent.pageX - startPageX.current;
-    if (!props.disabled && maxDx - dx <= dropZoneWidth) {
-      props.onConfirm();
-    } else {
-      props.onInteractionCancel?.();
-    }
-    resetPosition();
-  };
-
-  const move = (event: GestureResponderEvent) => {
-    if (!active.current || props.disabled) {
-      return;
-    }
-    const dx = event.nativeEvent.pageX - startPageX.current;
-    animatedPosition.setValue(clamp(dx, 0, maxDx));
-  };
-
-  const start = (event: GestureResponderEvent) => {
-    if (props.disabled) {
-      return;
-    }
-    animatedPosition.stopAnimation();
-    animatedPosition.setValue(0);
-    startPageX.current = event.nativeEvent.pageX;
     active.current = true;
     props.onInteractionStart?.();
   };
 
-  const confirmAccessibly = () => {
-    if (props.disabled) {
+  const finishInteraction = (confirmed: boolean) => {
+    if (!mounted.current || !active.current) {
       return;
     }
-    props.onInteractionStart?.();
-    props.onConfirm();
+    active.current = false;
+    if (confirmed && !props.disabled) {
+      props.onConfirm();
+    } else {
+      props.onInteractionCancel?.();
+    }
+  };
+
+  const pan = Gesture.Pan()
+    .enabled(!props.disabled)
+    .activeOffsetX([-10, 10])
+    .failOffsetY([-20, 20])
+    .onBegin(() => {
+      cancelAnimation(animatedPosition);
+      animatedPosition.set(0);
+      scheduleOnRN(beginInteraction);
+    })
+    .onChange(event => {
+      animatedPosition.set(clamp(event.translationX, 0, maxDx));
+    })
+    .onEnd((event, success) => {
+      if (success) {
+        scheduleOnRN(
+          finishInteraction,
+          maxDx - event.translationX <= dropZoneWidth,
+        );
+      }
+    })
+    .onFinalize((_event, success) => {
+      if (!success) {
+        scheduleOnRN(finishInteraction, false);
+      }
+      animatedPosition.set(
+        withTiming(0, {
+          duration: reducedMotion ? 0 : 100,
+        }),
+      );
+    });
+
+  const animatedTranslation = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: animatedPosition.get() }],
+    };
+  });
+
+  const confirmAccessibly = () => {
+    if (!mounted.current || props.disabled) {
+      return;
+    }
+    beginInteraction();
+    finishInteraction(true);
   };
 
   const handleAccessibilityAction = (event: AccessibilityActionEvent) => {
@@ -112,45 +130,34 @@ export const SlideToConfirm = memo((props: Props) => {
         width: props.sliderWidth + 2 * (3 + 2),
       }}
     >
-      <Animated.View
-        onResponderGrant={start}
-        onResponderMove={move}
-        onResponderRelease={end}
-        onResponderTerminate={cancel}
-        onResponderTerminationRequest={() => true}
-        onStartShouldSetResponder={() => !props.disabled}
-        style={{
-          transform: [
-            {
-              translateX: animatedPosition,
-            },
-          ],
-          width: props.buttonWidth,
-        }}
-      >
-        <View
-          style={{
-            alignItems: "center",
-            borderColor: props.disabled ? colors.disabledText : colors.text,
-            borderRadius: 6,
-            borderWidth: 2,
-            flexDirection: "row",
-            gap: 10,
-            paddingHorizontal: 14,
-            paddingVertical: 6,
-            width: props.buttonWidth,
-          }}
+      <GestureDetector gesture={pan}>
+        <Animated.View
+          style={[animatedTranslation, { width: props.buttonWidth }]}
         >
-          <ThemedText
+          <View
             style={{
-              color: props.disabled ? colors.disabledText : colors.text,
+              alignItems: "center",
+              borderColor: props.disabled ? colors.disabledText : colors.text,
+              borderRadius: 6,
+              borderWidth: 2,
+              flexDirection: "row",
+              gap: 10,
+              paddingHorizontal: 14,
+              paddingVertical: 6,
+              width: props.buttonWidth,
             }}
           >
-            {props.children}
-          </ThemedText>
-          <ArrowRightIcon />
-        </View>
-      </Animated.View>
+            <ThemedText
+              style={{
+                color: props.disabled ? colors.disabledText : colors.text,
+              }}
+            >
+              {props.children}
+            </ThemedText>
+            <ArrowRightIcon />
+          </View>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
-});
+};

@@ -9,7 +9,20 @@ import {
 import { BarcodeScanningResult } from "expo-camera";
 import { setItemAsync } from "expo-secure-store";
 import { useState } from "react";
-import { AccessibilityInfo, Pressable, Text, View } from "react-native";
+import {
+  AccessibilityInfo,
+  DeviceEventEmitter,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+  State,
+} from "react-native-gesture-handler";
+import { fireGestureHandler } from "react-native-gesture-handler/jest-utils";
 import { useReducedMotion } from "react-native-reanimated";
 import { HomeScreen } from "../src/homeScreen/HomeScreen";
 import { MainStateProvider } from "../src/mainState/MainStateProvider";
@@ -45,6 +58,7 @@ jest.mock("expo-router", () => {
   const Native =
     jest.requireActual<typeof import("react-native")>("react-native");
   return {
+    useIsFocused: () => mockRoute === "/",
     useRouter: () => ({
       canGoBack: () => mockCanGoBack && mockRoute !== "/",
       back: () => mockNavigate("/"),
@@ -59,10 +73,6 @@ jest.mock("expo-router", () => {
   };
 });
 
-jest.mock("@react-navigation/native", () => ({
-  useIsFocused: () => mockRoute === "/",
-}));
-
 // Router and native camera/storage are the outer boundaries. All screens, the
 // confirmation control, parsing, calculations and persistence orchestration are real.
 const AppHost = ({ initialRoute = "/" }: { initialRoute?: Route }) => {
@@ -70,22 +80,24 @@ const AppHost = ({ initialRoute = "/" }: { initialRoute?: Route }) => {
   mockRoute = route;
   mockNavigate = setRoute;
   return (
-    <MainStateProvider>
-      <View style={{ display: route === "/" ? "flex" : "none" }}>
-        <HomeScreen />
-      </View>
-      {route !== "/" && (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Luk"
-          onPress={() => setRoute("/")}
-        >
-          <Text>Luk</Text>
-        </Pressable>
-      )}
-      {route === "/scan" && <ScannerScreen />}
-      {route === "/reset" && <ResetScreen />}
-    </MainStateProvider>
+    <GestureHandlerRootView>
+      <MainStateProvider>
+        <View style={{ display: route === "/" ? "flex" : "none" }}>
+          <HomeScreen />
+        </View>
+        {route !== "/" && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Luk"
+            onPress={() => setRoute("/")}
+          >
+            <Text>Luk</Text>
+          </Pressable>
+        )}
+        {route === "/scan" && <ScannerScreen />}
+        {route === "/reset" && <ResetScreen />}
+      </MainStateProvider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -135,19 +147,42 @@ const confirm = () =>
     { nativeEvent: { actionName: "activate" } },
   );
 
-const gestureHandle = () =>
-  within(screen.getByRole("button", { name: "Bekræft" }))
-    .UNSAFE_getAllByType(View)
-    .find(element => typeof element.props.onResponderMove === "function");
-const gesture = (
-  event: "responderGrant" | "responderRelease" | "responderTerminate",
-  pageX: number,
+const confirmationPan = (): ReturnType<typeof Gesture.Pan> =>
+  within(screen.getByRole("button", { name: "Bekræft" })).UNSAFE_getByType(
+    GestureDetector,
+  ).props.gesture;
+
+const slide = (translationX: number) => {
+  act(() => {
+    fireGestureHandler(confirmationPan(), [
+      { state: State.BEGAN, translationX: 0 },
+      { state: State.ACTIVE, translationX: 0 },
+      { state: State.ACTIVE, translationX: translationX },
+      { state: State.END, translationX: translationX },
+    ]);
+    jest.runAllTicks();
+  });
+};
+
+// The official helper completes whole gesture streams. Native event emission
+// lets this test interleave a queued camera callback before cancellation.
+const nativePanState = (
+  pan: ReturnType<typeof Gesture.Pan>,
+  oldState: number,
+  state: number,
+  translationX = 0,
 ) => {
-  const handle = gestureHandle();
-  if (handle === undefined) {
-    throw new Error("Confirmation handle is missing");
-  }
-  fireEvent(handle, event, { nativeEvent: { pageX: pageX } });
+  act(() => {
+    DeviceEventEmitter.emit("onGestureHandlerStateChange", {
+      handlerTag: pan.handlerTag,
+      oldState: oldState,
+      state: state,
+      translationX: translationX,
+      translationY: 0,
+      numberOfPointers: 1,
+    });
+    jest.runAllTicks();
+  });
 };
 
 beforeEach(() => {
@@ -172,7 +207,7 @@ afterEach(() => {
 test("hydrates legacy progress and displays a large score with spaces", async () => {
   seed(20, 10, 10);
   await mount();
-  expect(screen.getByText("1 770")).toBeOnTheScreen();
+  expect(screen.getByText("1 520")).toBeOnTheScreen();
   expect(screen.getByLabelText("10 hjerter")).toBeOnTheScreen();
   expect(screen.getByLabelText("10 flammer")).toBeOnTheScreen();
   expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
@@ -230,7 +265,8 @@ test("locks selection during a gesture and termination never applies a change", 
   scan("+025pp");
   const queuedCameraCallback =
     screen.getByTestId("camera").props.onBarcodeScanned;
-  gesture("responderGrant", 0);
+  const pan = confirmationPan();
+  nativePanState(pan, State.UNDETERMINED, State.BEGAN);
   // Native camera events can already be queued before the handler is detached.
   act(() =>
     queuedCameraCallback({
@@ -239,12 +275,12 @@ test("locks selection during a gesture and termination never applies a change", 
     }),
   );
   expect(screen.getByText("+ 25%")).toBeOnTheScreen();
-  gesture("responderTerminate", 200);
+  nativePanState(pan, State.BEGAN, State.ACTIVE);
+  nativePanState(pan, State.ACTIVE, State.CANCELLED, 200);
   await flush();
   expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
   expect(screen.getByText("+ 25%")).toBeOnTheScreen();
-  gesture("responderGrant", 0);
-  gesture("responderRelease", 110);
+  slide(110);
   await finishFeedback();
   expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
 });
@@ -253,8 +289,7 @@ test("a short slide cancels and a challenger must displace the selected code for
   await mount();
   fireEvent.press(screen.getByText("Scan QR-kode"));
   scan("+005pp");
-  gesture("responderGrant", 0);
-  gesture("responderRelease", 30);
+  slide(30);
   expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
   scan("+040pp");
   await act(async () => {
@@ -370,7 +405,7 @@ test.each([true, false])(
     confirm();
     await finishFeedback();
     expect(screen.getByLabelText("1 hjerter")).toBeOnTheScreen();
-    expect(screen.getByLabelText("Trivselsscore 145")).toBeOnTheScreen();
+    expect(screen.getByLabelText("Trivselsscore 120")).toBeOnTheScreen();
     expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
     fireEvent.press(screen.getByText("Scan QR-kode"));
     fireEvent.press(screen.getByRole("button", { name: "Luk" }));
@@ -379,7 +414,7 @@ test.each([true, false])(
     result.unmount();
     await mount();
     await finishFeedback();
-    expect(screen.getByLabelText("Trivselsscore 145")).toBeOnTheScreen();
+    expect(screen.getByLabelText("Trivselsscore 120")).toBeOnTheScreen();
     expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
   },
 );

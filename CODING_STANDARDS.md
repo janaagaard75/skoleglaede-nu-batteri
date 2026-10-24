@@ -58,8 +58,9 @@ authority for mechanical rules. Keep changes focused on the requested behavior.
 - Run the applicable type, lint and formatting checks defined in `package.json`
   and the validation workflow. Lint warnings fail validation. Report checks that
   could not run and their concrete blockers.
-- The repository currently has no test files. Establish a runnable test setup
-  before relying on new automated tests, even though a test script is declared.
+- Keep automated tests runnable through the declared test command and the
+  validation workflow. Use the existing integration and compatibility suites
+  as references when adding regression coverage.
 
 ## Comments and documentation
 

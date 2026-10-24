@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect -- Navigation and committed game state drive this cancellable presentation animation. */
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { AccessibilityInfo, AppState, InteractionManager } from "react-native";
+import { AccessibilityInfo, AppState } from "react-native";
 import { useReducedMotion } from "react-native-reanimated";
 import { MainValues } from "../mainState/MainValues";
 import { scoreForValues } from "../mainState/scoreForValues";
@@ -72,9 +72,9 @@ export const useQrChangeAnimation = () => {
       }
       return;
     }
-    // Wait until the modal has closed before explaining its result.
-    // eslint-disable-next-line @typescript-eslint/no-deprecated -- Navigation completion, rather than idle time, is required here.
-    const task = InteractionManager.runAfterInteractions(() => {
+    // Defer consumption until the next frame after home regains focus. Native
+    // modal transition timing is independent of this presentation animation.
+    const presentationFrame = requestAnimationFrame(() => {
       const change = takePendingQrChange();
       if (change === undefined) {
         return;
@@ -141,7 +141,7 @@ export const useQrChangeAnimation = () => {
       frameRef.current = requestAnimationFrame(update);
     });
     return () => {
-      task.cancel();
+      cancelAnimationFrame(presentationFrame);
     };
   }, [
     appState,
