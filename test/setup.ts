@@ -10,4 +10,15 @@ jest.mock("react-native-reanimated", () => ({
   // Reanimated's upstream mock leaves clamp as a no-op. Use its real pure math.
   clamp: jest.requireActual("react-native-reanimated/src/interpolation").clamp,
   useReducedMotion: jest.fn(() => false),
+  // Native shared values keep their identity across renders. The upstream mock
+  // creates a new object on every call, which spuriously runs effect cleanups.
+  useSharedValue: <Value>(initial: Value) => {
+    const React = jest.requireActual<typeof import("react")>("react");
+    const [shared] = React.useState(() =>
+      jest
+        .requireActual("react-native-reanimated/mock")
+        .useSharedValue(initial),
+    );
+    return shared;
+  },
 }));

@@ -51,6 +51,9 @@ export const ScannerScreen = () => {
       return;
     }
     selectedQrCode.current = qrCode;
+    // Native gesture callbacks can reach JS after another camera event rendered.
+    // Lock the preview to the same captured code that this gesture will apply.
+    setQrCodeString(qrCodeString);
     setError(undefined);
     setConfirmationInProgress(true);
   };
