@@ -1,4 +1,4 @@
-import { HeaderCloseButton } from "@/src/HeaderCloseButton";
+import { CloseModalButton } from "@/src/themed/CloseModalButton";
 import { useColors } from "@/src/colors/useColors";
 import { useColorScheme } from "@/src/colors/useColorScheme";
 import { MainStateProvider } from "@/src/mainState/MainStateProvider";
@@ -35,7 +35,10 @@ export default function RootLayout() {
               <Stack.Screen
                 name="reset"
                 options={{
-                  headerRight: () => <HeaderCloseButton />,
+                  headerBackVisible: false,
+                  headerRight: () => (
+                    <CloseModalButton accessibilityLabel="Luk nulstilling" />
+                  ),
                   headerTitle: "Nulstil",
                   presentation: "fullScreenModal",
                 }}
@@ -43,7 +46,10 @@ export default function RootLayout() {
               <Stack.Screen
                 name="scan"
                 options={{
-                  headerRight: () => <HeaderCloseButton />,
+                  headerBackVisible: false,
+                  headerRight: () => (
+                    <CloseModalButton accessibilityLabel="Luk scanner" />
+                  ),
                   headerTitle: "Scan QR-kode",
                   presentation: "fullScreenModal",
                 }}

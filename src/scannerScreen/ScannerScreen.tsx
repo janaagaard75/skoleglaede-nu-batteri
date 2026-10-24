@@ -1,9 +1,10 @@
 import { useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColors } from "../colors/useColors";
+import { QrCode } from "../mainState/QrCode";
 import { useMainState } from "../mainState/useMainState";
 import { SlideToConfirm } from "../slideToConfirm/SlideToConfirm";
 import { ThemedText } from "../themed/ThemedText";
@@ -24,24 +25,78 @@ export const ScannerScreen = () => {
 
   const qrCode = parseQrCodeString(qrCodeString);
 
-  const applyQrCode = () => {
-    if (qrCode === undefined) {
+  const [confirmationInProgress, setConfirmationInProgress] = useState(false);
+  const [applying, setApplying] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const selectedQrCode = useRef<QrCode | undefined>(undefined);
+  const confirmed = useRef(false);
+  const mounted = useRef(true);
+
+  const receiveScannedQrCode = useCallback((value: string | undefined) => {
+    // Ignore camera callbacks already queued when the confirmation started.
+    if (selectedQrCode.current === undefined && !confirmed.current) {
+      setQrCodeString(value);
+    }
+  }, []);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  const beginConfirmation = () => {
+    if (qrCode === undefined || confirmed.current) {
       return;
     }
+    selectedQrCode.current = qrCode;
+    // Native gesture callbacks can reach JS after another camera event rendered.
+    // Lock the preview to the same captured code that this gesture will apply.
+    setQrCodeString(qrCodeString);
+    setError(undefined);
+    setConfirmationInProgress(true);
+  };
 
-    mainState.applyQrCode(qrCode);
+  const cancelConfirmation = () => {
+    if (confirmed.current) {
+      return;
+    }
+    selectedQrCode.current = undefined;
+    setConfirmationInProgress(false);
+  };
 
-    // Defer navigation to next tick to avoid timing issues.
-    setTimeout(() => {
-      if (router.canGoBack()) {
-        router.back();
+  const applyQrCode = async () => {
+    const selected = selectedQrCode.current;
+    if (selected === undefined || confirmed.current) {
+      return;
+    }
+    confirmed.current = true;
+    setApplying(true);
+    try {
+      await Promise.resolve(mainState.applyQrCode(selected));
+      if (mounted.current) {
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace("/");
+        }
       }
-    });
+    } catch {
+      if (mounted.current) {
+        confirmed.current = false;
+        selectedQrCode.current = undefined;
+        setConfirmationInProgress(false);
+        setApplying(false);
+        setError("Ændringen kunne ikke gemmes. Prøv igen.");
+      }
+    }
   };
 
   if (cameraPermissions === null) {
     return (
       <SafeAreaView
+        edges={["bottom", "left", "right"]}
         style={{
           backgroundColor: colors.background,
           flex: 1,
@@ -64,6 +119,7 @@ export const ScannerScreen = () => {
   if (!cameraPermissions.granted) {
     return (
       <SafeAreaView
+        edges={["bottom", "left", "right"]}
         style={{
           backgroundColor: colors.background,
           flex: 1,
@@ -95,6 +151,7 @@ export const ScannerScreen = () => {
 
   return (
     <SafeAreaView
+      edges={["bottom", "left", "right"]}
       style={{
         backgroundColor: colors.background,
         flex: 1,
@@ -111,11 +168,12 @@ export const ScannerScreen = () => {
           style={{
             height: 220,
             justifyContent: "flex-end",
-            marginTop: 20 + 50,
+            marginTop: 50,
           }}
         >
           <Viewfinder
-            onScannedQrCodeChange={setQrCodeString}
+            onScannedQrCodeChange={receiveScannedQrCode}
+            paused={confirmationInProgress}
             scannedQrCode={qrCodeString}
           />
         </View>
@@ -125,24 +183,27 @@ export const ScannerScreen = () => {
           }}
         >
           <ScannedCodeFeedback
-            flames={mainState.flames}
-            hearts={mainState.hearts}
-            percentage={mainState.percentage}
             qrCode={qrCode}
+            unknownCode={qrCodeString !== undefined && qrCode === undefined}
           />
+          {error !== undefined && (
+            <ThemedText accessibilityRole="alert">{error}</ThemedText>
+          )}
         </View>
         <View
           style={{
             justifyContent: "flex-end",
-            marginBottom: 80,
+            marginBottom: 30,
             marginHorizontal: "auto",
             width: 270,
           }}
         >
           <SlideToConfirm
             buttonWidth={140}
-            disabled={qrCode === undefined}
+            disabled={qrCode === undefined || applying}
             onConfirm={applyQrCode}
+            onInteractionCancel={cancelConfirmation}
+            onInteractionStart={beginConfirmation}
             sliderWidth={250}
           >
             Bekræft

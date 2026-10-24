@@ -1,5 +1,8 @@
-import { ReactNode } from "react";
+import { getItemAsync, setItemAsync } from "expo-secure-store";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { MainStateContext } from "./MainStateContext";
+import { MainValues } from "./MainValues";
+import { QrChange } from "./QrChange";
 import { QrCode } from "./QrCode";
 import { calculateNewValues } from "./calculateNewValues";
 import {
@@ -7,53 +10,146 @@ import {
   initialHearts,
   initialPercentage,
 } from "./initialValues";
-import { usePersistedState } from "./usePersistedState";
+import { maximumIcons } from "./maximumIcons";
+import { scoreForValues } from "./scoreForValues";
 
-type Props = {
-  children: ReactNode;
+type Props = { children: ReactNode };
+
+const initialValues: MainValues = {
+  flames: initialFlames,
+  hearts: initialHearts,
+  percentage: initialPercentage,
+};
+
+const readNumber = (
+  stored: string | null,
+  fallback: number,
+  maximum: number,
+) => {
+  if (stored === null || !/^\d+$/.test(stored)) {
+    return fallback;
+  }
+  const value = Number(stored);
+  return Number.isSafeInteger(value) && value <= maximum ? value : fallback;
+};
+
+// Keep the three legacy keys so an update preserves existing progress.
+const saveValues = async (values: MainValues) => {
+  const writes = await Promise.allSettled([
+    setItemAsync("flames", values.flames.toString()),
+    setItemAsync("hearts", values.hearts.toString()),
+    setItemAsync("percentage", values.percentage.toString()),
+  ]);
+  const failure = writes.find(result => result.status === "rejected");
+  if (failure?.status === "rejected") {
+    throw new Error("Kunne ikke gemme fremskridt.", { cause: failure.reason });
+  }
 };
 
 export const MainStateProvider = (props: Props) => {
-  const [flames, setFlames] = usePersistedState("flames", initialFlames);
-  const [hearts, setHearts] = usePersistedState("hearts", initialHearts);
-  const [percentage, setPercentage] = usePersistedState(
-    "percentage",
-    initialPercentage,
-  );
+  const [values, setValues] = useState(initialValues);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [pendingQrChange, setPendingQrChange] = useState<
+    QrChange | undefined
+  >();
+  const valuesRef = useRef(initialValues);
+  const pendingRef = useRef<QrChange | undefined>(undefined);
+  const changeIdRef = useRef(0);
+  const queueRef = useRef(Promise.resolve());
+  const hydrationRef = useRef<Promise<void> | undefined>(undefined);
 
-  const heartValue = 100;
-  const flameValue = 50;
-  const score = percentage + hearts * heartValue + flames * flameValue;
+  useEffect(() => {
+    const lifecycle = { active: true };
+    hydrationRef.current = (async () => {
+      const [flames, hearts, percentage] = await Promise.all([
+        getItemAsync("flames"),
+        getItemAsync("hearts"),
+        getItemAsync("percentage"),
+      ]);
+      const storedValues = {
+        flames: readNumber(flames, initialFlames, maximumIcons),
+        hearts: readNumber(hearts, initialHearts, maximumIcons),
+        percentage: readNumber(
+          percentage,
+          initialPercentage,
+          Number.MAX_SAFE_INTEGER,
+        ),
+      };
+      if (lifecycle.active) {
+        valuesRef.current = storedValues;
+        setValues(storedValues);
+        setIsHydrated(true);
+      }
+    })();
+    // Mutation callers receive the hydration failure; never overwrite unread progress.
+    void hydrationRef.current.catch(() => undefined);
+    return () => {
+      lifecycle.active = false;
+    };
+  }, []);
 
-  const applyQrCode = async (qrCode: QrCode) => {
-    const newValues = calculateNewValues(
-      {
-        flames: flames,
-        hearts: hearts,
-        percentage: percentage,
-      },
-      qrCode,
-    );
-    await setFlames(newValues.newFlames);
-    await setHearts(newValues.newHearts);
-    await setPercentage(newValues.newPercentage);
-  };
+  const takePendingQrChange = useCallback(() => {
+    const change = pendingRef.current;
+    pendingRef.current = undefined;
+    setPendingQrChange(undefined);
+    return change;
+  }, []);
 
-  const reset = async () => {
-    await setFlames(initialFlames);
-    await setHearts(initialHearts);
-    await setPercentage(initialPercentage);
+  const commit = (qrCode: QrCode | undefined) => {
+    const operation = queueRef.current.then(async () => {
+      await hydrationRef.current;
+      const previousValues = valuesRef.current;
+      const calculated =
+        qrCode === undefined
+          ? undefined
+          : calculateNewValues(previousValues, qrCode);
+      const newValues =
+        calculated === undefined
+          ? initialValues
+          : {
+              flames: calculated.newFlames,
+              hearts: calculated.newHearts,
+              percentage: calculated.newPercentage,
+            };
+      try {
+        await saveValues(newValues);
+      } catch (error) {
+        // SecureStore cannot update multiple legacy keys atomically. Restore all keys
+        // before rejecting, and keep the visible state at the last committed value.
+        await saveValues(previousValues).catch(() => undefined);
+        throw error;
+      }
+      valuesRef.current = newValues;
+      if (qrCode === undefined) {
+        pendingRef.current = undefined;
+      } else {
+        changeIdRef.current += 1;
+        pendingRef.current = {
+          id: changeIdRef.current,
+          newValues: newValues,
+          previousValues: previousValues,
+          qrCode: qrCode,
+        };
+      }
+      setPendingQrChange(pendingRef.current);
+      setValues(newValues);
+    });
+    queueRef.current = operation.catch(() => undefined);
+    return operation;
   };
 
   return (
     <MainStateContext.Provider
       value={{
-        applyQrCode: applyQrCode,
-        flames: flames,
-        hearts: hearts,
-        percentage: percentage,
-        reset: reset,
-        score: score,
+        applyQrCode: qrCode => commit(qrCode),
+        flames: values.flames,
+        hearts: values.hearts,
+        isHydrated: isHydrated,
+        pendingQrChange: pendingQrChange,
+        percentage: values.percentage,
+        reset: () => commit(undefined),
+        score: scoreForValues(values),
+        takePendingQrChange: takePendingQrChange,
       }}
     >
       {props.children}
