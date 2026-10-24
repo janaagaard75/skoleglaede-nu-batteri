@@ -171,6 +171,7 @@ const nativePanState = (
   oldState: number,
   state: number,
   translationX = 0,
+  flushCallbacks = true,
 ) => {
   act(() => {
     DeviceEventEmitter.emit("onGestureHandlerStateChange", {
@@ -181,7 +182,9 @@ const nativePanState = (
       translationY: 0,
       numberOfPointers: 1,
     });
-    jest.runAllTicks();
+    if (flushCallbacks) {
+      jest.runAllTicks();
+    }
   });
 };
 
@@ -506,4 +509,31 @@ test("reset previews empty hearts and flames without changing earned progress", 
   fireEvent.press(screen.getByRole("button", { name: "Luk" }));
   expect(screen.getByLabelText("2 hjerter")).toBeOnTheScreen();
   expect(screen.getByLabelText("3 flammer")).toBeOnTheScreen();
+});
+
+test("a delayed gesture start locks the displayed code together with the applied code", async () => {
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+025pp");
+  scan("+040pp");
+  // Let the challenger stay visible without consuming the Worklets RN queue.
+  jest.setSystemTime(Date.now() + 200);
+  scan("+040pp");
+  // Publish the currently rendered gesture callbacks to the native registry.
+  await flush();
+  const pan = confirmationPan();
+  nativePanState(pan, State.UNDETERMINED, State.BEGAN, 0, false);
+  jest.setSystemTime(Date.now() + 201);
+  scan("+040pp");
+  expect(screen.getByText("+ 40%")).toBeOnTheScreen();
+
+  // The pending native-start callback captured +25 before the camera switched.
+  act(() => jest.runAllTicks());
+  expect(screen.getByText("+ 25%")).toBeOnTheScreen();
+  nativePanState(pan, State.BEGAN, State.ACTIVE);
+  nativePanState(pan, State.ACTIVE, State.END, 110);
+  await finishFeedback();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+  expect(mockStorage.get("percentage")).toBe("45");
+  expect(jest.mocked(setItemAsync)).toHaveBeenCalledTimes(3);
 });
