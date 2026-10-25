@@ -120,6 +120,7 @@ export const ScannerScreen = () => {
         >
           <Viewfinder
             onScannedQrCodeChange={setQrCodeString}
+            paused={false}
             scannedQrCode={qrCodeString}
           />
         </View>

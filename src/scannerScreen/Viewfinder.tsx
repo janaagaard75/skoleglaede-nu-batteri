@@ -1,5 +1,5 @@
 import { BarcodeBounds, BarcodeScanningResult, CameraView } from "expo-camera";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { useColors } from "../colors/useColors";
 
@@ -12,34 +12,94 @@ type Challenger = {
 
 type Props = {
   readonly onScannedQrCodeChange: (scannedQrCode: string | undefined) => void;
+  readonly paused: boolean;
   readonly scannedQrCode: string | undefined;
 };
 
+type ResetTimeout = {
+  duration: number;
+  id: ReturnType<typeof setTimeout>;
+};
+
+const debounceDuration = 400;
+const scannerMargin = 50;
+const viewfinderSize = 90 * 3;
+
 export const Viewfinder = (props: Props) => {
+  const { onScannedQrCodeChange, paused, scannedQrCode } = props;
+  const scannedQrCodeRef = useRef(scannedQrCode);
   const [bounds, setBounds] = useState<BarcodeBounds | undefined>(undefined);
   const challengerRef = useRef<Challenger | undefined>(undefined);
   const colors = useColors();
-  const scannedQrCodeRef = useRef(props.scannedQrCode);
+  const resetTimeoutRef = useRef<ResetTimeout | undefined>(undefined);
   const scannedQrCodeLastSeenAtRef = useRef(0);
-  const resetScannedQrCodeTimeoutRef = useRef<
-    ReturnType<typeof setTimeout> | undefined
-  >(undefined);
+  const wasPausedRef = useRef(paused);
 
-  const debounceDuration = 400;
-  const scannerMargin = 50;
-  const viewfinderSize = 90 * 3;
+  useEffect(() => {
+    scannedQrCodeRef.current = scannedQrCode;
+  }, [paused, scannedQrCode]);
+
+  const resetScannedQrCode = useCallback(() => {
+    resetTimeoutRef.current = undefined;
+    challengerRef.current = undefined;
+    scannedQrCodeRef.current = undefined;
+    scannedQrCodeLastSeenAtRef.current = 0;
+    onScannedQrCodeChange(undefined);
+    setBounds(undefined);
+  }, [onScannedQrCodeChange]);
+
+  const scheduleReset = useCallback(
+    (duration: number, restart: boolean) => {
+      const existingTimeout = resetTimeoutRef.current;
+
+      if (
+        existingTimeout !== undefined
+        && !restart
+        && existingTimeout.duration === duration
+      ) {
+        return;
+      }
+
+      if (existingTimeout !== undefined) {
+        clearTimeout(existingTimeout.id);
+      }
+
+      resetTimeoutRef.current = {
+        duration: duration,
+        id: setTimeout(resetScannedQrCode, duration),
+      };
+    },
+    [resetScannedQrCode],
+  );
 
   useEffect(
     () => () => {
-      if (resetScannedQrCodeTimeoutRef.current !== undefined) {
-        clearTimeout(resetScannedQrCodeTimeoutRef.current);
+      if (resetTimeoutRef.current !== undefined) {
+        clearTimeout(resetTimeoutRef.current.id);
       }
     },
     [],
   );
 
+  useEffect(() => {
+    const wasPaused = wasPausedRef.current;
+    wasPausedRef.current = paused;
+
+    if (paused) {
+      if (resetTimeoutRef.current !== undefined) {
+        clearTimeout(resetTimeoutRef.current.id);
+        resetTimeoutRef.current = undefined;
+      }
+    } else if (wasPaused) {
+      scheduleReset(debounceDuration, false);
+    }
+  }, [paused, scheduleReset]);
+
   const qrCodeScanned = (scanningResult: BarcodeScanningResult) => {
-    // Verify that the scanned QR code is entirely within the visible area of the viewfinder.
+    if (paused) {
+      return;
+    }
+
     const aboveScanningArea = scanningResult.bounds.origin.y < scannerMargin;
     const belowScanningArea =
       scanningResult.bounds.origin.y + scanningResult.bounds.size.height
@@ -55,11 +115,8 @@ export const Viewfinder = (props: Props) => {
       || leftOfScanningArea
       || rightOfScanningArea
     ) {
+      scheduleReset(debounceDuration, false);
       return;
-    }
-
-    if (resetScannedQrCodeTimeoutRef.current !== undefined) {
-      clearTimeout(resetScannedQrCodeTimeoutRef.current);
     }
 
     const now = Date.now();
@@ -73,12 +130,13 @@ export const Viewfinder = (props: Props) => {
 
       if (scanningResult.data !== scannedQrCodeRef.current) {
         scannedQrCodeRef.current = scanningResult.data;
-        props.onScannedQrCodeChange(scanningResult.data);
+        onScannedQrCodeChange(scanningResult.data);
       }
 
       updateBounds(scanningResult.bounds);
     } else {
       const updatedChallenger = updateChallenger(scanningResult, now);
+
       const scannedQrCodeKeepsItsLock =
         now - scannedQrCodeLastSeenAtRef.current <= debounceDuration;
       const challengerHasBeenInSightLongEnough =
@@ -87,16 +145,13 @@ export const Viewfinder = (props: Props) => {
       if (!scannedQrCodeKeepsItsLock && challengerHasBeenInSightLongEnough) {
         scannedQrCodeLastSeenAtRef.current = now;
         scannedQrCodeRef.current = updatedChallenger.data;
-        props.onScannedQrCodeChange(updatedChallenger.data);
+        onScannedQrCodeChange(updatedChallenger.data);
         updateBounds(updatedChallenger.bounds);
         challengerRef.current = undefined;
       }
     }
 
-    resetScannedQrCodeTimeoutRef.current = setTimeout(
-      resetScannedQrCode,
-      3_000,
-    );
+    scheduleReset(3_000, true);
   };
 
   const updateChallenger = (
@@ -133,28 +188,20 @@ export const Viewfinder = (props: Props) => {
     }
   };
 
-  const resetScannedQrCode = () => {
-    resetScannedQrCodeTimeoutRef.current = undefined;
-    challengerRef.current = undefined;
-    scannedQrCodeRef.current = undefined;
-    scannedQrCodeLastSeenAtRef.current = 0;
-    props.onScannedQrCodeChange(undefined);
-    setBounds(undefined);
-  };
-
   return (
     <View
       style={{
         height: viewfinderSize,
-        marginLeft: "auto",
-        marginRight: "auto",
+        marginHorizontal: "auto",
         width: viewfinderSize,
       }}
     >
       <CameraView
-        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr"],
+        }}
         facing="back"
-        onBarcodeScanned={qrCodeScanned}
+        onBarcodeScanned={paused ? undefined : qrCodeScanned}
         style={{
           backgroundColor: colors.disabledText,
           height: "100%",
