@@ -8,10 +8,8 @@
     "start": "tsx generate.ts"
   },
   "dependencies": {
+    "@types/qrcode": "^1.5.5",
     "qrcode": "^1.5.4",
     "tsx": "^4.19.1"
-  },
-  "devDependencies": {
-    "@types/qrcode": "^1.5.5"
   }
 }
