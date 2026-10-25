@@ -12,6 +12,7 @@ import { ThemedLinkButton } from "../themed/ThemedLinkButton";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedView } from "../themed/ThemedView";
 import { BatteryAndPercentage } from "./BatteryAndPercentage";
+import { groupDigitsWithSpaces } from "./groupDigitsWithSpaces";
 
 export const HomeScreen = () => {
   const colors = useColors();
@@ -52,11 +53,22 @@ export const HomeScreen = () => {
             <ThemedText
               style={{
                 alignSelf: "center",
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: "bold",
               }}
             >
-              {`Trivselsscore: ${mainState.score}`}
+              {"Trivselsscore"}
+            </ThemedText>
+            <ThemedText
+              accessibilityLabel={`Trivselsscore ${mainState.score}`}
+              style={{
+                alignSelf: "center",
+                fontSize: 64,
+                fontWeight: "bold",
+                lineHeight: 76,
+              }}
+            >
+              {groupDigitsWithSpaces(mainState.score)}
             </ThemedText>
           </View>
           <View
