@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -18,8 +20,13 @@ type Props = {
 export const BatteryIcon = (props: Props) => {
   const colors = useColors();
   const opacity = useSharedValue(1);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion || props.percentage !== 0) {
+      opacity.value = 1;
+      return;
+    }
     const repeatIndefinitely = -1;
     const revertAnimation = true;
     opacity.value = withRepeat(
@@ -30,7 +37,10 @@ export const BatteryIcon = (props: Props) => {
       repeatIndefinitely,
       revertAnimation,
     );
-  }, [opacity]);
+    return () => {
+      cancelAnimation(opacity);
+    };
+  }, [opacity, props.percentage, reduceMotion]);
 
   const animatedOpacity = useAnimatedStyle(() => {
     return {
