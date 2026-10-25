@@ -319,6 +319,109 @@ test("a short slide cancels and a challenger must displace the selected code for
   expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
 });
 
+test("waits for persistence and registers repeated confirmation events only once", async () => {
+  let releaseWrite: (() => void) | undefined;
+  const blockedWrite = new Promise<void>(resolve => {
+    releaseWrite = resolve;
+  });
+  jest.mocked(setItemAsync).mockImplementationOnce(async (key, value) => {
+    await blockedWrite;
+    mockStorage.set(key, value);
+  });
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+025pp");
+  const activation = screen.getByRole("button", { name: "Bekræft" }).props
+    .onAccessibilityAction;
+  act(() => {
+    activation({ nativeEvent: { actionName: "activate" } });
+    activation({ nativeEvent: { actionName: "activate" } });
+  });
+  await flush();
+  expect(screen.getByText("+ 25%")).toBeOnTheScreen();
+  expect(screen.getByRole("button", { name: "Bekræft" })).toBeDisabled();
+  expect(jest.mocked(setItemAsync)).toHaveBeenCalledTimes(3);
+  await act(async () => {
+    releaseWrite?.();
+  });
+  await finishFeedback();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).toHaveBeenCalledTimes(3);
+});
+
+test("failed persistence rolls back progress, stays in scanner and permits retry", async () => {
+  seed(80, 2, 1);
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+025pp");
+  jest
+    .mocked(setItemAsync)
+    .mockRejectedValueOnce(new Error("disk unavailable"));
+  confirm();
+  await flush();
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Ændringen kunne ikke gemmes. Prøv igen.",
+  );
+  expect(screen.getByRole("button", { name: "Bekræft" })).toBeEnabled();
+  expect(Object.fromEntries(mockStorage)).toEqual({
+    percentage: "80",
+    hearts: "2",
+    flames: "1",
+  });
+  confirm();
+  await finishFeedback();
+  expect(screen.getByLabelText("Batteri 5 procent")).toBeOnTheScreen();
+  expect(screen.getByLabelText("3 hjerter")).toBeOnTheScreen();
+});
+
+test("closing scanner and reset preserves progress; confirming reset saves initial values once", async () => {
+  seed(80, 2, 1);
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+heart");
+  fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+  fireEvent.press(screen.getByText("Nulstil"));
+  fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+  expect(screen.getByLabelText("Batteri 80 procent")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+  fireEvent.press(screen.getByText("Nulstil"));
+  const activation = screen.getByRole("button", { name: "Bekræft" }).props
+    .onAccessibilityTap;
+  act(() => {
+    activation();
+    activation();
+  });
+  await flush();
+  expect(screen.getByLabelText("Batteri 20 procent")).toBeOnTheScreen();
+  expect(screen.getByLabelText("0 hjerter")).toBeOnTheScreen();
+  expect(screen.getByLabelText("0 flammer")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).toHaveBeenCalledTimes(3);
+});
+
+test.each([true, false])(
+  "explains one committed result, reaches final state and never replays on reopen/restart (reduced motion %s)",
+  async reducedMotion => {
+    jest.mocked(useReducedMotion).mockReturnValue(reducedMotion);
+    const result = await mount();
+    fireEvent.press(screen.getByText("Scan QR-kode"));
+    scan("+heart");
+    confirm();
+    await finishFeedback();
+    expect(screen.getByLabelText("1 hjerter")).toBeOnTheScreen();
+    expect(screen.getByLabelText("Trivselsscore 120")).toBeOnTheScreen();
+    expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
+    fireEvent.press(screen.getByText("Scan QR-kode"));
+    fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+    await finishFeedback();
+    expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
+    result.unmount();
+    await mount();
+    await finishFeedback();
+    expect(screen.getByLabelText("Trivselsscore 120")).toBeOnTheScreen();
+    expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
+  },
+);
+
 test.each([
   { starting: 80, code: "+020pp", expected: 100, hearts: 2 },
   { starting: 80, code: "+025pp", expected: 5, hearts: 3 },
@@ -342,6 +445,71 @@ test.each([
     expect(mockStorage.get("hearts")).toBe(scenario.hearts.toString());
   },
 );
+
+test("reset remains open until persistence completes and permits retry after failure", async () => {
+  seed(80, 2, 1);
+  await mount();
+  fireEvent.press(screen.getByText("Nulstil"));
+  let failWrite: ((reason: Error) => void) | undefined;
+  const blockedWrite = new Promise<void>((_resolve, reject) => {
+    failWrite = reject;
+  });
+  jest.mocked(setItemAsync).mockImplementationOnce(async () => blockedWrite);
+  confirm();
+  await flush();
+  expect(screen.getByText(/Bekræft at du vil nulstille/)).toBeOnTheScreen();
+  expect(screen.getByRole("button", { name: "Bekræft" })).toBeDisabled();
+  await act(async () => {
+    failWrite?.(new Error("disk unavailable"));
+  });
+  await flush();
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Nulstillingen kunne ikke gemmes. Prøv igen.",
+  );
+  expect(screen.getByRole("button", { name: "Bekræft" })).toBeEnabled();
+  expect(Object.fromEntries(mockStorage)).toEqual({
+    percentage: "80",
+    hearts: "2",
+    flames: "1",
+  });
+  confirm();
+  await flush();
+  expect(screen.getByLabelText("Batteri 20 procent")).toBeOnTheScreen();
+  expect(Object.fromEntries(mockStorage)).toEqual({
+    percentage: "20",
+    hearts: "0",
+    flames: "0",
+  });
+});
+
+test("a directly opened scanner replaces its route with home after confirmation", async () => {
+  mockCanGoBack = false;
+  await mount("/scan");
+  scan("+025pp");
+  confirm();
+  await finishFeedback();
+  expect(screen.queryByTestId("camera")).toBeNull();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+  expect(mockStorage.get("percentage")).toBe("45");
+  expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledTimes(1);
+});
+
+test("reset previews empty hearts and flames without changing earned progress", async () => {
+  seed(80, 2, 3);
+  await mount();
+  fireEvent.press(screen.getByText("Nulstil"));
+  expect(screen.getByLabelText("0 hjerter")).toBeOnTheScreen();
+  expect(screen.getByLabelText("0 flammer")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+  expect(Object.fromEntries(mockStorage)).toEqual({
+    percentage: "80",
+    hearts: "2",
+    flames: "3",
+  });
+  fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+  expect(screen.getByLabelText("2 hjerter")).toBeOnTheScreen();
+  expect(screen.getByLabelText("3 flammer")).toBeOnTheScreen();
+});
 
 test("a delayed gesture start locks the displayed code together with the applied code", async () => {
   await mount();
