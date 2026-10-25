@@ -262,6 +262,63 @@ test("unknown codes are distinct from no code and cannot be confirmed", async ()
   expect(screen.getByLabelText("Batteri 20 procent")).toBeOnTheScreen();
 });
 
+test("locks selection during a gesture and termination never applies a change", async () => {
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+025pp");
+  const queuedCameraCallback =
+    screen.getByTestId("camera").props.onBarcodeScanned;
+  const pan = confirmationPan();
+  nativePanState(pan, State.UNDETERMINED, State.BEGAN);
+  // Native camera events can already be queued before the handler is detached.
+  act(() =>
+    queuedCameraCallback({
+      data: "-020pp",
+      bounds: { origin: { x: 70, y: 70 }, size: { width: 50, height: 50 } },
+    }),
+  );
+  expect(screen.getByText("+ 25%")).toBeOnTheScreen();
+  nativePanState(pan, State.BEGAN, State.ACTIVE);
+  nativePanState(pan, State.ACTIVE, State.CANCELLED, 200);
+  await flush();
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+  expect(screen.getByText("+ 25%")).toBeOnTheScreen();
+  slide(110);
+  await finishFeedback();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+});
+
+test("a short slide cancels and a challenger must displace the selected code for 400 ms", async () => {
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+005pp");
+  slide(30);
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+  scan("+040pp");
+  await act(async () => {
+    jest.advanceTimersByTime(200);
+  });
+  scan("+005pp");
+  scan("+040pp");
+  expect(screen.getByText("+ 5%")).toBeOnTheScreen();
+  await act(async () => {
+    jest.advanceTimersByTime(200);
+  });
+  scan("+040pp");
+  expect(screen.getByText("+ 5%")).toBeOnTheScreen();
+  await act(async () => {
+    jest.advanceTimersByTime(201);
+  });
+  scan("+040pp");
+  expect(screen.getByText("+ 40%")).toBeOnTheScreen();
+  fireEvent.press(screen.getByRole("button", { name: "Luk" }));
+  await act(async () => {
+    jest.advanceTimersByTime(5_000);
+  });
+  expect(screen.getByLabelText("Batteri 20 procent")).toBeOnTheScreen();
+  expect(jest.mocked(setItemAsync)).not.toHaveBeenCalled();
+});
+
 test.each([
   { starting: 80, code: "+020pp", expected: 100, hearts: 2 },
   { starting: 80, code: "+025pp", expected: 5, hearts: 3 },
@@ -285,3 +342,30 @@ test.each([
     expect(mockStorage.get("hearts")).toBe(scenario.hearts.toString());
   },
 );
+
+test("a delayed gesture start locks the displayed code together with the applied code", async () => {
+  await mount();
+  fireEvent.press(screen.getByText("Scan QR-kode"));
+  scan("+025pp");
+  scan("+040pp");
+  // Let the challenger stay visible without consuming the Worklets RN queue.
+  jest.setSystemTime(Date.now() + 200);
+  scan("+040pp");
+  // Publish the currently rendered gesture callbacks to the native registry.
+  await flush();
+  const pan = confirmationPan();
+  nativePanState(pan, State.UNDETERMINED, State.BEGAN, 0, false);
+  jest.setSystemTime(Date.now() + 201);
+  scan("+040pp");
+  expect(screen.getByText("+ 40%")).toBeOnTheScreen();
+
+  // The pending native-start callback captured +25 before the camera switched.
+  act(() => jest.runAllTicks());
+  expect(screen.getByText("+ 25%")).toBeOnTheScreen();
+  nativePanState(pan, State.BEGAN, State.ACTIVE);
+  nativePanState(pan, State.ACTIVE, State.END, 110);
+  await finishFeedback();
+  expect(screen.getByLabelText("Batteri 45 procent")).toBeOnTheScreen();
+  expect(mockStorage.get("percentage")).toBe("45");
+  expect(jest.mocked(setItemAsync)).toHaveBeenCalledTimes(3);
+});
