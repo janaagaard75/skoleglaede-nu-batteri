@@ -1,4 +1,5 @@
-import { useRouter } from "expo-router";
+import { useCloseModal } from "./useCloseModal";
+import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Battery } from "./battery/Battery";
@@ -10,18 +11,22 @@ import { ThemedView } from "./themed/ThemedView";
 
 export const ResetScreen = () => {
   const colors = useColors();
-  const router = useRouter();
+  const closeModal = useCloseModal();
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const mainState = useMainState();
 
-  const reset = () => {
-    mainState.reset();
-
-    // Defer navigation to next tick to avoid timing issues.
-    setTimeout(() => {
-      if (router.canGoBack()) {
-        router.back();
-      }
-    });
+  const reset = async () => {
+    await mainState.reset();
+    if (mounted.current) {
+      closeModal();
+    }
   };
 
   return (

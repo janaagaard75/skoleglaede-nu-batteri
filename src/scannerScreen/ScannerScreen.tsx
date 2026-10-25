@@ -1,6 +1,6 @@
+import { useCloseModal } from "../useCloseModal";
 import { useCameraPermissions } from "expo-camera";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useColors } from "../colors/useColors";
@@ -20,23 +20,27 @@ export const ScannerScreen = () => {
   );
   const colors = useColors();
   const mainState = useMainState();
-  const router = useRouter();
+  const closeModal = useCloseModal();
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const qrCode = parseQrCodeString(qrCodeString);
 
-  const applyQrCode = () => {
+  const applyQrCode = async () => {
     if (qrCode === undefined) {
       return;
     }
 
-    mainState.applyQrCode(qrCode);
-
-    // Defer navigation to next tick to avoid timing issues.
-    setTimeout(() => {
-      if (router.canGoBack()) {
-        router.back();
-      }
-    });
+    await mainState.applyQrCode(qrCode);
+    if (mounted.current) {
+      closeModal();
+    }
   };
 
   if (cameraPermissions === null) {
