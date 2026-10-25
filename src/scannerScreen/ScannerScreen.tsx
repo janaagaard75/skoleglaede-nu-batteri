@@ -129,10 +129,8 @@ export const ScannerScreen = () => {
           }}
         >
           <ScannedCodeFeedback
-            flames={mainState.flames}
-            hearts={mainState.hearts}
-            percentage={mainState.percentage}
             qrCode={qrCode}
+            unknownCode={qrCodeString !== undefined && qrCode === undefined}
           />
         </View>
         <View
